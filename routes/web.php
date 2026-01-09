@@ -1,17 +1,25 @@
 <?php
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\BaglogController;
+use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KasbonController;
+use App\Http\Controllers\KasController;
+use App\Http\Controllers\KpiController;
 use App\Http\Controllers\KumbungController;
+use App\Http\Controllers\MonitoringKumbungController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PanenController;
+use App\Http\Controllers\PembelianBahanBakuController;
 use App\Http\Controllers\PenggajianController;
 use App\Http\Controllers\PengaturanGajiController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\ProduksiBaglogController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QrAbsensiController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -95,5 +103,41 @@ Route::middleware('auth')->group(function () {
     // Laporan
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
+
+    // Bahan Baku (Inventory)
+    Route::get('/bahan-baku/{bahanBaku}/movements', [BahanBakuController::class, 'movements'])->name('bahan-baku.movements');
+    Route::resource('bahan-baku', BahanBakuController::class)->except(['show']);
+
+    // Pembelian Bahan Baku
+    Route::resource('pembelian-bahan-baku', PembelianBahanBakuController::class)->except(['show']);
+
+    // Produksi Baglog
+    Route::patch('/produksi-baglog/{produksiBaglog}/status', [ProduksiBaglogController::class, 'updateStatus'])->name('produksi-baglog.update-status');
+    Route::resource('produksi-baglog', ProduksiBaglogController::class);
+
+    // Monitoring Kumbung
+    Route::resource('monitoring-kumbung', MonitoringKumbungController::class)->except(['show']);
+
+    // QR Absensi
+    Route::get('/qr-absensi', [QrAbsensiController::class, 'index'])->name('qr-absensi.index');
+    Route::post('/qr-absensi/generate', [QrAbsensiController::class, 'generate'])->name('qr-absensi.generate');
+    Route::get('/qr-absensi/scan', [QrAbsensiController::class, 'scan'])->name('qr-absensi.scan');
+    Route::post('/qr-absensi/process-scan', [QrAbsensiController::class, 'processScan'])->name('qr-absensi.process-scan');
+    Route::get('/qr-absensi/history', [QrAbsensiController::class, 'history'])->name('qr-absensi.history');
+
+    // KPI Karyawan
+    Route::get('/kpi', [KpiController::class, 'index'])->name('kpi.index');
+    Route::get('/kpi/{karyawan}', [KpiController::class, 'detail'])->name('kpi.detail');
+
+    // Kas / Keuangan
+    Route::get('/kas/report', [KasController::class, 'report'])->name('kas.report');
+    Route::resource('kas', KasController::class)->except(['show']);
+
+    // Notifikasi
+    Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+    Route::patch('/notifikasi/{notifikasi}/read', [NotifikasiController::class, 'markAsRead'])->name('notifikasi.read');
+    Route::post('/notifikasi/read-all', [NotifikasiController::class, 'markAllAsRead'])->name('notifikasi.read-all');
+    Route::delete('/notifikasi/{notifikasi}', [NotifikasiController::class, 'destroy'])->name('notifikasi.destroy');
+    Route::delete('/notifikasi/delete-all', [NotifikasiController::class, 'destroyAll'])->name('notifikasi.destroy-all');
 });
 require __DIR__.'/auth.php';

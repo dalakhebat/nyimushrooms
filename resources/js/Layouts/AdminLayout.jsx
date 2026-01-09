@@ -22,14 +22,42 @@ import {
     CalendarDaysIcon,
     CreditCardIcon,
     ClipboardDocumentListIcon,
+    CubeIcon,
+    TruckIcon,
+    Cog6ToothIcon,
+    ChartBarIcon,
+    QrCodeIcon,
+    BeakerIcon,
+    SunIcon,
+    CurrencyDollarIcon,
+    BellIcon,
 } from '@heroicons/react/24/outline';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: Squares2X2Icon },
     { name: 'Kumbung', href: '/kumbung', icon: HomeModernIcon },
+    { name: 'Monitoring Kumbung', href: '/monitoring-kumbung', icon: SunIcon },
     { name: 'Panen', href: '/panen', icon: ScaleIcon },
-    { name: 'Karyawan', href: '/karyawan', icon: UsersIcon },
-    { name: 'Absensi', href: '/absensi', icon: ClockIcon },
+    {
+        name: 'Produksi',
+        icon: BeakerIcon,
+        children: [
+            { name: 'Bahan Baku', href: '/bahan-baku', icon: CubeIcon },
+            { name: 'Pembelian Bahan', href: '/pembelian-bahan-baku', icon: TruckIcon },
+            { name: 'Produksi Baglog', href: '/produksi-baglog', icon: Cog6ToothIcon },
+        ],
+    },
+    { name: 'Baglog', href: '/baglog', icon: Square3Stack3DIcon },
+    {
+        name: 'SDM',
+        icon: UsersIcon,
+        children: [
+            { name: 'Data Karyawan', href: '/karyawan', icon: UsersIcon },
+            { name: 'Absensi Manual', href: '/absensi', icon: ClockIcon },
+            { name: 'Absensi QR Code', href: '/qr-absensi', icon: QrCodeIcon },
+            { name: 'KPI Karyawan', href: '/kpi', icon: ChartBarIcon },
+        ],
+    },
     {
         name: 'Penggajian',
         icon: WalletIcon,
@@ -40,11 +68,12 @@ const navigation = [
         ],
     },
     { name: 'Kasbon', href: '/kasbon', icon: BanknotesIcon },
-    { name: 'Baglog', href: '/baglog', icon: Square3Stack3DIcon },
+    { name: 'Kas / Keuangan', href: '/kas', icon: CurrencyDollarIcon },
     { name: 'Supplier', href: '/supplier', icon: BuildingOffice2Icon },
     { name: 'Customer', href: '/customer', icon: UserGroupIcon },
     { name: 'Penjualan', href: '/penjualan', icon: ShoppingBagIcon },
     { name: 'Laporan', href: '/laporan', icon: ChartBarSquareIcon },
+    { name: 'Notifikasi', href: '/notifikasi', icon: BellIcon },
     { name: 'Pengaturan Gaji', href: '/pengaturan-gaji', icon: AdjustmentsHorizontalIcon },
 ];
 
