@@ -44,7 +44,7 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
             <Head title="Panen" />
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-green-500 p-3 rounded-lg">
@@ -64,6 +64,28 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Panen Bulan Ini</p>
                             <p className="text-2xl font-semibold text-gray-900">{formatBerat(summary.totalBulanIni)}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm p-5">
+                    <div className="flex items-center">
+                        <div className="bg-blue-500 p-3 rounded-lg">
+                            <ScaleIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <div className="ml-4">
+                            <p className="text-sm font-medium text-gray-500">Layak Jual</p>
+                            <p className="text-2xl font-semibold text-blue-600">{formatBerat(summary.layakJualBulanIni)}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm p-5">
+                    <div className="flex items-center">
+                        <div className="bg-red-500 p-3 rounded-lg">
+                            <ScaleIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <div className="ml-4">
+                            <p className="text-sm font-medium text-gray-500">Reject</p>
+                            <p className="text-2xl font-semibold text-red-600">{formatBerat(summary.rejectBulanIni)}</p>
                         </div>
                     </div>
                 </div>
@@ -167,8 +189,14 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Kumbung
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Berat
+                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Total
+                                </th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Layak Jual
+                                </th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Reject
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Catatan
@@ -181,7 +209,7 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                         <tbody className="divide-y divide-gray-200">
                             {panens.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
                                         Belum ada data panen
                                     </td>
                                 </tr>
@@ -198,8 +226,14 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                                                 <span className="text-gray-400">-</span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
                                             {formatBerat(panen.berat_kg)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600 text-right">
+                                            {formatBerat(panen.berat_layak_jual)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-red-600 text-right">
+                                            {formatBerat(panen.berat_reject)}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
                                             {panen.catatan || '-'}

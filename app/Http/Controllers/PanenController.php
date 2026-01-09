@@ -39,8 +39,10 @@ class PanenController extends Controller
                         'nama' => $panen->kumbung->nama,
                     ] : null,
                     'tanggal' => $panen->tanggal->format('Y-m-d'),
-                    'tanggal_formatted' => $panen->tanggal->format('d M Y'),
+                    'tanggal_formatted' => $panen->tanggal->locale('id')->isoFormat('D MMM Y'),
                     'berat_kg' => $panen->berat_kg,
+                    'berat_layak_jual' => $panen->berat_layak_jual,
+                    'berat_reject' => $panen->berat_reject,
                     'catatan' => $panen->catatan,
                 ];
             });
@@ -57,6 +59,8 @@ class PanenController extends Controller
         $summary = [
             'totalHariIni' => Panen::whereDate('tanggal', $today)->sum('berat_kg'),
             'totalBulanIni' => Panen::whereBetween('tanggal', [$startOfMonth, $endOfMonth])->sum('berat_kg'),
+            'layakJualBulanIni' => Panen::whereBetween('tanggal', [$startOfMonth, $endOfMonth])->sum('berat_layak_jual'),
+            'rejectBulanIni' => Panen::whereBetween('tanggal', [$startOfMonth, $endOfMonth])->sum('berat_reject'),
         ];
 
         return Inertia::render('Panen/Index', [
@@ -85,8 +89,16 @@ class PanenController extends Controller
             'kumbung_id' => 'required|exists:kumbungs,id',
             'tanggal' => 'required|date',
             'berat_kg' => 'required|numeric|min:0.01',
+            'berat_layak_jual' => 'required|numeric|min:0',
+            'berat_reject' => 'required|numeric|min:0',
             'catatan' => 'nullable|string|max:500',
         ]);
+
+        // Validasi: layak_jual + reject harus sama dengan total
+        $totalSortir = $validated['berat_layak_jual'] + $validated['berat_reject'];
+        if (abs($totalSortir - $validated['berat_kg']) > 0.01) {
+            return back()->withErrors(['berat_layak_jual' => 'Total layak jual + reject harus sama dengan berat total']);
+        }
 
         Panen::create($validated);
 
@@ -106,6 +118,8 @@ class PanenController extends Controller
                 'kumbung_id' => $panen->kumbung_id,
                 'tanggal' => $panen->tanggal->format('Y-m-d'),
                 'berat_kg' => $panen->berat_kg,
+                'berat_layak_jual' => $panen->berat_layak_jual,
+                'berat_reject' => $panen->berat_reject,
                 'catatan' => $panen->catatan,
             ],
             'kumbungs' => $kumbungs,
@@ -118,8 +132,16 @@ class PanenController extends Controller
             'kumbung_id' => 'required|exists:kumbungs,id',
             'tanggal' => 'required|date',
             'berat_kg' => 'required|numeric|min:0.01',
+            'berat_layak_jual' => 'required|numeric|min:0',
+            'berat_reject' => 'required|numeric|min:0',
             'catatan' => 'nullable|string|max:500',
         ]);
+
+        // Validasi: layak_jual + reject harus sama dengan total
+        $totalSortir = $validated['berat_layak_jual'] + $validated['berat_reject'];
+        if (abs($totalSortir - $validated['berat_kg']) > 0.01) {
+            return back()->withErrors(['berat_layak_jual' => 'Total layak jual + reject harus sama dengan berat total']);
+        }
 
         $panen->update($validated);
 

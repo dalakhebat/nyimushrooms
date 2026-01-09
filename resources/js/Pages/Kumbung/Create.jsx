@@ -5,7 +5,6 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 export default function KumbungCreate({ nextNomor }) {
     const { data, setData, post, processing, errors } = useForm({
         nama: '',
-        kapasitas_baglog: '',
         status: 'aktif',
         tanggal_mulai: '',
     });
@@ -64,23 +63,6 @@ export default function KumbungCreate({ nextNomor }) {
                             />
                             {errors.nama && (
                                 <p className="mt-1 text-sm text-red-600">{errors.nama}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Kapasitas Baglog <span className="text-red-500">*</span>
-                            </label>
-                            <input
-                                type="number"
-                                value={data.kapasitas_baglog}
-                                onChange={(e) => setData('kapasitas_baglog', e.target.value)}
-                                placeholder="Jumlah baglog maksimal"
-                                min="0"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                            />
-                            {errors.kapasitas_baglog && (
-                                <p className="mt-1 text-sm text-red-600">{errors.kapasitas_baglog}</p>
                             )}
                         </div>
 

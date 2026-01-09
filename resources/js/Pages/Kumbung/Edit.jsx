@@ -5,7 +5,6 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 export default function KumbungEdit({ kumbung }) {
     const { data, setData, put, processing, errors } = useForm({
         nama: kumbung.nama || '',
-        kapasitas_baglog: kumbung.kapasitas_baglog || '',
         status: kumbung.status || 'aktif',
         tanggal_mulai: kumbung.tanggal_mulai || '',
     });
@@ -69,19 +68,17 @@ export default function KumbungEdit({ kumbung }) {
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Kapasitas Baglog <span className="text-red-500">*</span>
+                                Jumlah Baglog
                             </label>
                             <input
-                                type="number"
-                                value={data.kapasitas_baglog}
-                                onChange={(e) => setData('kapasitas_baglog', e.target.value)}
-                                placeholder="Jumlah baglog maksimal"
-                                min="0"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                type="text"
+                                value={`${kumbung.kapasitas_baglog || 0} baglog`}
+                                readOnly
+                                className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
                             />
-                            {errors.kapasitas_baglog && (
-                                <p className="mt-1 text-sm text-red-600">{errors.kapasitas_baglog}</p>
-                            )}
+                            <p className="mt-1 text-xs text-gray-500">
+                                Dihitung otomatis dari data baglog yang masuk kumbung
+                            </p>
                         </div>
 
                         <div>

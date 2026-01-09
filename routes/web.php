@@ -1,5 +1,7 @@
 <?php
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\BaglogController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KasbonController;
@@ -7,7 +9,10 @@ use App\Http\Controllers\KumbungController;
 use App\Http\Controllers\PanenController;
 use App\Http\Controllers\PenggajianController;
 use App\Http\Controllers\PengaturanGajiController;
+use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -59,5 +64,36 @@ Route::middleware('auth')->group(function () {
     // Pengaturan Gaji
     Route::get('/pengaturan-gaji', [PengaturanGajiController::class, 'index'])->name('pengaturan-gaji.index');
     Route::post('/pengaturan-gaji', [PengaturanGajiController::class, 'update'])->name('pengaturan-gaji.update');
+
+    // Baglog
+    Route::patch('/baglog/{baglog}/status', [BaglogController::class, 'updateStatus'])->name('baglog.update-status');
+    Route::resource('baglog', BaglogController::class)->except(['show']);
+
+    // Supplier
+    Route::resource('supplier', SupplierController::class)->except(['show']);
+
+    // Customer
+    Route::resource('customer', CustomerController::class)->except(['show']);
+
+    // Penjualan
+    Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
+    // Penjualan Baglog
+    Route::get('/penjualan/baglog/create', [PenjualanController::class, 'createBaglog'])->name('penjualan.baglog.create');
+    Route::post('/penjualan/baglog', [PenjualanController::class, 'storeBaglog'])->name('penjualan.baglog.store');
+    Route::get('/penjualan/baglog/{penjualanBaglog}/edit', [PenjualanController::class, 'editBaglog'])->name('penjualan.baglog.edit');
+    Route::put('/penjualan/baglog/{penjualanBaglog}', [PenjualanController::class, 'updateBaglog'])->name('penjualan.baglog.update');
+    Route::delete('/penjualan/baglog/{penjualanBaglog}', [PenjualanController::class, 'destroyBaglog'])->name('penjualan.baglog.destroy');
+    Route::patch('/penjualan/baglog/{penjualanBaglog}/status', [PenjualanController::class, 'updateStatusBaglog'])->name('penjualan.baglog.status');
+    // Penjualan Jamur
+    Route::get('/penjualan/jamur/create', [PenjualanController::class, 'createJamur'])->name('penjualan.jamur.create');
+    Route::post('/penjualan/jamur', [PenjualanController::class, 'storeJamur'])->name('penjualan.jamur.store');
+    Route::get('/penjualan/jamur/{penjualanJamur}/edit', [PenjualanController::class, 'editJamur'])->name('penjualan.jamur.edit');
+    Route::put('/penjualan/jamur/{penjualanJamur}', [PenjualanController::class, 'updateJamur'])->name('penjualan.jamur.update');
+    Route::delete('/penjualan/jamur/{penjualanJamur}', [PenjualanController::class, 'destroyJamur'])->name('penjualan.jamur.destroy');
+    Route::patch('/penjualan/jamur/{penjualanJamur}/status', [PenjualanController::class, 'updateStatusJamur'])->name('penjualan.jamur.status');
+
+    // Laporan
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
 });
 require __DIR__.'/auth.php';

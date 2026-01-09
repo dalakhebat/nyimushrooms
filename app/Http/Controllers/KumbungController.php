@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Baglog;
 use App\Models\Kumbung;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,11 +14,16 @@ class KumbungController extends Controller
         $kumbungs = Kumbung::orderBy('nomor')
             ->get()
             ->map(function ($kumbung) {
+                // Hitung jumlah baglog yang ada di kumbung ini (status: masuk_kumbung)
+                $jumlahBaglog = Baglog::where('kumbung_id', $kumbung->id)
+                    ->where('status', 'masuk_kumbung')
+                    ->sum('jumlah');
+
                 return [
                     'id' => $kumbung->id,
                     'nomor' => $kumbung->nomor,
                     'nama' => $kumbung->nama,
-                    'kapasitas_baglog' => $kumbung->kapasitas_baglog,
+                    'kapasitas_baglog' => $jumlahBaglog,
                     'status' => $kumbung->status,
                     'tanggal_mulai' => $kumbung->tanggal_mulai?->format('Y-m-d'),
                     'umur_hari' => $kumbung->umur,
@@ -40,13 +46,14 @@ class KumbungController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'kapasitas_baglog' => 'required|integer|min:0',
             'status' => 'required|in:aktif,nonaktif',
             'tanggal_mulai' => 'nullable|date',
         ]);
 
         // Auto-generate nomor
         $validated['nomor'] = Kumbung::generateNomor();
+        // kapasitas_baglog akan dihitung otomatis dari data baglog
+        $validated['kapasitas_baglog'] = 0;
 
         Kumbung::create($validated);
 
@@ -56,12 +63,17 @@ class KumbungController extends Controller
 
     public function edit(Kumbung $kumbung)
     {
+        // Hitung jumlah baglog yang ada di kumbung ini (status: masuk_kumbung)
+        $jumlahBaglog = Baglog::where('kumbung_id', $kumbung->id)
+            ->where('status', 'masuk_kumbung')
+            ->sum('jumlah');
+
         return Inertia::render('Kumbung/Edit', [
             'kumbung' => [
                 'id' => $kumbung->id,
                 'nomor' => $kumbung->nomor,
                 'nama' => $kumbung->nama,
-                'kapasitas_baglog' => $kumbung->kapasitas_baglog,
+                'kapasitas_baglog' => $jumlahBaglog,
                 'status' => $kumbung->status,
                 'tanggal_mulai' => $kumbung->tanggal_mulai?->format('Y-m-d'),
             ],
@@ -72,7 +84,6 @@ class KumbungController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'kapasitas_baglog' => 'required|integer|min:0',
             'status' => 'required|in:aktif,nonaktif',
             'tanggal_mulai' => 'nullable|date',
         ]);

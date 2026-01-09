@@ -14,12 +14,16 @@ class Panen extends Model
         'kumbung_id',
         'tanggal',
         'berat_kg',
+        'berat_layak_jual',
+        'berat_reject',
         'catatan',
     ];
 
     protected $casts = [
         'tanggal' => 'date',
         'berat_kg' => 'decimal:2',
+        'berat_layak_jual' => 'decimal:2',
+        'berat_reject' => 'decimal:2',
     ];
 
     public function kumbung(): BelongsTo

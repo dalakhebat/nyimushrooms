@@ -7,8 +7,27 @@ export default function PanenCreate({ kumbungs, today }) {
         kumbung_id: '',
         tanggal: today,
         berat_kg: '',
+        berat_layak_jual: '',
+        berat_reject: '',
         catatan: '',
     });
+
+    // Auto-calculate reject when berat_kg or layak_jual changes
+    const handleBeratChange = (value) => {
+        setData('berat_kg', value);
+        if (value && data.berat_layak_jual) {
+            const reject = parseFloat(value) - parseFloat(data.berat_layak_jual);
+            setData('berat_reject', reject >= 0 ? reject.toFixed(2) : '0');
+        }
+    };
+
+    const handleLayakJualChange = (value) => {
+        setData('berat_layak_jual', value);
+        if (data.berat_kg && value) {
+            const reject = parseFloat(data.berat_kg) - parseFloat(value);
+            setData('berat_reject', reject >= 0 ? reject.toFixed(2) : '0');
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -74,19 +93,67 @@ export default function PanenCreate({ kumbungs, today }) {
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Berat (kg) <span className="text-red-500">*</span>
+                                Berat Total (kg) <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="number"
                                 step="0.01"
                                 min="0"
                                 value={data.berat_kg}
-                                onChange={(e) => setData('berat_kg', e.target.value)}
+                                onChange={(e) => handleBeratChange(e.target.value)}
                                 placeholder="Contoh: 5.5"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             />
                             {errors.berat_kg && (
                                 <p className="mt-1 text-sm text-red-600">{errors.berat_kg}</p>
+                            )}
+                        </div>
+
+                        <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+                            <h3 className="text-sm font-medium text-gray-700">Sortir Hasil Panen</h3>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-green-700 mb-1">
+                                        Layak Jual (kg) <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={data.berat_layak_jual}
+                                        onChange={(e) => handleLayakJualChange(e.target.value)}
+                                        placeholder="0.00"
+                                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-green-50"
+                                    />
+                                    {errors.berat_layak_jual && (
+                                        <p className="mt-1 text-sm text-red-600">{errors.berat_layak_jual}</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-red-700 mb-1">
+                                        Reject (kg) <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={data.berat_reject}
+                                        onChange={(e) => setData('berat_reject', e.target.value)}
+                                        placeholder="0.00"
+                                        className="w-full px-4 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50"
+                                    />
+                                    {errors.berat_reject && (
+                                        <p className="mt-1 text-sm text-red-600">{errors.berat_reject}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {data.berat_kg && (parseFloat(data.berat_layak_jual || 0) + parseFloat(data.berat_reject || 0)).toFixed(2) !== parseFloat(data.berat_kg).toFixed(2) && (
+                                <p className="text-sm text-orange-600">
+                                    Total sortir ({(parseFloat(data.berat_layak_jual || 0) + parseFloat(data.berat_reject || 0)).toFixed(2)} kg) harus sama dengan berat total ({parseFloat(data.berat_kg).toFixed(2)} kg)
+                                </p>
                             )}
                         </div>
 
