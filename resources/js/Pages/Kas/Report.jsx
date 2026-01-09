@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { ArrowLeftIcon, ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function KasReport({ dailyData, perKategori, totalMasuk, totalKeluar, saldo, bulan, tahun }) {
     const [selectedBulan, setSelectedBulan] = useState(bulan);
@@ -26,7 +26,7 @@ export default function KasReport({ dailyData, perKategori, totalMasuk, totalKel
 
             <div className="mb-6">
                 <Link href="/kas" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900">
-                    <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                     Kembali
                 </Link>
             </div>
@@ -49,7 +49,7 @@ export default function KasReport({ dailyData, perKategori, totalMasuk, totalKel
                 <div className="bg-white rounded-xl shadow-sm p-6">
                     <div className="flex items-center">
                         <div className="p-3 bg-green-100 rounded-lg">
-                            <ArrowUpIcon className="w-6 h-6 text-green-600" />
+                            <Icon icon="solar:arrow-up-bold" className="w-6 h-6 text-green-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Total Kas Masuk</p>
@@ -60,7 +60,7 @@ export default function KasReport({ dailyData, perKategori, totalMasuk, totalKel
                 <div className="bg-white rounded-xl shadow-sm p-6">
                     <div className="flex items-center">
                         <div className="p-3 bg-red-100 rounded-lg">
-                            <ArrowDownIcon className="w-6 h-6 text-red-600" />
+                            <Icon icon="solar:arrow-down-bold" className="w-6 h-6 text-red-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Total Kas Keluar</p>
@@ -71,7 +71,7 @@ export default function KasReport({ dailyData, perKategori, totalMasuk, totalKel
                 <div className="bg-white rounded-xl shadow-sm p-6">
                     <div className="flex items-center">
                         <div className="p-3 bg-blue-100 rounded-lg">
-                            <ArrowUpIcon className="w-6 h-6 text-blue-600" />
+                            <Icon icon="solar:arrow-up-bold" className="w-6 h-6 text-blue-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Saldo</p>

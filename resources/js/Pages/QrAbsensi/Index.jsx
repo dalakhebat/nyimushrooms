@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { QrCodeIcon, ArrowPathIcon, ClockIcon, UserGroupIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function QrAbsensiIndex({ qrCode, scansToday, belumScan, summary }) {
     const handleGenerateNew = () => {
@@ -24,7 +24,7 @@ export default function QrAbsensiIndex({ qrCode, scansToday, belumScan, summary 
                                 className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
                                 title="Generate QR Baru"
                             >
-                                <ArrowPathIcon className="w-5 h-5" />
+                                <Icon icon="solar:refresh-bold" className="w-5 h-5" />
                             </button>
                         </div>
 
@@ -32,7 +32,7 @@ export default function QrAbsensiIndex({ qrCode, scansToday, belumScan, summary 
                             <div className="bg-white p-4 rounded-lg border-2 border-gray-200 mb-4">
                                 <div className="w-48 h-48 flex items-center justify-center bg-gray-100 rounded">
                                     <div className="text-center">
-                                        <QrCodeIcon className="w-24 h-24 text-gray-400 mx-auto" />
+                                        <Icon icon="solar:qr-code-bold" className="w-24 h-24 text-gray-400 mx-auto" />
                                         <p className="text-xs text-gray-500 mt-2 font-mono break-all px-2">{qrCode.kode_qr}</p>
                                     </div>
                                 </div>
@@ -52,7 +52,7 @@ export default function QrAbsensiIndex({ qrCode, scansToday, belumScan, summary 
                                 href="/qr-absensi/scan"
                                 className="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                             >
-                                <QrCodeIcon className="w-5 h-5 mr-2" />
+                                <Icon icon="solar:qr-code-bold" className="w-5 h-5 mr-2" />
                                 Scan Absensi
                             </Link>
                         </div>
@@ -64,25 +64,25 @@ export default function QrAbsensiIndex({ qrCode, scansToday, belumScan, summary 
                         <div className="space-y-3">
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-500 flex items-center">
-                                    <UserGroupIcon className="w-4 h-4 mr-2" /> Total Karyawan
+                                    <Icon icon="solar:users-group-rounded-bold" className="w-4 h-4 mr-2" /> Total Karyawan
                                 </span>
                                 <span className="font-semibold">{summary.totalKaryawan}</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-500 flex items-center">
-                                    <CheckCircleIcon className="w-4 h-4 mr-2 text-green-500" /> Sudah Masuk
+                                    <Icon icon="solar:check-circle-bold" className="w-4 h-4 mr-2 text-green-500" /> Sudah Masuk
                                 </span>
                                 <span className="font-semibold text-green-600">{summary.sudahMasuk}</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-500 flex items-center">
-                                    <XCircleIcon className="w-4 h-4 mr-2 text-red-500" /> Belum Masuk
+                                    <Icon icon="solar:close-circle-bold" className="w-4 h-4 mr-2 text-red-500" /> Belum Masuk
                                 </span>
                                 <span className="font-semibold text-red-600">{summary.belumMasuk}</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-500 flex items-center">
-                                    <ClockIcon className="w-4 h-4 mr-2 text-yellow-500" /> Terlambat
+                                    <Icon icon="solar:clock-circle-bold" className="w-4 h-4 mr-2 text-yellow-500" /> Terlambat
                                 </span>
                                 <span className="font-semibold text-yellow-600">{summary.terlambat}</span>
                             </div>

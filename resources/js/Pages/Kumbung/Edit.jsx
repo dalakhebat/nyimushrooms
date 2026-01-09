@@ -1,6 +1,6 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function KumbungEdit({ kumbung }) {
     const { data, setData, put, processing, errors } = useForm({
@@ -24,7 +24,7 @@ export default function KumbungEdit({ kumbung }) {
                         href="/kumbung"
                         className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                     >
-                        <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                        <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                         Kembali
                     </Link>
                 </div>

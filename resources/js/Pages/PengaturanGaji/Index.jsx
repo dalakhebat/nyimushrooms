@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    Cog6ToothIcon,
-    CheckIcon,
-    InformationCircleIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function PengaturanGajiIndex({ pengaturan }) {
     const [formData, setFormData] = useState(() => {
@@ -95,7 +91,7 @@ export default function PengaturanGajiIndex({ pengaturan }) {
             <div className="mb-6">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="flex items-start">
-                        <InformationCircleIcon className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
+                        <Icon icon="solar:info-circle-bold" className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
                         <div className="text-sm text-blue-700">
                             <p className="font-medium mb-1">Cara Kerja Potongan Gaji:</p>
                             <ul className="list-disc list-inside space-y-1">
@@ -180,7 +176,7 @@ export default function PengaturanGajiIndex({ pengaturan }) {
                         type="submit"
                         className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700"
                     >
-                        <CheckIcon className="w-5 h-5 mr-2" />
+                        <Icon icon="solar:check-circle-bold" className="w-5 h-5 mr-2" />
                         Simpan Pengaturan
                     </button>
                 </div>

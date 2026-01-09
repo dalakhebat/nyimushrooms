@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { ArrowLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function QrAbsensiHistory({ scans, karyawans, filters }) {
     const [karyawanId, setKaryawanId] = useState(filters.karyawan_id || '');
@@ -22,7 +22,7 @@ export default function QrAbsensiHistory({ scans, karyawans, filters }) {
 
             <div className="mb-6">
                 <Link href="/qr-absensi" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900">
-                    <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                     Kembali
                 </Link>
             </div>
@@ -59,7 +59,7 @@ export default function QrAbsensiHistory({ scans, karyawans, filters }) {
                             onClick={handleFilter}
                             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                         >
-                            <MagnifyingGlassIcon className="w-5 h-5" />
+                            <Icon icon="solar:magnifer-bold" className="w-5 h-5" />
                         </button>
                     </div>
                 </div>

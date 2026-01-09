@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { ArrowLeftIcon, CheckCircleIcon, UserIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function AbsensiCreate({ karyawans, tanggal, today }) {
     const [selectedDate, setSelectedDate] = useState(tanggal);
@@ -73,7 +73,7 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
                     href="/absensi"
                     className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                 >
-                    <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                     Kembali
                 </Link>
             </div>
@@ -132,7 +132,7 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
                                     <div className="flex items-center justify-between flex-wrap gap-4">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                                                <UserIcon className="w-6 h-6 text-orange-600" />
+                                                <Icon icon="solar:user-rounded-bold" className="w-6 h-6 text-orange-600" />
                                             </div>
                                             <div>
                                                 <p className="font-medium text-gray-900">{karyawan.nama}</p>
@@ -140,7 +140,7 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
                                             </div>
                                             {karyawan.absensi_status && (
                                                 <span className="inline-flex items-center px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full">
-                                                    <CheckCircleIcon className="w-4 h-4 mr-1" />
+                                                    <Icon icon="solar:check-circle-bold" className="w-4 h-4 mr-1" />
                                                     Sudah absen
                                                 </span>
                                             )}

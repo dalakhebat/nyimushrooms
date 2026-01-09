@@ -11,6 +11,99 @@ use Carbon\Carbon;
 
 class QrAbsensiController extends Controller
 {
+    /**
+     * Halaman scan publik (tanpa login) - untuk karyawan scan via HP
+     */
+    public function scanPublic()
+    {
+        return Inertia::render('QrAbsensi/ScanPublic');
+    }
+
+    /**
+     * Process scan dari halaman publik dengan validasi PIN
+     */
+    public function processScanPublic(Request $request)
+    {
+        $validated = $request->validate([
+            'pin' => 'required|string|size:6',
+            'kode_qr' => 'required|string',
+            'tipe' => 'required|in:masuk,keluar',
+        ]);
+
+        // Validasi PIN dan cari karyawan
+        $karyawan = Karyawan::where('pin', $validated['pin'])
+            ->where('status', 'aktif')
+            ->first();
+
+        if (!$karyawan) {
+            return back()->withErrors(['pin' => 'PIN tidak valid atau karyawan tidak aktif']);
+        }
+
+        // Validasi QR code
+        $qr = QrAbsensi::where('kode_qr', $validated['kode_qr'])->first();
+
+        if (!$qr) {
+            return back()->withErrors(['kode_qr' => 'QR Code tidak valid']);
+        }
+
+        if (!$qr->isValid()) {
+            return back()->withErrors(['kode_qr' => 'QR Code sudah tidak berlaku atau kadaluarsa']);
+        }
+
+        $today = Carbon::today();
+        $now = Carbon::now()->format('H:i:s');
+
+        // Cek apakah sudah ada record untuk hari ini
+        $existingScan = AbsensiScan::where('karyawan_id', $karyawan->id)
+            ->where('tanggal', $today)
+            ->first();
+
+        if ($validated['tipe'] === 'masuk') {
+            if ($existingScan && $existingScan->jam_masuk) {
+                return back()->withErrors(['pin' => 'Anda sudah melakukan scan masuk hari ini pada jam ' . $existingScan->jam_masuk]);
+            }
+
+            // Tentukan status (terlambat jika masuk setelah jam 08:00)
+            $status = Carbon::parse($now)->gt(Carbon::parse('08:00:00')) ? 'terlambat' : 'hadir';
+
+            if ($existingScan) {
+                $existingScan->update([
+                    'jam_masuk' => $now,
+                    'status' => $status,
+                ]);
+            } else {
+                AbsensiScan::create([
+                    'karyawan_id' => $karyawan->id,
+                    'qr_absensi_id' => $qr->id,
+                    'tanggal' => $today,
+                    'jam_masuk' => $now,
+                    'status' => $status,
+                ]);
+            }
+
+            $message = 'Halo ' . $karyawan->nama . '! Scan masuk berhasil pada ' . Carbon::parse($now)->format('H:i');
+            if ($status === 'terlambat') {
+                $message .= ' (Terlambat)';
+            }
+        } else {
+            if (!$existingScan || !$existingScan->jam_masuk) {
+                return back()->withErrors(['pin' => 'Anda belum melakukan scan masuk hari ini']);
+            }
+
+            if ($existingScan->jam_keluar) {
+                return back()->withErrors(['pin' => 'Anda sudah melakukan scan keluar hari ini pada jam ' . $existingScan->jam_keluar]);
+            }
+
+            $existingScan->update([
+                'jam_keluar' => $now,
+            ]);
+
+            $message = 'Halo ' . $karyawan->nama . '! Scan keluar berhasil pada ' . Carbon::parse($now)->format('H:i') . '. Sampai jumpa besok!';
+        }
+
+        return back()->with('success', $message);
+    }
+
     public function index()
     {
         // Generate atau ambil QR untuk hari ini
@@ -166,19 +259,19 @@ class QrAbsensiController extends Controller
 
     public function generateNewQr()
     {
-        // Nonaktifkan QR lama untuk hari ini
-        QrAbsensi::where('tanggal', Carbon::today())->update(['is_active' => false]);
-
-        // Generate QR baru
+        $today = Carbon::today();
         $kodeQr = strtoupper(\Str::random(8)) . '-' . now()->format('dmY') . '-' . strtoupper(\Str::random(4));
 
-        $qr = QrAbsensi::create([
-            'tanggal' => Carbon::today(),
-            'kode_qr' => $kodeQr,
-            'berlaku_mulai' => '06:00:00',
-            'berlaku_sampai' => '23:59:59',
-            'is_active' => true,
-        ]);
+        // Update existing atau create baru
+        QrAbsensi::updateOrCreate(
+            ['tanggal' => $today],
+            [
+                'kode_qr' => $kodeQr,
+                'berlaku_mulai' => '06:00:00',
+                'berlaku_sampai' => '23:59:59',
+                'is_active' => true,
+            ]
+        );
 
         return back()->with('success', 'QR Code baru berhasil digenerate');
     }

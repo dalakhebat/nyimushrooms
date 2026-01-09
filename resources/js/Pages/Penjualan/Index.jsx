@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    CubeIcon,
-    BeakerIcon,
-    MagnifyingGlassIcon,
-    BanknotesIcon,
-    ClockIcon,
-    CheckCircleIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summary, tipe, filters }) {
     const [activeTab, setActiveTab] = useState(tipe || 'baglog');
@@ -76,7 +66,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-blue-500 p-3 rounded-lg">
-                            <CubeIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:box-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Baglog</p>
@@ -88,7 +78,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-green-500 p-3 rounded-lg">
-                            <BeakerIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:test-tube-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Jamur</p>
@@ -100,7 +90,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-yellow-500 p-3 rounded-lg">
-                            <ClockIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Pending Baglog</p>
@@ -111,7 +101,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-orange-500 p-3 rounded-lg">
-                            <ClockIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Pending Jamur</p>
@@ -133,7 +123,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                             }`}
                         >
-                            <CubeIcon className="w-5 h-5 inline-block mr-2" />
+                            <Icon icon="solar:box-bold" className="w-5 h-5 inline-block mr-2" />
                             Penjualan Baglog
                         </button>
                         <button
@@ -144,7 +134,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                             }`}
                         >
-                            <BeakerIcon className="w-5 h-5 inline-block mr-2" />
+                            <Icon icon="solar:test-tube-bold" className="w-5 h-5 inline-block mr-2" />
                             Penjualan Jamur
                         </button>
                     </nav>
@@ -164,7 +154,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                         </select>
                         <form onSubmit={handleSearch} className="flex flex-1 min-w-[200px]">
                             <div className="relative flex-1">
-                                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <Icon icon="solar:magnifer-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <input
                                     type="text"
                                     value={search}
@@ -178,7 +168,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                             href={activeTab === 'baglog' ? '/penjualan/baglog/create' : '/penjualan/jamur/create'}
                             className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
                         >
-                            <PlusIcon className="w-5 h-5 mr-1" />
+                            <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                             Tambah {activeTab === 'baglog' ? 'Baglog' : 'Jamur'}
                         </Link>
                     </div>
@@ -205,7 +195,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                                 {penjualanBaglogs.data.length === 0 ? (
                                     <tr>
                                         <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
-                                            <CubeIcon className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                                            <Icon icon="solar:box-bold" className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                                             <p>Belum ada data penjualan baglog</p>
                                         </td>
                                     </tr>
@@ -247,13 +237,13 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                                                         href={`/penjualan/baglog/${item.id}/edit`}
                                                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                                                     >
-                                                        <PencilSquareIcon className="w-5 h-5" />
+                                                        <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                     </Link>
                                                     <button
                                                         onClick={() => handleDeleteBaglog(item.id)}
                                                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                                                     >
-                                                        <TrashIcon className="w-5 h-5" />
+                                                        <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -308,7 +298,7 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                                 {penjualanJamurs.data.length === 0 ? (
                                     <tr>
                                         <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
-                                            <BeakerIcon className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                                            <Icon icon="solar:test-tube-bold" className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                                             <p>Belum ada data penjualan jamur</p>
                                         </td>
                                     </tr>
@@ -350,13 +340,13 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                                                         href={`/penjualan/jamur/${item.id}/edit`}
                                                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                                                     >
-                                                        <PencilSquareIcon className="w-5 h-5" />
+                                                        <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                     </Link>
                                                     <button
                                                         onClick={() => handleDeleteJamur(item.id)}
                                                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                                                     >
-                                                        <TrashIcon className="w-5 h-5" />
+                                                        <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                     </button>
                                                 </div>
                                             </td>

@@ -55,7 +55,7 @@ class DashboardController extends Controller
         $bahanBakuLowStock = BahanBaku::whereColumn('stok', '<=', 'stok_minimum')->count();
 
         // Produksi dalam proses
-        $produksiDalamProses = ProduksiBaglog::whereNotIn('status', ['selesai', 'gagal'])->count();
+        $produksiDalamProses = ProduksiBaglog::whereNotIn('tahap', ['selesai'])->count();
 
         // Notifikasi belum dibaca
         $notifikasiBelumDibaca = Notifikasi::where('is_read', false)->count();

@@ -1,12 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    ArrowLeftIcon,
-    CheckCircleIcon,
-    ClockIcon,
-    BanknotesIcon,
-    CurrencyDollarIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function KasbonShow({ kasbon }) {
     const formatCurrency = (amount) => {
@@ -37,7 +31,7 @@ export default function KasbonShow({ kasbon }) {
                     href="/kasbon"
                     className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                 >
-                    <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                     Kembali ke Kasbon
                 </Link>
             </div>
@@ -56,12 +50,12 @@ export default function KasbonShow({ kasbon }) {
                                 </div>
                                 {kasbon.status === 'lunas' ? (
                                     <span className="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-700">
-                                        <CheckCircleIcon className="w-4 h-4 mr-1" />
+                                        <Icon icon="solar:check-circle-bold" className="w-4 h-4 mr-1" />
                                         Lunas
                                     </span>
                                 ) : (
                                     <span className="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-700">
-                                        <ClockIcon className="w-4 h-4 mr-1" />
+                                        <Icon icon="solar:clock-circle-bold" className="w-4 h-4 mr-1" />
                                         Belum Lunas
                                     </span>
                                 )}
@@ -86,17 +80,17 @@ export default function KasbonShow({ kasbon }) {
                             {/* Amount Cards */}
                             <div className="grid grid-cols-3 gap-4 mb-6">
                                 <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                    <CurrencyDollarIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                                    <Icon icon="solar:dollar-bold" className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                                     <p className="text-xs text-gray-500 uppercase">Total Kasbon</p>
                                     <p className="text-lg font-bold text-gray-900">{formatCurrency(kasbon.jumlah)}</p>
                                 </div>
                                 <div className="bg-green-50 p-4 rounded-lg text-center">
-                                    <CheckCircleIcon className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                                    <Icon icon="solar:check-circle-bold" className="w-8 h-8 text-green-500 mx-auto mb-2" />
                                     <p className="text-xs text-gray-500 uppercase">Sudah Dibayar</p>
                                     <p className="text-lg font-bold text-green-700">{formatCurrency(sudahDibayar)}</p>
                                 </div>
                                 <div className="bg-red-50 p-4 rounded-lg text-center">
-                                    <ClockIcon className="w-8 h-8 text-red-500 mx-auto mb-2" />
+                                    <Icon icon="solar:clock-circle-bold" className="w-8 h-8 text-red-500 mx-auto mb-2" />
                                     <p className="text-xs text-gray-500 uppercase">Sisa</p>
                                     <p className="text-lg font-bold text-red-700">{formatCurrency(kasbon.sisa)}</p>
                                 </div>
@@ -126,7 +120,7 @@ export default function KasbonShow({ kasbon }) {
                                         <div key={pembayaran.id} className="flex items-start space-x-3">
                                             <div className="flex-shrink-0">
                                                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                                    <BanknotesIcon className="w-5 h-5 text-green-600" />
+                                                    <Icon icon="solar:banknote-bold" className="w-5 h-5 text-green-600" />
                                                 </div>
                                             </div>
                                             <div className="flex-1 min-w-0">

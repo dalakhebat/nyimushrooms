@@ -32,6 +32,10 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+// Public route untuk absensi karyawan (tanpa login)
+Route::get('/absensi-publik', [QrAbsensiController::class, 'scanPublic'])->name('absensi.publik');
+Route::post('/absensi-publik', [QrAbsensiController::class, 'processScanPublic'])->name('absensi.publik.process');
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware('auth')->group(function () {
@@ -120,7 +124,7 @@ Route::middleware('auth')->group(function () {
 
     // QR Absensi
     Route::get('/qr-absensi', [QrAbsensiController::class, 'index'])->name('qr-absensi.index');
-    Route::post('/qr-absensi/generate', [QrAbsensiController::class, 'generate'])->name('qr-absensi.generate');
+    Route::post('/qr-absensi/generate', [QrAbsensiController::class, 'generateNewQr'])->name('qr-absensi.generate');
     Route::get('/qr-absensi/scan', [QrAbsensiController::class, 'scan'])->name('qr-absensi.scan');
     Route::post('/qr-absensi/process-scan', [QrAbsensiController::class, 'processScan'])->name('qr-absensi.process-scan');
     Route::get('/qr-absensi/history', [QrAbsensiController::class, 'history'])->name('qr-absensi.history');

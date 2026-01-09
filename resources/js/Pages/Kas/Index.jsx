@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { PlusIcon, PencilSquareIcon, TrashIcon, ArrowUpIcon, ArrowDownIcon, WalletIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function KasIndex({ transactions, saldoTotal, saldoBulanIni, kategoris, filters }) {
     const [deleting, setDeleting] = useState(null);
@@ -26,7 +26,7 @@ export default function KasIndex({ transactions, saldoTotal, saldoBulanIni, kate
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-blue-100 rounded-lg">
-                            <WalletIcon className="w-6 h-6 text-blue-600" />
+                            <Icon icon="solar:wallet-bold" className="w-6 h-6 text-blue-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Saldo Total</p>
@@ -39,7 +39,7 @@ export default function KasIndex({ transactions, saldoTotal, saldoBulanIni, kate
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-green-100 rounded-lg">
-                            <ArrowUpIcon className="w-6 h-6 text-green-600" />
+                            <Icon icon="solar:arrow-up-bold" className="w-6 h-6 text-green-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Masuk Bulan Ini</p>
@@ -50,7 +50,7 @@ export default function KasIndex({ transactions, saldoTotal, saldoBulanIni, kate
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-red-100 rounded-lg">
-                            <ArrowDownIcon className="w-6 h-6 text-red-600" />
+                            <Icon icon="solar:arrow-down-bold" className="w-6 h-6 text-red-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Keluar Bulan Ini</p>
@@ -61,7 +61,7 @@ export default function KasIndex({ transactions, saldoTotal, saldoBulanIni, kate
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-purple-100 rounded-lg">
-                            <WalletIcon className="w-6 h-6 text-purple-600" />
+                            <Icon icon="solar:wallet-bold" className="w-6 h-6 text-purple-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Saldo Bulan Ini</p>
@@ -85,7 +85,7 @@ export default function KasIndex({ transactions, saldoTotal, saldoBulanIni, kate
                                 href="/kas/create"
                                 className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
                             >
-                                <PlusIcon className="w-5 h-5 mr-1" />
+                                <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                                 Tambah
                             </Link>
                         </div>
@@ -133,7 +133,7 @@ export default function KasIndex({ transactions, saldoTotal, saldoBulanIni, kate
                                             <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
                                                 item.tipe === 'masuk' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                                             }`}>
-                                                {item.tipe === 'masuk' ? <ArrowUpIcon className="w-3 h-3 mr-1" /> : <ArrowDownIcon className="w-3 h-3 mr-1" />}
+                                                {item.tipe === 'masuk' ? <Icon icon="solar:arrow-up-bold" className="w-3 h-3 mr-1" /> : <Icon icon="solar:arrow-down-bold" className="w-3 h-3 mr-1" />}
                                                 {item.tipe === 'masuk' ? 'Masuk' : 'Keluar'}
                                             </span>
                                         </td>
@@ -145,10 +145,10 @@ export default function KasIndex({ transactions, saldoTotal, saldoBulanIni, kate
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link href={`/kas/${item.id}/edit`} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button onClick={() => handleDelete(item.id)} disabled={deleting === item.id} className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50">
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

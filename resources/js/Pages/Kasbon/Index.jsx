@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    EyeIcon,
-    PencilIcon,
-    TrashIcon,
-    CurrencyDollarIcon,
-    CheckCircleIcon,
-    ClockIcon,
-    MagnifyingGlassIcon,
-    BanknotesIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -82,7 +72,7 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-blue-500 p-3 rounded-lg flex-shrink-0">
-                            <CurrencyDollarIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:dollar-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Kasbon</p>
@@ -93,7 +83,7 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
-                            <ClockIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Belum Lunas</p>
@@ -104,7 +94,7 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-red-500 p-3 rounded-lg flex-shrink-0">
-                            <BanknotesIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:banknote-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Sisa</p>
@@ -149,7 +139,7 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                 type="submit"
                                 className="px-4 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg hover:bg-gray-200"
                             >
-                                <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
+                                <Icon icon="solar:magnifer-bold" className="w-5 h-5 text-gray-500" />
                             </button>
                         </form>
                     </div>
@@ -157,7 +147,7 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                         href="/kasbon/create"
                         className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
                     >
-                        <PlusIcon className="w-5 h-5 mr-1" />
+                        <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                         Tambah Kasbon
                     </Link>
                 </div>
@@ -203,12 +193,12 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                         <td className="px-4 py-4 text-center">
                                             {item.status === 'lunas' ? (
                                                 <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
-                                                    <CheckCircleIcon className="w-3 h-3 mr-1" />
+                                                    <Icon icon="solar:check-circle-bold" className="w-3 h-3 mr-1" />
                                                     Lunas
                                                 </span>
                                             ) : (
                                                 <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-700">
-                                                    <ClockIcon className="w-3 h-3 mr-1" />
+                                                    <Icon icon="solar:clock-circle-bold" className="w-3 h-3 mr-1" />
                                                     Belum Lunas
                                                 </span>
                                             )}
@@ -224,26 +214,26 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                                         className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
                                                         title="Bayar"
                                                     >
-                                                        <BanknotesIcon className="w-5 h-5" />
+                                                        <Icon icon="solar:banknote-bold" className="w-5 h-5" />
                                                     </button>
                                                 )}
                                                 <Link
                                                     href={`/kasbon/${item.id}`}
                                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                                                 >
-                                                    <EyeIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:eye-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <Link
                                                     href={`/kasbon/${item.id}/edit`}
                                                     className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg"
                                                 >
-                                                    <PencilIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(item.id)}
                                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                                                 >
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

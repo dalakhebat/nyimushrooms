@@ -1,16 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    ArrowLeftIcon,
-    DocumentArrowDownIcon,
-    TableCellsIcon,
-    CalendarIcon,
-    CheckIcon,
-    XMarkIcon,
-    ExclamationTriangleIcon,
-    DocumentIcon,
-    ClockIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tanggalAwal, tanggalAkhir, periode }) {
     // Helper function untuk format tanggal lokal (tanpa timezone conversion)
@@ -181,7 +171,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                     href="/absensi"
                     className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                 >
-                    <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                     Kembali ke Absensi
                 </Link>
             </div>
@@ -202,14 +192,14 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                                 onClick={handleExportExcel}
                                 className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                             >
-                                <TableCellsIcon className="w-5 h-5 mr-2" />
+                                <Icon icon="solar:file-text-bold" className="w-5 h-5 mr-2" />
                                 Export Excel
                             </button>
                             <button
                                 onClick={handleExportPdf}
                                 className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
                             >
-                                <DocumentArrowDownIcon className="w-5 h-5 mr-2" />
+                                <Icon icon="solar:document-download-bold" className="w-5 h-5 mr-2" />
                                 Export PDF
                             </button>
                         </div>
@@ -227,7 +217,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                                         : 'text-gray-600 hover:text-gray-900'
                                 }`}
                             >
-                                <CalendarIcon className="w-4 h-4 inline mr-1" />
+                                <Icon icon="solar:calendar-bold" className="w-4 h-4 inline mr-1" />
                                 Bulanan
                             </button>
                             <button
@@ -238,14 +228,14 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                                         : 'text-gray-600 hover:text-gray-900'
                                 }`}
                             >
-                                <ClockIcon className="w-4 h-4 inline mr-1" />
+                                <Icon icon="solar:clock-circle-bold" className="w-4 h-4 inline mr-1" />
                                 Mingguan
                             </button>
                         </div>
 
                         {/* Bulan Selector */}
                         <div className="flex items-center space-x-2">
-                            <CalendarIcon className="w-5 h-5 text-gray-400" />
+                            <Icon icon="solar:calendar-bold" className="w-5 h-5 text-gray-400" />
                             <select
                                 value={currentBulan}
                                 onChange={handleBulanChange}
@@ -262,7 +252,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                         {/* Minggu Selector (hanya tampil jika tipe mingguan) */}
                         {tipe === 'mingguan' && (
                             <div className="flex items-center space-x-2">
-                                <ClockIcon className="w-5 h-5 text-gray-400" />
+                                <Icon icon="solar:clock-circle-bold" className="w-5 h-5 text-gray-400" />
                                 <select
                                     value={currentMinggu}
                                     onChange={handleMingguChange}
@@ -285,7 +275,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-green-500 p-3 rounded-lg flex-shrink-0">
-                            <CheckIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Hadir</p>
@@ -296,7 +286,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-blue-500 p-3 rounded-lg flex-shrink-0">
-                            <DocumentIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:document-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Izin</p>
@@ -307,7 +297,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
-                            <ExclamationTriangleIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:danger-triangle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Sakit</p>
@@ -318,7 +308,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-red-500 p-3 rounded-lg flex-shrink-0">
-                            <XMarkIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:close-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Alpha</p>

@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    ArrowLeftIcon,
-    CheckIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function KasbonEdit({ kasbon, karyawans }) {
     const [formData, setFormData] = useState({
@@ -39,7 +36,7 @@ export default function KasbonEdit({ kasbon, karyawans }) {
                     href="/kasbon"
                     className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                 >
-                    <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                     Kembali ke Kasbon
                 </Link>
             </div>
@@ -126,7 +123,7 @@ export default function KasbonEdit({ kasbon, karyawans }) {
                             type="submit"
                             className="inline-flex items-center px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700"
                         >
-                            <CheckIcon className="w-5 h-5 mr-2" />
+                            <Icon icon="solar:check-circle-bold" className="w-5 h-5 mr-2" />
                             Simpan Perubahan
                         </button>
                     </div>

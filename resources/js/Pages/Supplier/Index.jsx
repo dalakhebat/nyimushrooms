@@ -1,15 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    TruckIcon,
-    MagnifyingGlassIcon,
-    PhoneIcon,
-    MapPinIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function SupplierIndex({ suppliers, filters }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -39,7 +31,7 @@ export default function SupplierIndex({ suppliers, filters }) {
                     href="/supplier/create"
                     className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
                 >
-                    <PlusIcon className="w-5 h-5 mr-1" />
+                    <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                     Tambah Supplier
                 </Link>
             </div>
@@ -48,7 +40,7 @@ export default function SupplierIndex({ suppliers, filters }) {
             <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
                 <form onSubmit={handleSearch} className="flex gap-3">
                     <div className="relative flex-1">
-                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Icon icon="solar:magnifer-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                             type="text"
                             value={search}
@@ -93,7 +85,7 @@ export default function SupplierIndex({ suppliers, filters }) {
                             {suppliers.data.length === 0 ? (
                                 <tr>
                                     <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
-                                        <TruckIcon className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                                        <Icon icon="solar:delivery-bold" className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                                         <p>Belum ada data supplier</p>
                                     </td>
                                 </tr>
@@ -103,7 +95,7 @@ export default function SupplierIndex({ suppliers, filters }) {
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
                                                 <div className="bg-blue-100 p-2 rounded-lg mr-3">
-                                                    <TruckIcon className="w-5 h-5 text-blue-600" />
+                                                    <Icon icon="solar:delivery-bold" className="w-5 h-5 text-blue-600" />
                                                 </div>
                                                 <span className="font-medium text-gray-900">{supplier.nama}</span>
                                             </div>
@@ -111,7 +103,7 @@ export default function SupplierIndex({ suppliers, filters }) {
                                         <td className="px-6 py-4">
                                             {supplier.no_hp ? (
                                                 <div className="flex items-center text-sm text-gray-600">
-                                                    <PhoneIcon className="w-4 h-4 mr-1" />
+                                                    <Icon icon="solar:phone-bold" className="w-4 h-4 mr-1" />
                                                     {supplier.no_hp}
                                                 </div>
                                             ) : (
@@ -121,7 +113,7 @@ export default function SupplierIndex({ suppliers, filters }) {
                                         <td className="px-6 py-4">
                                             {supplier.alamat ? (
                                                 <div className="flex items-start text-sm text-gray-600 max-w-xs">
-                                                    <MapPinIcon className="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" />
+                                                    <Icon icon="solar:map-point-bold" className="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" />
                                                     <span className="truncate">{supplier.alamat}</span>
                                                 </div>
                                             ) : (
@@ -139,13 +131,13 @@ export default function SupplierIndex({ suppliers, filters }) {
                                                     href={`/supplier/${supplier.id}/edit`}
                                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                                                 >
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(supplier.id)}
                                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                                                 >
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

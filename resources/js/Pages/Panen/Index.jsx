@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    ScaleIcon,
-    FunnelIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 import { formatBerat } from '@/Utils/format';
 
 export default function PanenIndex({ panens, kumbungs, filters, summary }) {
@@ -48,7 +42,7 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-green-500 p-3 rounded-lg">
-                            <ScaleIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:scale-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Panen Hari Ini</p>
@@ -59,7 +53,7 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-green-600 p-3 rounded-lg">
-                            <ScaleIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:scale-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Panen Bulan Ini</p>
@@ -70,7 +64,7 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-blue-500 p-3 rounded-lg">
-                            <ScaleIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:scale-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Layak Jual</p>
@@ -81,7 +75,7 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-red-500 p-3 rounded-lg">
-                            <ScaleIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:scale-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Reject</p>
@@ -95,7 +89,7 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                 <div className="p-6 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
-                            <ScaleIcon className="w-6 h-6 text-green-600 mr-2" />
+                            <Icon icon="solar:scale-bold" className="w-6 h-6 text-green-600 mr-2" />
                             <h2 className="text-lg font-semibold text-gray-800">Data Panen</h2>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -103,14 +97,14 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                                 onClick={() => setFilterOpen(!filterOpen)}
                                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                             >
-                                <FunnelIcon className="w-5 h-5 mr-1" />
+                                <Icon icon="solar:filter-bold" className="w-5 h-5 mr-1" />
                                 Filter
                             </button>
                             <Link
                                 href="/panen/create"
                                 className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                             >
-                                <PlusIcon className="w-5 h-5 mr-1" />
+                                <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                                 Input Panen
                             </Link>
                         </div>
@@ -244,14 +238,14 @@ export default function PanenIndex({ panens, kumbungs, filters, summary }) {
                                                     href={'/panen/' + panen.id + '/edit'}
                                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                                 >
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(panen.id)}
                                                     disabled={deleting === panen.id}
                                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                                 >
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

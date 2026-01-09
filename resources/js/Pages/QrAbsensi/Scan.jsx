@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { ArrowLeftIcon, QrCodeIcon, ArrowRightOnRectangleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function QrAbsensiScan({ karyawans }) {
     const [scanType, setScanType] = useState('masuk');
@@ -26,14 +26,14 @@ export default function QrAbsensiScan({ karyawans }) {
             <div className="max-w-xl mx-auto">
                 <div className="mb-6">
                     <Link href="/qr-absensi" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900">
-                        <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                        <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                         Kembali
                     </Link>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm p-6">
                     <div className="flex items-center justify-center mb-6">
-                        <QrCodeIcon className="w-12 h-12 text-green-600" />
+                        <Icon icon="solar:qr-code-bold" className="w-12 h-12 text-green-600" />
                     </div>
                     <h2 className="text-xl font-semibold text-gray-800 text-center mb-6">Scan Absensi</h2>
 
@@ -46,7 +46,7 @@ export default function QrAbsensiScan({ karyawans }) {
                                 scanType === 'masuk' ? 'bg-green-600 text-white' : 'text-gray-600 hover:bg-gray-100'
                             }`}
                         >
-                            <ArrowRightOnRectangleIcon className="w-5 h-5 mr-2" />
+                            <Icon icon="solar:login-3-bold" className="w-5 h-5 mr-2" />
                             Masuk
                         </button>
                         <button
@@ -56,7 +56,7 @@ export default function QrAbsensiScan({ karyawans }) {
                                 scanType === 'keluar' ? 'bg-red-600 text-white' : 'text-gray-600 hover:bg-gray-100'
                             }`}
                         >
-                            <ArrowLeftOnRectangleIcon className="w-5 h-5 mr-2" />
+                            <Icon icon="solar:logout-3-bold" className="w-5 h-5 mr-2" />
                             Keluar
                         </button>
                     </div>

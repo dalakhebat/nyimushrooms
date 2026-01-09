@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { PlusIcon, PencilSquareIcon, TrashIcon, SunIcon, CloudIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, kumbungs, filters }) {
     const [deleting, setDeleting] = useState(null);
@@ -45,7 +45,7 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-500 flex items-center">
-                                            <SunIcon className="w-4 h-4 mr-1" /> Suhu
+                                            <Icon icon="solar:sun-bold" className="w-4 h-4 mr-1" /> Suhu
                                         </span>
                                         <span className={`text-sm font-medium ${
                                             getSuhuStatus(item.monitoring.suhu).color === 'green' ? 'text-green-600' :
@@ -56,7 +56,7 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-500 flex items-center">
-                                            <CloudIcon className="w-4 h-4 mr-1" /> Kelembaban
+                                            <Icon icon="solar:cloud-bold" className="w-4 h-4 mr-1" /> Kelembaban
                                         </span>
                                         <span className={`text-sm font-medium ${
                                             getKelembabanStatus(item.monitoring.kelembaban).color === 'green' ? 'text-green-600' :
@@ -90,7 +90,7 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
                             href="/monitoring-kumbung/create"
                             className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
                         >
-                            <PlusIcon className="w-5 h-5 mr-1" />
+                            <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                             Input Monitoring
                         </Link>
                     </div>
@@ -158,10 +158,10 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link href={`/monitoring-kumbung/${item.id}/edit`} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button onClick={() => handleDelete(item.id)} disabled={deleting === item.id} className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50">
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

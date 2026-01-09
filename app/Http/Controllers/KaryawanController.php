@@ -82,6 +82,7 @@ class KaryawanController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'no_hp' => 'nullable|string|max:20',
+            'pin' => 'nullable|string|size:6|unique:karyawans,pin',
             'alamat' => 'nullable|string',
             'bagian' => 'nullable|string|max:100',
             'tanggal_masuk' => 'nullable|date',
@@ -102,6 +103,7 @@ class KaryawanController extends Controller
                 'id' => $karyawan->id,
                 'nama' => $karyawan->nama,
                 'no_hp' => $karyawan->no_hp,
+                'pin' => $karyawan->pin,
                 'alamat' => $karyawan->alamat,
                 'bagian' => $karyawan->bagian,
                 'tanggal_masuk' => $karyawan->tanggal_masuk?->format('Y-m-d'),
@@ -117,6 +119,7 @@ class KaryawanController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'no_hp' => 'nullable|string|max:20',
+            'pin' => 'nullable|string|size:6|unique:karyawans,pin,' . $karyawan->id,
             'alamat' => 'nullable|string',
             'bagian' => 'nullable|string|max:100',
             'tanggal_masuk' => 'nullable|date',

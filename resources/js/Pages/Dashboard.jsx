@@ -1,19 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link } from '@inertiajs/react';
-import {
-    ScaleIcon,
-    CubeIcon,
-    UsersIcon,
-    BanknotesIcon,
-    ArrowTrendingUpIcon,
-    ArrowTrendingDownIcon,
-    ExclamationTriangleIcon,
-    BeakerIcon,
-    BellIcon,
-    CurrencyDollarIcon,
-    SunIcon,
-    QrCodeIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 import { formatBerat, formatRupiah, formatNumber } from '@/Utils/format';
 
 export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = [] }) {
@@ -36,25 +23,25 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
         {
             title: 'Panen Hari Ini',
             value: formatBerat(defaultStats.totalPanenHariIni),
-            icon: ScaleIcon,
+            icon: 'solar:scale-bold',
             color: 'bg-green-500',
         },
         {
             title: 'Panen Bulan Ini',
             value: formatBerat(defaultStats.totalPanenBulanIni),
-            icon: ScaleIcon,
+            icon: 'solar:scale-bold',
             color: 'bg-green-600',
         },
         {
             title: 'Kumbung Aktif',
             value: defaultStats.totalKumbungAktif,
-            icon: CubeIcon,
+            icon: 'solar:home-2-bold',
             color: 'bg-blue-500',
         },
         {
             title: 'Total Baglog',
             value: formatNumber(defaultStats.totalBaglog),
-            icon: CubeIcon,
+            icon: 'solar:layers-bold',
             color: 'bg-purple-500',
         },
     ];
@@ -63,19 +50,19 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
         {
             title: 'Income Bulan Ini',
             value: 'Rp ' + formatNumber(defaultStats.incomeBulanIni),
-            icon: ArrowTrendingUpIcon,
+            icon: 'solar:arrow-up-bold',
             color: 'bg-emerald-500',
         },
         {
             title: 'Outcome Bulan Ini',
             value: 'Rp ' + formatNumber(defaultStats.outcomeBulanIni),
-            icon: ArrowTrendingDownIcon,
+            icon: 'solar:arrow-down-bold',
             color: 'bg-red-500',
         },
         {
             title: 'Saldo Kas',
             value: 'Rp ' + formatNumber(defaultStats.saldoKas),
-            icon: CurrencyDollarIcon,
+            icon: 'solar:dollar-bold',
             color: defaultStats.saldoKas >= 0 ? 'bg-blue-500' : 'bg-red-600',
         },
     ];
@@ -84,19 +71,19 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
         {
             title: 'Karyawan Aktif',
             value: defaultStats.totalKaryawan,
-            icon: UsersIcon,
+            icon: 'solar:users-group-rounded-bold',
             color: 'bg-orange-500',
         },
         {
             title: 'Produksi Berjalan',
             value: defaultStats.produksiDalamProses,
-            icon: BeakerIcon,
+            icon: 'solar:test-tube-bold',
             color: 'bg-indigo-500',
         },
         {
             title: 'Monitoring Hari Ini',
             value: defaultStats.monitoringHariIni,
-            icon: SunIcon,
+            icon: 'solar:sun-bold',
             color: 'bg-yellow-500',
         },
     ];
@@ -105,14 +92,14 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
         {
             title: 'Stok Rendah',
             value: defaultStats.bahanBakuLowStock,
-            icon: ExclamationTriangleIcon,
+            icon: 'solar:danger-triangle-bold',
             color: defaultStats.bahanBakuLowStock > 0 ? 'bg-red-500' : 'bg-gray-400',
             link: '/bahan-baku',
         },
         {
             title: 'Notifikasi',
             value: defaultStats.notifikasiBelumDibaca,
-            icon: BellIcon,
+            icon: 'solar:bell-bold',
             color: defaultStats.notifikasiBelumDibaca > 0 ? 'bg-red-500' : 'bg-gray-400',
             link: '/notifikasi',
         },
@@ -128,13 +115,13 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
                     <div className="flex items-center gap-4">
                         {defaultStats.bahanBakuLowStock > 0 && (
                             <Link href="/bahan-baku" className="flex items-center gap-2 text-yellow-700 hover:text-yellow-900">
-                                <ExclamationTriangleIcon className="w-5 h-5" />
+                                <Icon icon="solar:danger-triangle-bold" className="w-5 h-5" />
                                 <span className="font-medium">{defaultStats.bahanBakuLowStock} bahan baku stok rendah</span>
                             </Link>
                         )}
                         {defaultStats.notifikasiBelumDibaca > 0 && (
                             <Link href="/notifikasi" className="flex items-center gap-2 text-yellow-700 hover:text-yellow-900">
-                                <BellIcon className="w-5 h-5" />
+                                <Icon icon="solar:bell-bold" className="w-5 h-5" />
                                 <span className="font-medium">{defaultStats.notifikasiBelumDibaca} notifikasi belum dibaca</span>
                             </Link>
                         )}
@@ -149,7 +136,7 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
                         <div className="p-4">
                             <div className="flex items-center">
                                 <div className={card.color + ' p-3 rounded-lg'}>
-                                    <card.icon className="w-6 h-6 text-white" />
+                                    <Icon icon={card.icon} className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="ml-3">
                                     <p className="text-xs font-medium text-gray-500">{card.title}</p>
@@ -168,7 +155,7 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
                         <div className="p-5">
                             <div className="flex items-center">
                                 <div className={card.color + ' p-3 rounded-lg'}>
-                                    <card.icon className="w-6 h-6 text-white" />
+                                    <Icon icon={card.icon} className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="ml-4">
                                     <p className="text-sm font-medium text-gray-500">{card.title}</p>
@@ -187,7 +174,7 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
                         <div className="p-5">
                             <div className="flex items-center">
                                 <div className={card.color + ' p-3 rounded-lg'}>
-                                    <card.icon className="w-6 h-6 text-white" />
+                                    <Icon icon={card.icon} className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="ml-4">
                                     <p className="text-sm font-medium text-gray-500">{card.title}</p>
@@ -284,42 +271,42 @@ export default function Dashboard({ stats, recentPanen = [], recentNotifikasi = 
                         href="/panen/create"
                         className="flex flex-col items-center justify-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
                     >
-                        <ScaleIcon className="w-8 h-8 text-green-600 mb-2" />
+                        <Icon icon="solar:scale-bold" className="w-8 h-8 text-green-600 mb-2" />
                         <span className="text-sm font-medium text-green-700 text-center">Input Panen</span>
                     </Link>
                     <Link
                         href="/qr-absensi/scan"
                         className="flex flex-col items-center justify-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
                     >
-                        <QrCodeIcon className="w-8 h-8 text-blue-600 mb-2" />
+                        <Icon icon="solar:qr-code-bold" className="w-8 h-8 text-blue-600 mb-2" />
                         <span className="text-sm font-medium text-blue-700 text-center">Scan Absensi</span>
                     </Link>
                     <Link
                         href="/monitoring-kumbung/create"
                         className="flex flex-col items-center justify-center p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors"
                     >
-                        <SunIcon className="w-8 h-8 text-yellow-600 mb-2" />
+                        <Icon icon="solar:sun-bold" className="w-8 h-8 text-yellow-600 mb-2" />
                         <span className="text-sm font-medium text-yellow-700 text-center">Monitoring</span>
                     </Link>
                     <Link
                         href="/produksi-baglog/create"
                         className="flex flex-col items-center justify-center p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
                     >
-                        <BeakerIcon className="w-8 h-8 text-indigo-600 mb-2" />
+                        <Icon icon="solar:test-tube-bold" className="w-8 h-8 text-indigo-600 mb-2" />
                         <span className="text-sm font-medium text-indigo-700 text-center">Produksi Baglog</span>
                     </Link>
                     <Link
                         href="/kas/create"
                         className="flex flex-col items-center justify-center p-4 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
                     >
-                        <CurrencyDollarIcon className="w-8 h-8 text-emerald-600 mb-2" />
+                        <Icon icon="solar:dollar-bold" className="w-8 h-8 text-emerald-600 mb-2" />
                         <span className="text-sm font-medium text-emerald-700 text-center">Transaksi Kas</span>
                     </Link>
                     <Link
                         href="/penjualan/jamur/create"
                         className="flex flex-col items-center justify-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
                     >
-                        <BanknotesIcon className="w-8 h-8 text-purple-600 mb-2" />
+                        <Icon icon="solar:banknote-bold" className="w-8 h-8 text-purple-600 mb-2" />
                         <span className="text-sm font-medium text-purple-700 text-center">Jual Jamur</span>
                     </Link>
                 </div>

@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    EyeIcon,
-    TrashIcon,
-    BanknotesIcon,
-    CheckCircleIcon,
-    ClockIcon,
-    MagnifyingGlassIcon,
-    DocumentArrowDownIcon,
-    ExclamationTriangleIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function PenggajianIndex({ penggajians, filters, summary }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -123,9 +113,9 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
 
     const getStatusBadge = (status) => {
         if (status === 'dibayar') {
-            return { class: 'bg-green-100 text-green-700', label: 'Dibayar', icon: CheckCircleIcon };
+            return { class: 'bg-green-100 text-green-700', label: 'Dibayar', icon: 'solar:check-circle-bold' };
         }
-        return { class: 'bg-yellow-100 text-yellow-700', label: 'Pending', icon: ClockIcon };
+        return { class: 'bg-yellow-100 text-yellow-700', label: 'Pending', icon: 'solar:clock-circle-bold' };
     };
 
     return (
@@ -137,7 +127,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
-                            <ClockIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Pending</p>
@@ -148,7 +138,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-green-500 p-3 rounded-lg flex-shrink-0">
-                            <CheckCircleIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Dibayar</p>
@@ -159,7 +149,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-red-500 p-3 rounded-lg flex-shrink-0">
-                            <BanknotesIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:banknote-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Total Belum Dibayar</p>
@@ -206,7 +196,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                 type="submit"
                                 className="px-4 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg hover:bg-gray-200"
                             >
-                                <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
+                                <Icon icon="solar:magnifer-bold" className="w-5 h-5 text-gray-500" />
                             </button>
                         </form>
                     </div>
@@ -216,7 +206,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                 onClick={() => setShowBayarModal(true)}
                                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"
                             >
-                                <BanknotesIcon className="w-5 h-5 mr-1" />
+                                <Icon icon="solar:banknote-bold" className="w-5 h-5 mr-1" />
                                 Bayar ({selectedIds.length})
                             </button>
                         )}
@@ -224,14 +214,14 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                             onClick={() => setShowDeleteAllModal(true)}
                             className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700"
                         >
-                            <TrashIcon className="w-5 h-5 mr-1" />
+                            <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5 mr-1" />
                             Hapus Semua
                         </button>
                         <Link
                             href="/penggajian/create"
                             className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
                         >
-                            <PlusIcon className="w-5 h-5 mr-1" />
+                            <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                             Proses Gaji
                         </Link>
                     </div>
@@ -269,7 +259,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                 </tr>
                             ) : (
                                 penggajians.data.map((item) => {
-                                    const StatusIcon = getStatusBadge(item.status).icon;
+                                    const statusIconName = getStatusBadge(item.status).icon;
                                     return (
                                         <tr key={item.id} className="hover:bg-gray-50">
                                             <td className="px-4 py-4">
@@ -299,7 +289,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                             </td>
                                             <td className="px-4 py-4 text-center">
                                                 <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(item.status).class}`}>
-                                                    <StatusIcon className="w-3 h-3 mr-1" />
+                                                    <Icon icon={statusIconName} className="w-3 h-3 mr-1" />
                                                     {getStatusBadge(item.status).label}
                                                 </span>
                                             </td>
@@ -309,19 +299,19 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                                         href={`/penggajian/${item.id}`}
                                                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                                                     >
-                                                        <EyeIcon className="w-5 h-5" />
+                                                        <Icon icon="solar:eye-bold" className="w-5 h-5" />
                                                     </Link>
                                                     <a
                                                         href={`/penggajian/${item.id}/slip-pdf`}
                                                         className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
                                                     >
-                                                        <DocumentArrowDownIcon className="w-5 h-5" />
+                                                        <Icon icon="solar:document-download-bold" className="w-5 h-5" />
                                                     </a>
                                                     <button
                                                         onClick={() => handleDelete(item.id)}
                                                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                                                     >
-                                                        <TrashIcon className="w-5 h-5" />
+                                                        <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -399,7 +389,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                     <div className="bg-white rounded-xl p-6 w-full max-w-md">
                         <div className="flex items-center mb-4">
                             <div className="bg-red-100 p-3 rounded-full mr-3">
-                                <ExclamationTriangleIcon className="w-6 h-6 text-red-600" />
+                                <Icon icon="solar:danger-triangle-bold" className="w-6 h-6 text-red-600" />
                             </div>
                             <h3 className="text-lg font-semibold text-gray-800">Hapus Semua Data Penggajian</h3>
                         </div>

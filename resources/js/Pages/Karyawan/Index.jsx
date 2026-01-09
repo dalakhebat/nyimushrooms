@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    UsersIcon,
-    MagnifyingGlassIcon,
-    FunnelIcon,
-    ChevronUpIcon,
-    ChevronDownIcon,
-    ChevronUpDownIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 import { formatRupiah } from '@/Utils/format';
 
 export default function KaryawanIndex({ karyawans, filters, summary }) {
@@ -83,7 +73,7 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-green-500 p-3 rounded-lg">
-                            <UsersIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:users-group-rounded-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Karyawan Aktif</p>
@@ -94,7 +84,7 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-gray-400 p-3 rounded-lg">
-                            <UsersIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:users-group-rounded-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm font-medium text-gray-500">Karyawan Nonaktif</p>
@@ -108,7 +98,7 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                 <div className="p-6 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
-                            <UsersIcon className="w-6 h-6 text-orange-600 mr-2" />
+                            <Icon icon="solar:users-group-rounded-bold" className="w-6 h-6 text-orange-600 mr-2" />
                             <h2 className="text-lg font-semibold text-gray-800">Data Karyawan</h2>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -116,14 +106,14 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                 onClick={() => setFilterOpen(!filterOpen)}
                                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                             >
-                                <FunnelIcon className="w-5 h-5 mr-1" />
+                                <Icon icon="solar:filter-bold" className="w-5 h-5 mr-1" />
                                 Filter
                             </button>
                             <Link
                                 href="/karyawan/create"
                                 className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                             >
-                                <PlusIcon className="w-5 h-5 mr-1" />
+                                <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                                 Tambah Karyawan
                             </Link>
                         </div>
@@ -138,7 +128,7 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                         Cari Nama
                                     </label>
                                     <div className="relative">
-                                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                        <Icon icon="solar:magnifer-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                                         <input
                                             type="text"
                                             value={filterData.search}
@@ -314,14 +304,14 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                                     href={'/karyawan/' + karyawan.id + '/edit'}
                                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                                 >
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(karyawan.id)}
                                                     disabled={deleting === karyawan.id}
                                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                                 >
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

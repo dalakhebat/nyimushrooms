@@ -1,15 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    MagnifyingGlassIcon,
-    ShoppingCartIcon,
-    CheckCircleIcon,
-    ClockIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function PembelianBahanBakuIndex({ pembelians, summary, filters }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -46,7 +38,7 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-blue-100 rounded-lg">
-                            <ShoppingCartIcon className="w-6 h-6 text-blue-600" />
+                            <Icon icon="solar:cart-bold" className="w-6 h-6 text-blue-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Total Bulan Ini</p>
@@ -57,7 +49,7 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-yellow-100 rounded-lg">
-                            <ClockIcon className="w-6 h-6 text-yellow-600" />
+                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-yellow-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Pending</p>
@@ -68,7 +60,7 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-green-100 rounded-lg">
-                            <CheckCircleIcon className="w-6 h-6 text-green-600" />
+                            <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-green-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Lunas</p>
@@ -79,7 +71,7 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-purple-100 rounded-lg">
-                            <ShoppingCartIcon className="w-6 h-6 text-purple-600" />
+                            <Icon icon="solar:cart-bold" className="w-6 h-6 text-purple-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Transaksi</p>
@@ -96,7 +88,7 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                         <div className="flex flex-col md:flex-row gap-3">
                             <div className="flex gap-2">
                                 <div className="relative">
-                                    <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <Icon icon="solar:magnifer-bold" className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                                     <input
                                         type="text"
                                         placeholder="Cari..."
@@ -123,7 +115,7 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                                 href="/pembelian-bahan-baku/create"
                                 className="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
                             >
-                                <PlusIcon className="w-5 h-5 mr-1" />
+                                <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                                 Tambah
                             </Link>
                         </div>
@@ -190,14 +182,14 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                                                     href={`/pembelian-bahan-baku/${item.id}/edit`}
                                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                                                 >
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(item.id)}
                                                     disabled={deleting === item.id}
                                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
                                                 >
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

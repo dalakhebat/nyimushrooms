@@ -13,12 +13,17 @@ class Karyawan extends Model
     protected $fillable = [
         'nama',
         'no_hp',
+        'pin',
         'alamat',
         'bagian',
         'tanggal_masuk',
         'tipe_gaji',
         'nominal_gaji',
         'status',
+    ];
+
+    protected $hidden = [
+        'pin',
     ];
 
     protected $casts = [

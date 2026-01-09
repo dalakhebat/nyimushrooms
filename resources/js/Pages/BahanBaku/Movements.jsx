@@ -1,16 +1,16 @@
 import { Head, Link } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { ArrowLeftIcon, ArrowUpIcon, ArrowDownIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function BahanBakuMovements({ bahanBaku, movements }) {
     const getTipeIcon = (tipe) => {
         switch (tipe) {
             case 'masuk':
-                return <ArrowUpIcon className="w-4 h-4 text-green-600" />;
+                return <Icon icon="solar:arrow-up-bold" className="w-4 h-4 text-green-600" />;
             case 'keluar':
-                return <ArrowDownIcon className="w-4 h-4 text-red-600" />;
+                return <Icon icon="solar:arrow-down-bold" className="w-4 h-4 text-red-600" />;
             default:
-                return <AdjustmentsHorizontalIcon className="w-4 h-4 text-blue-600" />;
+                return <Icon icon="solar:tuning-2-bold" className="w-4 h-4 text-blue-600" />;
         }
     };
 
@@ -33,7 +33,7 @@ export default function BahanBakuMovements({ bahanBaku, movements }) {
                         href="/bahan-baku"
                         className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                     >
-                        <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                        <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                         Kembali
                     </Link>
                 </div>

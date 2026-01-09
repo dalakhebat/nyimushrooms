@@ -1,13 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    ArrowLeftIcon,
-    CheckIcon,
-    MagnifyingGlassIcon,
-    DocumentArrowDownIcon,
-    TableCellsIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks, periode }) {
     const [attendance, setAttendance] = useState(() => {
@@ -162,7 +156,7 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
                     href="/penggajian"
                     className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                 >
-                    <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                     Kembali ke Penggajian
                 </Link>
             </div>
@@ -200,14 +194,14 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
                             href={`/absensi/mingguan/export/pdf?bulan=${bulan}&minggu=${minggu}`}
                             className="inline-flex items-center px-3 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700"
                         >
-                            <DocumentArrowDownIcon className="w-4 h-4 mr-1" />
+                            <Icon icon="solar:document-download-bold" className="w-4 h-4 mr-1" />
                             PDF
                         </a>
                         <a
                             href={`/absensi/mingguan/export/excel?bulan=${bulan}&minggu=${minggu}`}
                             className="inline-flex items-center px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
                         >
-                            <TableCellsIcon className="w-4 h-4 mr-1" />
+                            <Icon icon="solar:file-text-bold" className="w-4 h-4 mr-1" />
                             Excel
                         </a>
                     </div>
@@ -219,7 +213,7 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <div className="relative">
-                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <Icon icon="solar:magnifer-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                             <input
                                 type="text"
                                 value={search}
@@ -317,7 +311,7 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
                         disabled={saving}
                         className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:bg-gray-400"
                     >
-                        <CheckIcon className="w-5 h-5 mr-2" />
+                        <Icon icon="solar:check-circle-bold" className="w-5 h-5 mr-2" />
                         {saving ? 'Menyimpan...' : 'Simpan Absensi'}
                     </button>
                 </div>

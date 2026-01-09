@@ -1,15 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    MagnifyingGlassIcon,
-    ExclamationTriangleIcon,
-    ArchiveBoxIcon,
-    AdjustmentsHorizontalIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function BahanBakuIndex({ bahanBakus, summary, kategoris, filters }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -42,7 +34,7 @@ export default function BahanBakuIndex({ bahanBakus, summary, kategoris, filters
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-blue-100 rounded-lg">
-                            <ArchiveBoxIcon className="w-6 h-6 text-blue-600" />
+                            <Icon icon="solar:box-bold" className="w-6 h-6 text-blue-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Total Item</p>
@@ -53,7 +45,7 @@ export default function BahanBakuIndex({ bahanBakus, summary, kategoris, filters
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-red-100 rounded-lg">
-                            <ExclamationTriangleIcon className="w-6 h-6 text-red-600" />
+                            <Icon icon="solar:danger-triangle-bold" className="w-6 h-6 text-red-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Stok Menipis</p>
@@ -64,7 +56,7 @@ export default function BahanBakuIndex({ bahanBakus, summary, kategoris, filters
                 <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center">
                         <div className="p-3 bg-green-100 rounded-lg">
-                            <ArchiveBoxIcon className="w-6 h-6 text-green-600" />
+                            <Icon icon="solar:box-bold" className="w-6 h-6 text-green-600" />
                         </div>
                         <div className="ml-4">
                             <p className="text-sm text-gray-500">Total Nilai Stok</p>
@@ -81,7 +73,7 @@ export default function BahanBakuIndex({ bahanBakus, summary, kategoris, filters
                         <div className="flex flex-col md:flex-row gap-3">
                             <div className="flex gap-2">
                                 <div className="relative">
-                                    <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <Icon icon="solar:magnifer-bold" className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                                     <input
                                         type="text"
                                         placeholder="Cari..."
@@ -112,7 +104,7 @@ export default function BahanBakuIndex({ bahanBakus, summary, kategoris, filters
                                 href="/bahan-baku/create"
                                 className="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                             >
-                                <PlusIcon className="w-5 h-5 mr-1" />
+                                <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                                 Tambah
                             </Link>
                         </div>
@@ -158,7 +150,7 @@ export default function BahanBakuIndex({ bahanBakus, summary, kategoris, filters
                                                 {item.stok} {item.satuan}
                                             </span>
                                             {item.stok <= item.stok_minimum && (
-                                                <ExclamationTriangleIcon className="w-4 h-4 inline ml-1 text-red-500" />
+                                                <Icon icon="solar:danger-triangle-bold" className="w-4 h-4 inline ml-1 text-red-500" />
                                             )}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
@@ -174,20 +166,20 @@ export default function BahanBakuIndex({ bahanBakus, summary, kategoris, filters
                                                     className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                                                     title="Riwayat Stok"
                                                 >
-                                                    <AdjustmentsHorizontalIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:tuning-2-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <Link
                                                     href={`/bahan-baku/${item.id}/edit`}
                                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                                 >
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(item.id)}
                                                     disabled={deleting === item.id}
                                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                                 >
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

@@ -1,21 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    ClipboardDocumentCheckIcon,
-    CalendarIcon,
-    CheckIcon,
-    XMarkIcon,
-    ExclamationTriangleIcon,
-    UserGroupIcon,
-    ClockIcon,
-    DocumentIcon,
-    ChartBarIcon,
-    MagnifyingGlassIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function AbsensiIndex({ absensis, filters, summary, today }) {
     const [deleting, setDeleting] = useState(null);
@@ -75,7 +61,7 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
             <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <div className="flex items-center space-x-3">
-                        <CalendarIcon className="w-6 h-6 text-gray-500" />
+                        <Icon icon="solar:calendar-bold" className="w-6 h-6 text-gray-500" />
                         <div>
                             <p className="text-sm text-gray-500">Tanggal Absensi</p>
                             <p className="text-lg font-semibold text-gray-800">{formatTanggal(tanggal)}</p>
@@ -92,14 +78,14 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                             href="/absensi/rekap"
                             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
                         >
-                            <ChartBarIcon className="w-5 h-5 mr-1" />
+                            <Icon icon="solar:chart-bold" className="w-5 h-5 mr-1" />
                             Rekap
                         </Link>
                         <Link
                             href={'/absensi/create?tanggal=' + tanggal}
                             className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                         >
-                            <PlusIcon className="w-5 h-5 mr-1" />
+                            <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                             Input Absensi
                         </Link>
                     </div>
@@ -111,7 +97,7 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-green-500 p-3 rounded-lg flex-shrink-0">
-                            <CheckIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4 min-w-0">
                             <p className="text-sm font-medium text-gray-500">Hadir</p>
@@ -122,7 +108,7 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-blue-500 p-3 rounded-lg flex-shrink-0">
-                            <DocumentIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:document-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4 min-w-0">
                             <p className="text-sm font-medium text-gray-500">Izin</p>
@@ -133,7 +119,7 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
-                            <ExclamationTriangleIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:danger-triangle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4 min-w-0">
                             <p className="text-sm font-medium text-gray-500">Sakit</p>
@@ -144,7 +130,7 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-red-500 p-3 rounded-lg flex-shrink-0">
-                            <XMarkIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:close-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4 min-w-0">
                             <p className="text-sm font-medium text-gray-500">Alpha</p>
@@ -155,7 +141,7 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-gray-400 p-3 rounded-lg flex-shrink-0">
-                            <ClockIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4 min-w-0">
                             <p className="text-sm font-medium text-gray-500">Belum Absen</p>
@@ -166,7 +152,7 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                 <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center">
                         <div className="bg-purple-500 p-3 rounded-lg flex-shrink-0">
-                            <UserGroupIcon className="w-6 h-6 text-white" />
+                            <Icon icon="solar:users-group-rounded-bold" className="w-6 h-6 text-white" />
                         </div>
                         <div className="ml-4 min-w-0">
                             <p className="text-sm font-medium text-gray-500">Total Aktif</p>
@@ -181,12 +167,12 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                 <div className="p-6 border-b border-gray-200">
                     <div className="flex items-center justify-between flex-wrap gap-4">
                         <div className="flex items-center">
-                            <ClipboardDocumentCheckIcon className="w-6 h-6 text-blue-600 mr-3" />
+                            <Icon icon="solar:clipboard-check-bold" className="w-6 h-6 text-blue-600 mr-3" />
                             <h2 className="text-lg font-semibold text-gray-800">Data Absensi</h2>
                         </div>
                         <form onSubmit={handleSearch} className="flex items-center gap-2">
                             <div className="relative">
-                                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                <Icon icon="solar:magnifer-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                                 <input
                                     type="text"
                                     value={search}
@@ -261,14 +247,14 @@ export default function AbsensiIndex({ absensis, filters, summary, today }) {
                                                     href={'/absensi/' + absensi.id + '/edit'}
                                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                                 >
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(absensi.id)}
                                                     disabled={deleting === absensi.id}
                                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                                 >
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

@@ -1,11 +1,12 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function KaryawanEdit({ karyawan }) {
     const { data, setData, put, processing, errors } = useForm({
         nama: karyawan.nama || '',
         no_hp: karyawan.no_hp || '',
+        pin: karyawan.pin || '',
         alamat: karyawan.alamat || '',
         bagian: karyawan.bagian || '',
         tanggal_masuk: karyawan.tanggal_masuk || '',
@@ -13,6 +14,11 @@ export default function KaryawanEdit({ karyawan }) {
         nominal_gaji: karyawan.nominal_gaji || '',
         status: karyawan.status || 'aktif',
     });
+
+    const generateRandomPin = () => {
+        const pin = Math.floor(100000 + Math.random() * 900000).toString();
+        setData('pin', pin);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,7 +35,7 @@ export default function KaryawanEdit({ karyawan }) {
                         href="/karyawan"
                         className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                     >
-                        <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                        <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                         Kembali
                     </Link>
                 </div>
@@ -69,6 +75,33 @@ export default function KaryawanEdit({ karyawan }) {
                             />
                             {errors.no_hp && (
                                 <p className="mt-1 text-sm text-red-600">{errors.no_hp}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                PIN Absensi (6 digit)
+                            </label>
+                            <div className="flex space-x-2">
+                                <input
+                                    type="text"
+                                    value={data.pin}
+                                    onChange={(e) => setData('pin', e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                    placeholder="Contoh: 123456"
+                                    maxLength={6}
+                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono tracking-widest"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={generateRandomPin}
+                                    className="px-4 py-2 text-sm font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors"
+                                >
+                                    Generate
+                                </button>
+                            </div>
+                            <p className="mt-1 text-xs text-gray-500">PIN digunakan untuk absensi QR Code</p>
+                            {errors.pin && (
+                                <p className="mt-1 text-sm text-red-600">{errors.pin}</p>
                             )}
                         </div>
 

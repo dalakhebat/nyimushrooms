@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    BuildingStorefrontIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function KumbungIndex({ kumbungs }) {
     const [deleting, setDeleting] = useState(null);
@@ -43,7 +38,7 @@ export default function KumbungIndex({ kumbungs }) {
                 <div className="p-6 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
-                            <BuildingStorefrontIcon className="w-6 h-6 text-green-600 mr-2" />
+                            <Icon icon="solar:home-2-bold" className="w-6 h-6 text-green-600 mr-2" />
                             <h2 className="text-lg font-semibold text-gray-800">
                                 Daftar Kumbung
                             </h2>
@@ -52,7 +47,7 @@ export default function KumbungIndex({ kumbungs }) {
                             href="/kumbung/create"
                             className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                         >
-                            <PlusIcon className="w-5 h-5 mr-1" />
+                            <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
                             Tambah Kumbung
                         </Link>
                     </div>
@@ -113,14 +108,14 @@ export default function KumbungIndex({ kumbungs }) {
                                                     href={'/kumbung/' + kumbung.id + '/edit'}
                                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                                 >
-                                                    <PencilSquareIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(kumbung.id)}
                                                     disabled={deleting === kumbung.id}
                                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                                 >
-                                                    <TrashIcon className="w-5 h-5" />
+                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </td>

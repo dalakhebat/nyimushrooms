@@ -1,6 +1,6 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { ArrowLeftIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function PenggajianEdit({ penggajian }) {
     const { data, setData, put, processing, errors } = useForm({
@@ -36,7 +36,7 @@ export default function PenggajianEdit({ penggajian }) {
                         href={'/penggajian/' + penggajian.id}
                         className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                     >
-                        <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                        <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                         Kembali ke Detail
                     </Link>
                 </div>
@@ -57,7 +57,7 @@ export default function PenggajianEdit({ penggajian }) {
                     {penggajian.sisa_kasbon > 0 && (
                         <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
                             <div className="flex items-start">
-                                <ExclamationTriangleIcon className="w-5 h-5 text-orange-500 mt-0.5 mr-2" />
+                                <Icon icon="solar:danger-triangle-bold" className="w-5 h-5 text-orange-500 mt-0.5 mr-2" />
                                 <div>
                                     <p className="text-sm font-medium text-orange-800">Karyawan ini memiliki kasbon aktif</p>
                                     <p className="text-sm text-orange-700 mt-1">

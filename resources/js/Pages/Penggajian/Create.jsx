@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import {
-    ArrowLeftIcon,
-    CalendarIcon,
-    ClockIcon,
-    BanknotesIcon,
-    CheckIcon,
-} from '@heroicons/react/24/outline';
+import { Icon } from '@iconify/react';
 
 export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, minggu, weeks, periode }) {
     const [selectedKaryawans, setSelectedKaryawans] = useState(
@@ -165,7 +159,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                     href="/penggajian"
                     className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
                 >
-                    <ArrowLeftIcon className="w-4 h-4 mr-1" />
+                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
                     Kembali ke Penggajian
                 </Link>
             </div>
@@ -185,7 +179,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                                     : 'text-gray-600 hover:text-gray-900'
                             }`}
                         >
-                            <CalendarIcon className="w-4 h-4 inline mr-1" />
+                            <Icon icon="solar:calendar-bold" className="w-4 h-4 inline mr-1" />
                             Bulanan
                         </button>
                         <button
@@ -196,7 +190,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                                     : 'text-gray-600 hover:text-gray-900'
                             }`}
                         >
-                            <ClockIcon className="w-4 h-4 inline mr-1" />
+                            <Icon icon="solar:clock-circle-bold" className="w-4 h-4 inline mr-1" />
                             Mingguan
                         </button>
                     </div>
@@ -383,7 +377,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                                 disabled={selectedCount === 0}
                                 className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                             >
-                                <CheckIcon className="w-5 h-5 mr-2" />
+                                <Icon icon="solar:check-circle-bold" className="w-5 h-5 mr-2" />
                                 Proses Penggajian
                             </button>
                         </div>
