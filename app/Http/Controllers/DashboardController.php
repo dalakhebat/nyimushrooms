@@ -14,6 +14,7 @@ use App\Models\PenjualanBaglog;
 use App\Models\PenjualanJamur;
 use App\Models\Penggajian;
 use App\Models\ProduksiBaglog;
+use App\Models\StokJamur;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
@@ -93,10 +94,70 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // Kumbung ROI Data
+        $kumbungRoi = Kumbung::where('status', 'aktif')
+            ->orderBy('nomor')
+            ->get()
+            ->map(function ($kumbung) {
+                return [
+                    'id' => $kumbung->id,
+                    'nama' => $kumbung->nama,
+                    'nomor' => $kumbung->nomor,
+                    'kapasitas_baglog' => $kumbung->kapasitas_baglog,
+                    'baglog_aktif' => $kumbung->baglog_aktif,
+                    'total_investasi' => $kumbung->total_investasi,
+                    'total_panen' => $kumbung->total_panen,
+                    'pendapatan_panen' => $kumbung->pendapatan_panen,
+                    'roi' => $kumbung->roi,
+                    'progress_target' => $kumbung->progress_target,
+                    'sisa_target_bep' => $kumbung->sisa_target_bep,
+                    'estimasi_profit' => $kumbung->estimasi_profit,
+                ];
+            });
+
+        // Stok Jamur Data
+        $stokJamur = [
+            'tersedia' => StokJamur::getStokTersedia(),
+            'masuk_bulan_ini' => StokJamur::where('tipe', 'masuk')
+                ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])
+                ->sum('berat_kg'),
+            'keluar_bulan_ini' => StokJamur::where('tipe', 'keluar')
+                ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])
+                ->sum('berat_kg'),
+        ];
+
+        // Baglog Status Summary
+        $baglogStatus = [
+            'produksi' => Baglog::where('status', 'produksi')->sum('jumlah'),
+            'inkubasi' => Baglog::where('status', 'inkubasi')->sum('jumlah'),
+            'pembibitan' => Baglog::where('status', 'pembibitan')->sum('jumlah'),
+            'masuk_kumbung' => Baglog::where('status', 'masuk_kumbung')->sum('jumlah'),
+            'dijual' => Baglog::where('status', 'dijual')->sum('jumlah'),
+            'selesai' => Baglog::where('status', 'selesai')->sum('jumlah'),
+        ];
+
+        // Investment Summary
+        $investmentSummary = [
+            'total_investasi' => Kumbung::sum('total_investasi'),
+            'total_biaya_pembangunan' => Kumbung::sum('biaya_pembangunan'),
+            'total_biaya_baglog' => Kumbung::sum('biaya_baglog'),
+            'total_pendapatan' => Kumbung::get()->sum(function ($k) { return $k->pendapatan_panen; }),
+            'overall_roi' => null,
+        ];
+
+        // Calculate overall ROI
+        if ($investmentSummary['total_investasi'] > 0) {
+            $investmentSummary['overall_roi'] = (($investmentSummary['total_pendapatan'] - $investmentSummary['total_investasi']) / $investmentSummary['total_investasi']) * 100;
+        }
+
         return Inertia::render('Dashboard', [
             'stats' => $stats,
             'recentPanen' => $recentPanen,
             'recentNotifikasi' => $recentNotifikasi,
+            'kumbungRoi' => $kumbungRoi,
+            'stokJamur' => $stokJamur,
+            'baglogStatus' => $baglogStatus,
+            'investmentSummary' => $investmentSummary,
         ]);
     }
 }

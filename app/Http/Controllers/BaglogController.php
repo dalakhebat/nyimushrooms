@@ -10,6 +10,39 @@ use Carbon\Carbon;
 
 class BaglogController extends Controller
 {
+    /**
+     * Status progression rules (state machine)
+     * produksi → inkubasi → pembibitan → masuk_kumbung → selesai
+     * Any status can go to → dijual (when selling baglog)
+     */
+    private const STATUS_TRANSITIONS = [
+        'produksi' => ['inkubasi', 'dijual'],
+        'inkubasi' => ['pembibitan', 'dijual'],
+        'pembibitan' => ['masuk_kumbung', 'dijual'],
+        'masuk_kumbung' => ['selesai', 'dijual'],
+        'dijual' => [], // Final state
+        'selesai' => [], // Final state
+    ];
+
+    /**
+     * Get allowed next statuses for a given status
+     */
+    private function getAllowedStatuses(string $currentStatus): array
+    {
+        return self::STATUS_TRANSITIONS[$currentStatus] ?? [];
+    }
+
+    /**
+     * Check if a status transition is valid
+     */
+    private function isValidTransition(string $from, string $to): bool
+    {
+        // Same status is always valid
+        if ($from === $to) {
+            return true;
+        }
+        return in_array($to, self::STATUS_TRANSITIONS[$from] ?? []);
+    }
     public function index(Request $request)
     {
         $query = Baglog::with('kumbung');
@@ -56,7 +89,19 @@ class BaglogController extends Controller
             'selesai' => Baglog::where('status', 'selesai')->sum('jumlah'),
         ];
 
-        $kumbungs = Kumbung::where('status', 'aktif')->orderBy('nama')->get();
+        $kumbungs = Kumbung::where('status', 'aktif')->orderBy('nama')->get()->map(function ($k) {
+            $terisi = Baglog::where('kumbung_id', $k->id)
+                ->where('status', 'masuk_kumbung')
+                ->sum('jumlah');
+            return [
+                'id' => $k->id,
+                'nama' => $k->nama,
+                'kapasitas' => $k->kapasitas_baglog,
+                'terisi' => $terisi,
+                'tersedia' => $k->kapasitas_baglog - $terisi,
+                'status' => $k->status,
+            ];
+        });
 
         return Inertia::render('Baglog/Index', [
             'baglogs' => $baglogs,
@@ -68,7 +113,18 @@ class BaglogController extends Controller
 
     public function create()
     {
-        $kumbungs = Kumbung::where('status', 'aktif')->orderBy('nama')->get();
+        $kumbungs = Kumbung::where('status', 'aktif')->orderBy('nama')->get()->map(function ($k) {
+            $terisi = Baglog::where('kumbung_id', $k->id)
+                ->where('status', 'masuk_kumbung')
+                ->sum('jumlah');
+            return [
+                'id' => $k->id,
+                'nama' => $k->nama,
+                'kapasitas' => $k->kapasitas_baglog,
+                'terisi' => $terisi,
+                'tersedia' => $k->kapasitas_baglog - $terisi,
+            ];
+        });
 
         return Inertia::render('Baglog/Create', [
             'kumbungs' => $kumbungs,
@@ -86,6 +142,31 @@ class BaglogController extends Controller
             'status' => 'required|in:produksi,inkubasi,pembibitan,masuk_kumbung,dijual,selesai',
         ]);
 
+        // New baglog must start with 'produksi' status
+        if ($validated['status'] !== 'produksi') {
+            return back()->withErrors(['status' => 'Baglog baru harus dimulai dengan status "produksi"']);
+        }
+
+        // Validate: masuk_kumbung requires kumbung_id
+        if ($validated['status'] === 'masuk_kumbung' && empty($validated['kumbung_id'])) {
+            return back()->withErrors(['kumbung_id' => 'Pilih kumbung untuk status masuk_kumbung']);
+        }
+
+        // Validate kumbung capacity if assigning to kumbung
+        if (!empty($validated['kumbung_id'])) {
+            $kumbung = Kumbung::find($validated['kumbung_id']);
+            $currentBaglogs = Baglog::where('kumbung_id', $validated['kumbung_id'])
+                ->where('status', 'masuk_kumbung')
+                ->sum('jumlah');
+            $availableCapacity = $kumbung->kapasitas_baglog - $currentBaglogs;
+
+            if ($validated['jumlah'] > $availableCapacity) {
+                return back()->withErrors([
+                    'jumlah' => "Kapasitas kumbung tidak cukup. Tersedia: {$availableCapacity} baglog (kapasitas: {$kumbung->kapasitas_baglog}, terisi: {$currentBaglogs})"
+                ]);
+            }
+        }
+
         // Calculate estimated completion date (5 months from masuk kumbung)
         if ($validated['tanggal_tanam']) {
             $validated['tanggal_estimasi_selesai'] = Carbon::parse($validated['tanggal_tanam'])->addMonths(5);
@@ -98,7 +179,19 @@ class BaglogController extends Controller
 
     public function edit(Baglog $baglog)
     {
-        $kumbungs = Kumbung::where('status', 'aktif')->orderBy('nama')->get();
+        $kumbungs = Kumbung::where('status', 'aktif')->orderBy('nama')->get()->map(function ($k) use ($baglog) {
+            $terisi = Baglog::where('kumbung_id', $k->id)
+                ->where('status', 'masuk_kumbung')
+                ->where('id', '!=', $baglog->id) // Exclude current baglog
+                ->sum('jumlah');
+            return [
+                'id' => $k->id,
+                'nama' => $k->nama,
+                'kapasitas' => $k->kapasitas_baglog,
+                'terisi' => $terisi,
+                'tersedia' => $k->kapasitas_baglog - $terisi,
+            ];
+        });
 
         return Inertia::render('Baglog/Edit', [
             'baglog' => [
@@ -127,6 +220,38 @@ class BaglogController extends Controller
             'status' => 'required|in:produksi,inkubasi,pembibitan,masuk_kumbung,dijual,selesai',
         ]);
 
+        // Validate status transition
+        if (!$this->isValidTransition($baglog->status, $validated['status'])) {
+            $allowedNext = implode(', ', $this->getAllowedStatuses($baglog->status));
+            return back()->withErrors([
+                'status' => "Tidak dapat mengubah status dari '{$baglog->status}' ke '{$validated['status']}'. Status yang diperbolehkan: {$allowedNext}"
+            ]);
+        }
+
+        // Validate: masuk_kumbung requires kumbung_id
+        if ($validated['status'] === 'masuk_kumbung' && empty($validated['kumbung_id'])) {
+            return back()->withErrors(['kumbung_id' => 'Pilih kumbung untuk status masuk_kumbung']);
+        }
+
+        // Validate kumbung capacity if status is masuk_kumbung
+        $newKumbungId = $validated['kumbung_id'] ?? null;
+
+        if ($newKumbungId && $validated['status'] === 'masuk_kumbung') {
+            $kumbung = Kumbung::find($newKumbungId);
+            // Hitung baglog lain di kumbung ini (exclude current baglog)
+            $currentBaglogs = Baglog::where('kumbung_id', $newKumbungId)
+                ->where('status', 'masuk_kumbung')
+                ->where('id', '!=', $baglog->id)
+                ->sum('jumlah');
+            $availableCapacity = $kumbung->kapasitas_baglog - $currentBaglogs;
+
+            if ($validated['jumlah'] > $availableCapacity) {
+                return back()->withErrors([
+                    'jumlah' => "Kapasitas kumbung tidak cukup. Tersedia: {$availableCapacity} baglog (kapasitas: {$kumbung->kapasitas_baglog}, terisi: {$currentBaglogs})"
+                ]);
+            }
+        }
+
         // Auto-calculate if tanggal_tanam changed and no manual estimasi
         if ($validated['tanggal_tanam'] && !$request->filled('tanggal_estimasi_selesai')) {
             $validated['tanggal_estimasi_selesai'] = Carbon::parse($validated['tanggal_tanam'])->addMonths(5);
@@ -151,17 +276,64 @@ class BaglogController extends Controller
     {
         $validated = $request->validate([
             'status' => 'required|in:produksi,inkubasi,pembibitan,masuk_kumbung,dijual,selesai',
+            'kumbung_id' => 'nullable|exists:kumbungs,id',
         ]);
 
-        // If changing to masuk_kumbung, set tanggal_tanam (tanggal masuk kumbung) if not set
-        if ($validated['status'] === 'masuk_kumbung' && !$baglog->tanggal_tanam) {
-            $baglog->tanggal_tanam = now();
-            $baglog->tanggal_estimasi_selesai = now()->addMonths(5);
+        // Validate status transition
+        if (!$this->isValidTransition($baglog->status, $validated['status'])) {
+            $allowedNext = implode(', ', $this->getAllowedStatuses($baglog->status));
+            return redirect()->back()->withErrors([
+                'status' => "Tidak dapat mengubah status dari '{$baglog->status}' ke '{$validated['status']}'. Status yang diperbolehkan: {$allowedNext}"
+            ]);
+        }
+
+        // If changing to masuk_kumbung, require kumbung_id
+        if ($validated['status'] === 'masuk_kumbung') {
+            $kumbungId = $validated['kumbung_id'] ?? $baglog->kumbung_id;
+            if (!$kumbungId) {
+                return redirect()->back()->withErrors([
+                    'kumbung_id' => 'Pilih kumbung untuk status masuk_kumbung'
+                ]);
+            }
+
+            // Validate kumbung capacity
+            $kumbung = Kumbung::find($kumbungId);
+            $currentBaglogs = Baglog::where('kumbung_id', $kumbungId)
+                ->where('status', 'masuk_kumbung')
+                ->where('id', '!=', $baglog->id)
+                ->sum('jumlah');
+            $availableCapacity = $kumbung->kapasitas_baglog - $currentBaglogs;
+
+            if ($baglog->jumlah > $availableCapacity) {
+                return redirect()->back()->withErrors([
+                    'kumbung_id' => "Kapasitas kumbung tidak cukup. Tersedia: {$availableCapacity} baglog"
+                ]);
+            }
+
+            // Set kumbung_id
+            $baglog->kumbung_id = $kumbungId;
+
+            // Set tanggal_tanam (tanggal masuk kumbung) if not set
+            if (!$baglog->tanggal_tanam) {
+                $baglog->tanggal_tanam = now();
+                $baglog->tanggal_estimasi_selesai = now()->addMonths(5);
+            }
         }
 
         $baglog->status = $validated['status'];
         $baglog->save();
 
         return redirect()->back()->with('success', 'Status baglog berhasil diupdate');
+    }
+
+    /**
+     * Get allowed next statuses for frontend
+     */
+    public function getAllowedNextStatuses(Baglog $baglog)
+    {
+        return response()->json([
+            'current_status' => $baglog->status,
+            'allowed_statuses' => $this->getAllowedStatuses($baglog->status),
+        ]);
     }
 }

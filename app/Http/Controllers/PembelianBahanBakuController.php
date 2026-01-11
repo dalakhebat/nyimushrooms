@@ -228,6 +228,12 @@ class PembelianBahanBakuController extends Controller
         ]);
 
         $oldStatus = $pembelianBahanBaku->status;
+
+        // Cegah perubahan dari lunas ke pending
+        if ($oldStatus === 'lunas' && $validated['status'] === 'pending') {
+            return back()->withErrors(['status' => 'Status yang sudah lunas tidak dapat diubah kembali ke pending']);
+        }
+
         $pembelianBahanBaku->update($validated);
 
         // Jika status berubah dari pending ke lunas
@@ -243,6 +249,6 @@ class PembelianBahanBakuController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Status berhasil diupdate');
+        return back()->with('success', 'Status berhasil diupdate menjadi lunas');
     }
 }

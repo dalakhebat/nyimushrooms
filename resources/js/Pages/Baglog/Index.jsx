@@ -5,6 +5,9 @@ import { Icon } from '@iconify/react';
 
 export default function BaglogIndex({ baglogs, kumbungs, summary, filters }) {
     const [search, setSearch] = useState(filters.search || '');
+    const [showKumbungModal, setShowKumbungModal] = useState(false);
+    const [selectedBaglog, setSelectedBaglog] = useState(null);
+    const [selectedKumbung, setSelectedKumbung] = useState('');
 
     const handleFilter = (key, value) => {
         router.get('/baglog', { ...filters, [key]: value }, { preserveState: true });
@@ -21,8 +24,44 @@ export default function BaglogIndex({ baglogs, kumbungs, summary, filters }) {
         }
     };
 
-    const handleStatusChange = (id, newStatus) => {
-        router.patch(`/baglog/${id}/status`, { status: newStatus });
+    const handleStatusChange = (baglog, newStatus) => {
+        // Jika pilih masuk_kumbung, tampilkan modal pilih kumbung
+        if (newStatus === 'masuk_kumbung' && !baglog.kumbung_id) {
+            setSelectedBaglog(baglog);
+            setSelectedKumbung('');
+            setShowKumbungModal(true);
+            return;
+        }
+
+        // Untuk status lain, langsung update
+        if (confirm(`Ubah status menjadi "${getStatusBadge(newStatus).label}"?`)) {
+            router.patch(`/baglog/${baglog.id}/status`, { status: newStatus });
+        }
+    };
+
+    const handleMasukKumbung = () => {
+        if (!selectedKumbung) {
+            alert('Pilih kumbung terlebih dahulu');
+            return;
+        }
+
+        // Validasi kapasitas
+        const kumbung = kumbungs.find(k => k.id == selectedKumbung);
+        if (kumbung && selectedBaglog.jumlah > kumbung.tersedia) {
+            alert(`Kapasitas kumbung tidak cukup!\n\nJumlah baglog: ${formatNumber(selectedBaglog.jumlah)}\nKapasitas tersedia: ${formatNumber(kumbung.tersedia)}`);
+            return;
+        }
+
+        router.patch(`/baglog/${selectedBaglog.id}/status`, {
+            status: 'masuk_kumbung',
+            kumbung_id: selectedKumbung,
+        }, {
+            onSuccess: () => {
+                setShowKumbungModal(false);
+                setSelectedBaglog(null);
+                setSelectedKumbung('');
+            }
+        });
     };
 
     const getStatusBadge = (status) => {
@@ -40,6 +79,9 @@ export default function BaglogIndex({ baglogs, kumbungs, summary, filters }) {
     const formatNumber = (num) => {
         return new Intl.NumberFormat('id-ID').format(num);
     };
+
+    // Filter kumbungs yang aktif dan punya kapasitas
+    const availableKumbungs = kumbungs.filter(k => k.status === 'aktif');
 
     return (
         <AdminLayout title="Baglog">
@@ -211,8 +253,8 @@ export default function BaglogIndex({ baglogs, kumbungs, summary, filters }) {
                                         <td className="px-6 py-4 text-center">
                                             <select
                                                 value={baglog.status}
-                                                onChange={(e) => handleStatusChange(baglog.id, e.target.value)}
-                                                className={`px-2 py-1 text-xs font-medium rounded-full border-0 cursor-pointer ${getStatusBadge(baglog.status).class}`}
+                                                onChange={(e) => handleStatusChange(baglog, e.target.value)}
+                                                className={`px-2 py-1 text-xs font-medium rounded-lg border cursor-pointer ${getStatusBadge(baglog.status).class}`}
                                             >
                                                 <option value="produksi">Produksi</option>
                                                 <option value="inkubasi">Inkubasi</option>
@@ -267,6 +309,91 @@ export default function BaglogIndex({ baglogs, kumbungs, summary, filters }) {
                     </div>
                 )}
             </div>
+
+            {/* Modal Pilih Kumbung */}
+            {showKumbungModal && selectedBaglog && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl p-6 w-full max-w-md">
+                        <div className="flex items-center mb-4">
+                            <div className="bg-green-100 p-3 rounded-full mr-3">
+                                <Icon icon="solar:home-2-bold" className="w-6 h-6 text-green-600" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-800">Masukkan ke Kumbung</h3>
+                                <p className="text-sm text-gray-500">{selectedBaglog.kode_batch}</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">Jumlah Baglog:</span>
+                                <span className="font-semibold text-gray-900">{formatNumber(selectedBaglog.jumlah)}</span>
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Pilih Kumbung <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                                value={selectedKumbung}
+                                onChange={(e) => setSelectedKumbung(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            >
+                                <option value="">-- Pilih Kumbung --</option>
+                                {availableKumbungs.map((k) => {
+                                    const cukup = k.tersedia >= selectedBaglog?.jumlah;
+                                    return (
+                                        <option
+                                            key={k.id}
+                                            value={k.id}
+                                            disabled={!cukup}
+                                        >
+                                            {k.nama} - Tersedia: {formatNumber(k.tersedia)} / {formatNumber(k.kapasitas)} {!cukup ? '(Kapasitas tidak cukup)' : ''}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+
+                            {/* Warning jika kapasitas tidak cukup */}
+                            {selectedKumbung && (() => {
+                                const k = kumbungs.find(x => x.id == selectedKumbung);
+                                if (k && selectedBaglog?.jumlah > k.tersedia) {
+                                    return (
+                                        <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                            <p className="text-sm text-red-700">
+                                                <Icon icon="solar:danger-triangle-bold" className="inline w-4 h-4 mr-1" />
+                                                Kapasitas tidak cukup! Tersedia: {formatNumber(k.tersedia)}, Dibutuhkan: {formatNumber(selectedBaglog.jumlah)}
+                                            </p>
+                                        </div>
+                                    );
+                                }
+                                return null;
+                            })()}
+                        </div>
+
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={() => {
+                                    setShowKumbungModal(false);
+                                    setSelectedBaglog(null);
+                                    setSelectedKumbung('');
+                                }}
+                                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={handleMasukKumbung}
+                                disabled={!selectedKumbung || (selectedKumbung && kumbungs.find(k => k.id == selectedKumbung)?.tersedia < selectedBaglog?.jumlah)}
+                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Masukkan ke Kumbung
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AdminLayout>
     );
 }

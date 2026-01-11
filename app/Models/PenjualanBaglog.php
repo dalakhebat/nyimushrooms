@@ -12,6 +12,7 @@ class PenjualanBaglog extends Model
 
     protected $fillable = [
         'customer_id',
+        'baglog_id',
         'tanggal',
         'jumlah_baglog',
         'harga_satuan',
@@ -30,5 +31,10 @@ class PenjualanBaglog extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function baglog(): BelongsTo
+    {
+        return $this->belongsTo(Baglog::class);
     }
 }

@@ -44,7 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Kumbung
-    Route::resource('kumbung', KumbungController::class)->except(['show']);
+    Route::get('/kumbung/{kumbung}/profitability', [KumbungController::class, 'calculateProfitability'])->name('kumbung.profitability');
+    Route::resource('kumbung', KumbungController::class);
 
     // Panen
     Route::resource('panen', PanenController::class)->except(['show']);
@@ -79,6 +80,7 @@ Route::middleware('auth')->group(function () {
 
     // Baglog
     Route::patch('/baglog/{baglog}/status', [BaglogController::class, 'updateStatus'])->name('baglog.update-status');
+    Route::get('/baglog/{baglog}/allowed-statuses', [BaglogController::class, 'getAllowedNextStatuses'])->name('baglog.allowed-statuses');
     Route::resource('baglog', BaglogController::class)->except(['show']);
 
     // Supplier
@@ -113,10 +115,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('bahan-baku', BahanBakuController::class)->except(['show']);
 
     // Pembelian Bahan Baku
+    Route::patch('/pembelian-bahan-baku/{pembelian_bahan_baku}/status', [PembelianBahanBakuController::class, 'updateStatus'])->name('pembelian-bahan-baku.update-status');
     Route::resource('pembelian-bahan-baku', PembelianBahanBakuController::class)->except(['show']);
 
     // Produksi Baglog
     Route::patch('/produksi-baglog/{produksiBaglog}/status', [ProduksiBaglogController::class, 'updateStatus'])->name('produksi-baglog.update-status');
+    Route::patch('/produksi-baglog/{produksiBaglog}/tahap', [ProduksiBaglogController::class, 'updateTahap'])->name('produksi-baglog.update-tahap');
     Route::resource('produksi-baglog', ProduksiBaglogController::class);
 
     // Monitoring Kumbung

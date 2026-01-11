@@ -33,11 +33,27 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
         }
     };
 
-    const handleStatusChange = (id, newStatus, type) => {
-        if (type === 'baglog') {
-            router.patch(`/penjualan/baglog/${id}/status`, { status: newStatus });
+    const handleStatusChange = (id, newStatus, currentStatus, type) => {
+        // Jika sudah lunas, tidak bisa diubah
+        if (currentStatus === 'lunas') {
+            return;
+        }
+
+        // Konfirmasi jika mengubah ke lunas
+        if (newStatus === 'lunas') {
+            if (confirm('Apakah Anda yakin ingin mengubah status menjadi LUNAS?\n\nStatus yang sudah lunas tidak dapat diubah kembali ke pending.')) {
+                if (type === 'baglog') {
+                    router.patch(`/penjualan/baglog/${id}/status`, { status: newStatus });
+                } else {
+                    router.patch(`/penjualan/jamur/${id}/status`, { status: newStatus });
+                }
+            }
         } else {
-            router.patch(`/penjualan/jamur/${id}/status`, { status: newStatus });
+            if (type === 'baglog') {
+                router.patch(`/penjualan/baglog/${id}/status`, { status: newStatus });
+            } else {
+                router.patch(`/penjualan/jamur/${id}/status`, { status: newStatus });
+            }
         }
     };
 
@@ -222,14 +238,21 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                                                 {formatCurrency(item.total_harga)}
                                             </td>
                                             <td className="px-6 py-4 text-center">
-                                                <select
-                                                    value={item.status}
-                                                    onChange={(e) => handleStatusChange(item.id, e.target.value, 'baglog')}
-                                                    className={`px-2 py-1 text-xs font-medium rounded-full border-0 cursor-pointer ${getStatusBadge(item.status).class}`}
-                                                >
-                                                    <option value="pending">Pending</option>
-                                                    <option value="lunas">Lunas</option>
-                                                </select>
+                                                {item.status === 'lunas' ? (
+                                                    <span className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                                        <Icon icon="solar:check-circle-bold" className="w-4 h-4 mr-1" />
+                                                        Lunas
+                                                    </span>
+                                                ) : (
+                                                    <select
+                                                        value={item.status}
+                                                        onChange={(e) => handleStatusChange(item.id, e.target.value, item.status, 'baglog')}
+                                                        className="px-2 py-1 text-xs font-medium rounded-lg border border-yellow-300 bg-yellow-50 text-yellow-800 focus:ring-2 focus:ring-yellow-500 cursor-pointer"
+                                                    >
+                                                        <option value="pending">Pending</option>
+                                                        <option value="lunas">Lunas</option>
+                                                    </select>
+                                                )}
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex items-center justify-end space-x-2">
@@ -325,14 +348,21 @@ export default function PenjualanIndex({ penjualanBaglogs, penjualanJamurs, summ
                                                 {formatCurrency(item.total_harga)}
                                             </td>
                                             <td className="px-6 py-4 text-center">
-                                                <select
-                                                    value={item.status}
-                                                    onChange={(e) => handleStatusChange(item.id, e.target.value, 'jamur')}
-                                                    className={`px-2 py-1 text-xs font-medium rounded-full border-0 cursor-pointer ${getStatusBadge(item.status).class}`}
-                                                >
-                                                    <option value="pending">Pending</option>
-                                                    <option value="lunas">Lunas</option>
-                                                </select>
+                                                {item.status === 'lunas' ? (
+                                                    <span className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                                        <Icon icon="solar:check-circle-bold" className="w-4 h-4 mr-1" />
+                                                        Lunas
+                                                    </span>
+                                                ) : (
+                                                    <select
+                                                        value={item.status}
+                                                        onChange={(e) => handleStatusChange(item.id, e.target.value, item.status, 'jamur')}
+                                                        className="px-2 py-1 text-xs font-medium rounded-lg border border-yellow-300 bg-yellow-50 text-yellow-800 focus:ring-2 focus:ring-yellow-500 cursor-pointer"
+                                                    >
+                                                        <option value="pending">Pending</option>
+                                                        <option value="lunas">Lunas</option>
+                                                    </select>
+                                                )}
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex items-center justify-end space-x-2">

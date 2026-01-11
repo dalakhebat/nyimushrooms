@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Baglog;
 use App\Models\Kumbung;
 use App\Models\Panen;
+use App\Models\StokJamur;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Carbon\Carbon;
 
@@ -12,7 +15,7 @@ class PanenController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Panen::with('kumbung');
+        $query = Panen::with(['kumbung', 'baglog']);
 
         // Filter by date range
         if ($request->filled('tanggal_dari')) {
@@ -37,6 +40,11 @@ class PanenController extends Controller
                         'id' => $panen->kumbung->id,
                         'nomor' => $panen->kumbung->nomor,
                         'nama' => $panen->kumbung->nama,
+                    ] : null,
+                    'baglog' => $panen->baglog ? [
+                        'id' => $panen->baglog->id,
+                        'kode_batch' => $panen->baglog->kode_batch,
+                        'jumlah' => $panen->baglog->jumlah,
                     ] : null,
                     'tanggal' => $panen->tanggal->format('Y-m-d'),
                     'tanggal_formatted' => $panen->tanggal->locale('id')->isoFormat('D MMM Y'),
@@ -77,8 +85,26 @@ class PanenController extends Controller
             ->orderBy('nomor')
             ->get(['id', 'nomor', 'nama']);
 
+        // Get baglogs that are in kumbung (masuk_kumbung status)
+        $baglogs = Baglog::where('status', 'masuk_kumbung')
+            ->whereNotNull('kumbung_id')
+            ->with('kumbung:id,nomor,nama')
+            ->orderBy('kode_batch')
+            ->get()
+            ->map(function ($baglog) {
+                return [
+                    'id' => $baglog->id,
+                    'kode_batch' => $baglog->kode_batch,
+                    'jumlah' => $baglog->jumlah,
+                    'kumbung_id' => $baglog->kumbung_id,
+                    'kumbung_nama' => $baglog->kumbung ? $baglog->kumbung->nama : null,
+                ];
+            });
+
         return Inertia::render('Panen/Create', [
             'kumbungs' => $kumbungs,
+            'baglogs' => $baglogs,
+            'stokTersedia' => StokJamur::getStokTersedia(),
             'today' => Carbon::today()->format('Y-m-d'),
         ]);
     }
@@ -87,6 +113,7 @@ class PanenController extends Controller
     {
         $validated = $request->validate([
             'kumbung_id' => 'required|exists:kumbungs,id',
+            'baglog_id' => 'nullable|exists:baglogs,id',
             'tanggal' => 'required|date',
             'berat_kg' => 'required|numeric|min:0.01',
             'berat_layak_jual' => 'required|numeric|min:0',
@@ -100,10 +127,41 @@ class PanenController extends Controller
             return back()->withErrors(['berat_layak_jual' => 'Total layak jual + reject harus sama dengan berat total']);
         }
 
-        Panen::create($validated);
+        // Validate baglog belongs to the selected kumbung
+        if (!empty($validated['baglog_id'])) {
+            $baglog = Baglog::find($validated['baglog_id']);
+            if ($baglog->kumbung_id != $validated['kumbung_id']) {
+                return back()->withErrors(['baglog_id' => 'Baglog tidak berada di kumbung yang dipilih']);
+            }
+            if ($baglog->status !== 'masuk_kumbung') {
+                return back()->withErrors(['baglog_id' => 'Baglog harus berstatus masuk_kumbung untuk dipanen']);
+            }
+        }
+
+        DB::transaction(function () use ($validated) {
+            // Create panen record
+            $panen = Panen::create($validated);
+
+            // Create StokJamur entry (masuk) for berat_layak_jual only
+            if ($validated['berat_layak_jual'] > 0) {
+                $stokSebelum = StokJamur::getStokTersedia();
+                $stokSesudah = $stokSebelum + $validated['berat_layak_jual'];
+
+                StokJamur::create([
+                    'kumbung_id' => $validated['kumbung_id'],
+                    'panen_id' => $panen->id,
+                    'tipe' => 'masuk',
+                    'berat_kg' => $validated['berat_layak_jual'],
+                    'stok_sebelum' => $stokSebelum,
+                    'stok_sesudah' => $stokSesudah,
+                    'keterangan' => 'Hasil panen - ' . ($validated['catatan'] ?? 'Tanpa catatan'),
+                    'tanggal' => $validated['tanggal'],
+                ]);
+            }
+        });
 
         return redirect()->route('panen.index')
-            ->with('success', 'Data panen berhasil ditambahkan');
+            ->with('success', 'Data panen berhasil ditambahkan. Stok jamur bertambah ' . number_format($validated['berat_layak_jual'], 2) . ' kg');
     }
 
     public function edit(Panen $panen)
@@ -112,10 +170,32 @@ class PanenController extends Controller
             ->orderBy('nomor')
             ->get(['id', 'nomor', 'nama']);
 
+        // Get baglogs that are in kumbung (masuk_kumbung status) + current baglog
+        $baglogs = Baglog::where(function ($query) use ($panen) {
+                $query->where('status', 'masuk_kumbung')
+                    ->whereNotNull('kumbung_id');
+                if ($panen->baglog_id) {
+                    $query->orWhere('id', $panen->baglog_id);
+                }
+            })
+            ->with('kumbung:id,nomor,nama')
+            ->orderBy('kode_batch')
+            ->get()
+            ->map(function ($baglog) {
+                return [
+                    'id' => $baglog->id,
+                    'kode_batch' => $baglog->kode_batch,
+                    'jumlah' => $baglog->jumlah,
+                    'kumbung_id' => $baglog->kumbung_id,
+                    'kumbung_nama' => $baglog->kumbung ? $baglog->kumbung->nama : null,
+                ];
+            });
+
         return Inertia::render('Panen/Edit', [
             'panen' => [
                 'id' => $panen->id,
                 'kumbung_id' => $panen->kumbung_id,
+                'baglog_id' => $panen->baglog_id,
                 'tanggal' => $panen->tanggal->format('Y-m-d'),
                 'berat_kg' => $panen->berat_kg,
                 'berat_layak_jual' => $panen->berat_layak_jual,
@@ -123,6 +203,7 @@ class PanenController extends Controller
                 'catatan' => $panen->catatan,
             ],
             'kumbungs' => $kumbungs,
+            'baglogs' => $baglogs,
         ]);
     }
 
@@ -130,6 +211,7 @@ class PanenController extends Controller
     {
         $validated = $request->validate([
             'kumbung_id' => 'required|exists:kumbungs,id',
+            'baglog_id' => 'nullable|exists:baglogs,id',
             'tanggal' => 'required|date',
             'berat_kg' => 'required|numeric|min:0.01',
             'berat_layak_jual' => 'required|numeric|min:0',
@@ -143,7 +225,46 @@ class PanenController extends Controller
             return back()->withErrors(['berat_layak_jual' => 'Total layak jual + reject harus sama dengan berat total']);
         }
 
-        $panen->update($validated);
+        // Validate baglog belongs to the selected kumbung
+        if (!empty($validated['baglog_id'])) {
+            $baglog = Baglog::find($validated['baglog_id']);
+            if ($baglog->kumbung_id != $validated['kumbung_id']) {
+                return back()->withErrors(['baglog_id' => 'Baglog tidak berada di kumbung yang dipilih']);
+            }
+        }
+
+        $oldBeratLayakJual = $panen->berat_layak_jual;
+
+        DB::transaction(function () use ($validated, $panen, $oldBeratLayakJual) {
+            // Update panen record
+            $panen->update($validated);
+
+            // Update StokJamur if berat_layak_jual changed
+            $newBeratLayakJual = $validated['berat_layak_jual'];
+            $selisih = $newBeratLayakJual - $oldBeratLayakJual;
+
+            if (abs($selisih) > 0.01) {
+                // Delete old StokJamur entry
+                StokJamur::where('panen_id', $panen->id)->delete();
+
+                // Create new StokJamur entry if there's berat_layak_jual
+                if ($newBeratLayakJual > 0) {
+                    $stokSebelum = StokJamur::getStokTersedia();
+                    $stokSesudah = $stokSebelum + $newBeratLayakJual;
+
+                    StokJamur::create([
+                        'kumbung_id' => $validated['kumbung_id'],
+                        'panen_id' => $panen->id,
+                        'tipe' => 'masuk',
+                        'berat_kg' => $newBeratLayakJual,
+                        'stok_sebelum' => $stokSebelum,
+                        'stok_sesudah' => $stokSesudah,
+                        'keterangan' => 'Hasil panen (update) - ' . ($validated['catatan'] ?? 'Tanpa catatan'),
+                        'tanggal' => $validated['tanggal'],
+                    ]);
+                }
+            }
+        });
 
         return redirect()->route('panen.index')
             ->with('success', 'Data panen berhasil diupdate');
@@ -151,9 +272,14 @@ class PanenController extends Controller
 
     public function destroy(Panen $panen)
     {
-        $panen->delete();
+        DB::transaction(function () use ($panen) {
+            // Delete related StokJamur entry
+            StokJamur::where('panen_id', $panen->id)->delete();
+
+            $panen->delete();
+        });
 
         return redirect()->route('panen.index')
-            ->with('success', 'Data panen berhasil dihapus');
+            ->with('success', 'Data panen berhasil dihapus. Stok jamur telah disesuaikan.');
     }
 }

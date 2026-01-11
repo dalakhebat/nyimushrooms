@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Panen extends Model
 {
@@ -12,6 +13,7 @@ class Panen extends Model
 
     protected $fillable = [
         'kumbung_id',
+        'baglog_id',
         'tanggal',
         'berat_kg',
         'berat_layak_jual',
@@ -29,5 +31,15 @@ class Panen extends Model
     public function kumbung(): BelongsTo
     {
         return $this->belongsTo(Kumbung::class);
+    }
+
+    public function baglog(): BelongsTo
+    {
+        return $this->belongsTo(Baglog::class);
+    }
+
+    public function stokJamur(): HasOne
+    {
+        return $this->hasOne(StokJamur::class);
     }
 }
