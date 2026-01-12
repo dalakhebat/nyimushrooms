@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\EncryptsSensitiveData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ReturnBulananTransolido extends Model
 {
-    use HasFactory;
+    use HasFactory, EncryptsSensitiveData;
 
     protected $fillable = [
         'bulan',
@@ -21,29 +22,40 @@ class ReturnBulananTransolido extends Model
         'keterangan',
     ];
 
+    // Fields that will be encrypted in database
+    protected $encryptedFields = [
+        'jamur_kering',
+        'share_transolido',
+        'share_defila',
+        'kumbung',
+        'total',
+    ];
+
     protected $casts = [
-        'jamur_kering' => 'decimal:2',
-        'share_transolido' => 'decimal:2',
-        'share_defila' => 'decimal:2',
-        'kumbung' => 'decimal:2',
-        'total' => 'decimal:2',
         'diterima' => 'boolean',
         'tanggal_terima' => 'date',
     ];
 
+    // Calculate in PHP since encrypted fields can't be summed in SQL
     public static function getTotalDiterima()
     {
-        return self::where('diterima', true)->sum('total');
+        return self::where('diterima', true)->get()->sum(function ($item) {
+            return (float) $item->total;
+        });
     }
 
     public static function getTotalShareTransolido()
     {
-        return self::where('diterima', true)->sum('share_transolido');
+        return self::where('diterima', true)->get()->sum(function ($item) {
+            return (float) $item->share_transolido;
+        });
     }
 
     public static function getTotalKumbung()
     {
-        return self::where('diterima', true)->sum('kumbung');
+        return self::where('diterima', true)->get()->sum(function ($item) {
+            return (float) $item->kumbung;
+        });
     }
 
     public function getBulanFormattedAttribute()

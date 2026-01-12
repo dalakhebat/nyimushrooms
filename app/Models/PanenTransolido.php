@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\EncryptsSensitiveData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PanenTransolido extends Model
 {
-    use HasFactory;
+    use HasFactory, EncryptsSensitiveData;
 
     protected $fillable = [
         'investasi_transolido_id',
@@ -21,13 +22,17 @@ class PanenTransolido extends Model
         'keterangan',
     ];
 
+    // Fields that will be encrypted in database
+    protected $encryptedFields = [
+        'volume_kg',
+        'pendapatan_kotor',
+        'tabungan_baglog',
+        'profit',
+    ];
+
     protected $casts = [
         'tanggal_mulai' => 'date',
         'tanggal_selesai' => 'date',
-        'volume_kg' => 'decimal:2',
-        'pendapatan_kotor' => 'decimal:2',
-        'tabungan_baglog' => 'decimal:2',
-        'profit' => 'decimal:2',
     ];
 
     public function investasi()
@@ -35,25 +40,38 @@ class PanenTransolido extends Model
         return $this->belongsTo(InvestasiTransolido::class, 'investasi_transolido_id');
     }
 
+    // Calculate in PHP since encrypted fields can't be summed in SQL
     public static function getTotalVolume()
     {
-        return self::sum('volume_kg');
+        return self::all()->sum(function ($item) {
+            return (float) $item->volume_kg;
+        });
     }
 
     public static function getTotalPendapatan()
     {
-        return self::sum('pendapatan_kotor');
+        return self::all()->sum(function ($item) {
+            return (float) $item->pendapatan_kotor;
+        });
     }
 
     public static function getTotalProfit()
     {
-        return self::sum('profit');
+        return self::all()->sum(function ($item) {
+            return (float) $item->profit;
+        });
     }
 
     public static function getAverageVolumePerWeek()
     {
-        $count = self::count();
+        $items = self::all();
+        $count = $items->count();
         if ($count == 0) return 0;
-        return self::sum('volume_kg') / $count;
+
+        $totalVolume = $items->sum(function ($item) {
+            return (float) $item->volume_kg;
+        });
+
+        return $totalVolume / $count;
     }
 }

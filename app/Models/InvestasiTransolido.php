@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\EncryptsSensitiveData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class InvestasiTransolido extends Model
 {
-    use HasFactory;
+    use HasFactory, EncryptsSensitiveData;
 
     protected $fillable = [
         'nama',
@@ -24,10 +25,14 @@ class InvestasiTransolido extends Model
         'keterangan',
     ];
 
+    // Fields that will be encrypted in database
+    protected $encryptedFields = [
+        'modal',
+        'return_bulanan',
+        'roi_tahunan',
+    ];
+
     protected $casts = [
-        'modal' => 'decimal:2',
-        'return_bulanan' => 'decimal:2',
-        'roi_tahunan' => 'decimal:2',
         'tanggal_mulai' => 'date',
         'tanggal_mulai_fase' => 'date',
     ];
@@ -51,20 +56,30 @@ class InvestasiTransolido extends Model
         return $this->hasMany(PanenTransolido::class);
     }
 
+    // Calculate in PHP since encrypted fields can't be summed in SQL
     public static function getTotalModal()
     {
-        return self::where('status', 'active')->sum('modal');
+        return self::where('status', 'active')->get()->sum(function ($item) {
+            return (float) $item->modal;
+        });
     }
 
     public static function getTotalReturnBulanan()
     {
-        return self::where('status', 'active')->sum('return_bulanan');
+        return self::where('status', 'active')->get()->sum(function ($item) {
+            return (float) $item->return_bulanan;
+        });
     }
 
     public static function getAverageROI()
     {
-        $total = self::where('status', 'active')->sum('modal');
-        $return = self::where('status', 'active')->sum('return_bulanan');
+        $items = self::where('status', 'active')->get();
+        $total = $items->sum(function ($item) {
+            return (float) $item->modal;
+        });
+        $return = $items->sum(function ($item) {
+            return (float) $item->return_bulanan;
+        });
 
         if ($total == 0) return 0;
         return ($return * 12 / $total) * 100;

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\EncryptsSensitiveData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class KasTransolido extends Model
 {
-    use HasFactory;
+    use HasFactory, EncryptsSensitiveData;
 
     protected $table = 'kas_transolido';
 
@@ -22,9 +23,13 @@ class KasTransolido extends Model
         'status',
     ];
 
+    // Fields that will be encrypted in database
+    protected $encryptedFields = [
+        'jumlah',
+    ];
+
     protected $casts = [
         'tanggal' => 'date',
-        'jumlah' => 'decimal:2',
     ];
 
     const TIPE_MASUK = 'masuk';
@@ -59,12 +64,20 @@ class KasTransolido extends Model
         return $this->hasMany(KasTransolido::class, 'reimburse_ref_id');
     }
 
-    // Get current balance
+    // Calculate in PHP since encrypted fields can't be summed in SQL
     public static function getSaldo()
     {
-        $masuk = self::where('tipe', self::TIPE_MASUK)->sum('jumlah');
-        $reimburse = self::where('tipe', self::TIPE_REIMBURSE)->sum('jumlah');
-        $keluar = self::where('tipe', self::TIPE_KELUAR)->sum('jumlah');
+        $items = self::all();
+
+        $masuk = $items->where('tipe', self::TIPE_MASUK)->sum(function ($item) {
+            return (float) $item->jumlah;
+        });
+        $reimburse = $items->where('tipe', self::TIPE_REIMBURSE)->sum(function ($item) {
+            return (float) $item->jumlah;
+        });
+        $keluar = $items->where('tipe', self::TIPE_KELUAR)->sum(function ($item) {
+            return (float) $item->jumlah;
+        });
 
         return ($masuk + $reimburse) - $keluar;
     }
@@ -74,24 +87,33 @@ class KasTransolido extends Model
     {
         return self::where('tipe', self::TIPE_KELUAR)
             ->where('status', self::STATUS_PENDING)
-            ->sum('jumlah');
+            ->get()
+            ->sum(function ($item) {
+                return (float) $item->jumlah;
+            });
     }
 
     // Get total masuk
     public static function getTotalMasuk()
     {
-        return self::where('tipe', self::TIPE_MASUK)->sum('jumlah');
+        return self::where('tipe', self::TIPE_MASUK)->get()->sum(function ($item) {
+            return (float) $item->jumlah;
+        });
     }
 
     // Get total keluar
     public static function getTotalKeluar()
     {
-        return self::where('tipe', self::TIPE_KELUAR)->sum('jumlah');
+        return self::where('tipe', self::TIPE_KELUAR)->get()->sum(function ($item) {
+            return (float) $item->jumlah;
+        });
     }
 
     // Get total reimburse
     public static function getTotalReimburse()
     {
-        return self::where('tipe', self::TIPE_REIMBURSE)->sum('jumlah');
+        return self::where('tipe', self::TIPE_REIMBURSE)->get()->sum(function ($item) {
+            return (float) $item->jumlah;
+        });
     }
 }
