@@ -130,6 +130,9 @@ class PanenController extends Controller
         // Validate baglog belongs to the selected kumbung
         if (!empty($validated['baglog_id'])) {
             $baglog = Baglog::find($validated['baglog_id']);
+            if (!$baglog) {
+                return back()->withErrors(['baglog_id' => 'Baglog tidak ditemukan']);
+            }
             if ($baglog->kumbung_id != $validated['kumbung_id']) {
                 return back()->withErrors(['baglog_id' => 'Baglog tidak berada di kumbung yang dipilih']);
             }
@@ -228,6 +231,9 @@ class PanenController extends Controller
         // Validate baglog belongs to the selected kumbung
         if (!empty($validated['baglog_id'])) {
             $baglog = Baglog::find($validated['baglog_id']);
+            if (!$baglog) {
+                return back()->withErrors(['baglog_id' => 'Baglog tidak ditemukan']);
+            }
             if ($baglog->kumbung_id != $validated['kumbung_id']) {
                 return back()->withErrors(['baglog_id' => 'Baglog tidak berada di kumbung yang dipilih']);
             }

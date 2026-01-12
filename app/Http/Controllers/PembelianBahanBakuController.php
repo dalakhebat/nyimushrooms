@@ -99,26 +99,34 @@ class PembelianBahanBakuController extends Controller
 
         $pembelian = PembelianBahanBaku::create($validated);
 
-        // Update stok bahan baku
         $bahanBaku = BahanBaku::find($validated['bahan_baku_id']);
-        $stokSebelum = $bahanBaku->stok;
-        $stokSesudah = $stokSebelum + $validated['jumlah'];
 
-        StokMovement::create([
-            'bahan_baku_id' => $bahanBaku->id,
-            'tipe' => 'masuk',
-            'jumlah' => $validated['jumlah'],
-            'stok_sebelum' => $stokSebelum,
-            'stok_sesudah' => $stokSesudah,
-            'referensi' => 'pembelian:' . $pembelian->id,
-            'keterangan' => 'Pembelian ' . $kodeTransaksi,
-            'tanggal' => $validated['tanggal'],
-        ]);
+        // Update stok bahan baku HANYA jika status lunas
+        if ($validated['status'] === 'lunas') {
+            $stokSebelum = $bahanBaku->stok;
+            $stokSesudah = $stokSebelum + $validated['jumlah'];
 
-        $bahanBaku->update([
-            'stok' => $stokSesudah,
-            'harga_terakhir' => $validated['harga_satuan'],
-        ]);
+            StokMovement::create([
+                'bahan_baku_id' => $bahanBaku->id,
+                'tipe' => 'masuk',
+                'jumlah' => $validated['jumlah'],
+                'stok_sebelum' => $stokSebelum,
+                'stok_sesudah' => $stokSesudah,
+                'referensi' => 'pembelian:' . $pembelian->id,
+                'keterangan' => 'Pembelian ' . $kodeTransaksi,
+                'tanggal' => $validated['tanggal'],
+            ]);
+
+            $bahanBaku->update([
+                'stok' => $stokSesudah,
+                'harga_terakhir' => $validated['harga_satuan'],
+            ]);
+        } else {
+            // Jika pending, hanya update harga terakhir
+            $bahanBaku->update([
+                'harga_terakhir' => $validated['harga_satuan'],
+            ]);
+        }
 
         // Jika lunas, catat ke kas
         if ($validated['status'] === 'lunas') {
@@ -162,22 +170,47 @@ class PembelianBahanBakuController extends Controller
         $validated['total_harga'] = $pembelianBahanBaku->jumlah * $validated['harga_satuan'];
 
         $oldStatus = $pembelianBahanBaku->status;
+        $bahanBaku = $pembelianBahanBaku->bahanBaku;
+
+        // Cegah perubahan dari lunas ke pending
+        if ($oldStatus === 'lunas' && $validated['status'] === 'pending') {
+            return back()->withErrors(['status' => 'Status yang sudah lunas tidak dapat diubah kembali ke pending']);
+        }
+
         $pembelianBahanBaku->update($validated);
 
         // Update harga terakhir bahan baku
-        $pembelianBahanBaku->bahanBaku->update([
+        $bahanBaku->update([
             'harga_terakhir' => $validated['harga_satuan'],
         ]);
 
         // Jika status berubah dari pending ke lunas
         if ($oldStatus === 'pending' && $validated['status'] === 'lunas') {
+            // Tambah stok bahan baku
+            $stokSebelum = $bahanBaku->stok;
+            $stokSesudah = $stokSebelum + $pembelianBahanBaku->jumlah;
+
+            StokMovement::create([
+                'bahan_baku_id' => $bahanBaku->id,
+                'tipe' => 'masuk',
+                'jumlah' => $pembelianBahanBaku->jumlah,
+                'stok_sebelum' => $stokSebelum,
+                'stok_sesudah' => $stokSesudah,
+                'referensi' => 'pembelian:' . $pembelianBahanBaku->id,
+                'keterangan' => 'Pelunasan pembelian ' . $pembelianBahanBaku->kode_transaksi,
+                'tanggal' => $validated['tanggal'],
+            ]);
+
+            $bahanBaku->update(['stok' => $stokSesudah]);
+
+            // Catat ke kas
             Kas::create([
                 'kode_transaksi' => Kas::generateKode(),
                 'tanggal' => $validated['tanggal'],
                 'tipe' => 'keluar',
                 'kategori' => 'pembelian',
                 'jumlah' => $validated['total_harga'],
-                'keterangan' => "Pembelian {$pembelianBahanBaku->bahanBaku->nama} - {$pembelianBahanBaku->kode_transaksi}",
+                'keterangan' => "Pembelian {$bahanBaku->nama} - {$pembelianBahanBaku->kode_transaksi}",
                 'referensi' => 'pembelian:' . $pembelianBahanBaku->id,
             ]);
         }
@@ -188,31 +221,34 @@ class PembelianBahanBakuController extends Controller
 
     public function destroy(PembelianBahanBaku $pembelianBahanBaku)
     {
-        // Rollback stok
         $bahanBaku = $pembelianBahanBaku->bahanBaku;
-        $stokSebelum = $bahanBaku->stok;
-        $stokSesudah = $stokSebelum - $pembelianBahanBaku->jumlah;
 
-        if ($stokSesudah < 0) {
-            return back()->withErrors(['error' => 'Tidak dapat menghapus, stok akan menjadi negatif']);
-        }
+        // Rollback stok hanya jika pembelian sudah lunas (stok sudah masuk)
+        if ($pembelianBahanBaku->status === 'lunas') {
+            $stokSebelum = $bahanBaku->stok;
+            $stokSesudah = $stokSebelum - $pembelianBahanBaku->jumlah;
 
-        StokMovement::create([
-            'bahan_baku_id' => $bahanBaku->id,
-            'tipe' => 'keluar',
-            'jumlah' => $pembelianBahanBaku->jumlah,
-            'stok_sebelum' => $stokSebelum,
-            'stok_sesudah' => $stokSesudah,
-            'referensi' => 'hapus_pembelian:' . $pembelianBahanBaku->id,
-            'keterangan' => 'Hapus pembelian ' . $pembelianBahanBaku->kode_transaksi,
-            'tanggal' => now(),
-        ]);
+            if ($stokSesudah < 0) {
+                return back()->withErrors(['error' => 'Tidak dapat menghapus, stok akan menjadi negatif']);
+            }
 
-        $bahanBaku->update(['stok' => $stokSesudah]);
+            StokMovement::create([
+                'bahan_baku_id' => $bahanBaku->id,
+                'tipe' => 'keluar',
+                'jumlah' => $pembelianBahanBaku->jumlah,
+                'stok_sebelum' => $stokSebelum,
+                'stok_sesudah' => $stokSesudah,
+                'referensi' => 'hapus_pembelian:' . $pembelianBahanBaku->id,
+                'keterangan' => 'Hapus pembelian ' . $pembelianBahanBaku->kode_transaksi,
+                'tanggal' => now(),
+            ]);
 
-        // Check low stock
-        if ($bahanBaku->isLowStock()) {
-            Notifikasi::createStokAlert($bahanBaku);
+            $bahanBaku->update(['stok' => $stokSesudah]);
+
+            // Check low stock
+            if ($bahanBaku->isLowStock()) {
+                Notifikasi::createStokAlert($bahanBaku);
+            }
         }
 
         $pembelianBahanBaku->delete();
@@ -238,13 +274,32 @@ class PembelianBahanBakuController extends Controller
 
         // Jika status berubah dari pending ke lunas
         if ($oldStatus === 'pending' && $validated['status'] === 'lunas') {
+            // Tambah stok bahan baku
+            $bahanBaku = $pembelianBahanBaku->bahanBaku;
+            $stokSebelum = $bahanBaku->stok;
+            $stokSesudah = $stokSebelum + $pembelianBahanBaku->jumlah;
+
+            StokMovement::create([
+                'bahan_baku_id' => $bahanBaku->id,
+                'tipe' => 'masuk',
+                'jumlah' => $pembelianBahanBaku->jumlah,
+                'stok_sebelum' => $stokSebelum,
+                'stok_sesudah' => $stokSesudah,
+                'referensi' => 'pembelian:' . $pembelianBahanBaku->id,
+                'keterangan' => 'Pelunasan pembelian ' . $pembelianBahanBaku->kode_transaksi,
+                'tanggal' => now(),
+            ]);
+
+            $bahanBaku->update(['stok' => $stokSesudah]);
+
+            // Catat ke kas
             Kas::create([
                 'kode_transaksi' => Kas::generateKode(),
                 'tanggal' => now(),
                 'tipe' => 'keluar',
                 'kategori' => 'pembelian',
                 'jumlah' => $pembelianBahanBaku->total_harga,
-                'keterangan' => "Pembelian {$pembelianBahanBaku->bahanBaku->nama} - {$pembelianBahanBaku->kode_transaksi}",
+                'keterangan' => "Pembelian {$bahanBaku->nama} - {$pembelianBahanBaku->kode_transaksi}",
                 'referensi' => 'pembelian:' . $pembelianBahanBaku->id,
             ]);
         }

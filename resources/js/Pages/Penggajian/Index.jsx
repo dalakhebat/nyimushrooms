@@ -85,8 +85,8 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
     };
 
     const handleDeleteAll = () => {
-        if (deleteConfirmCode !== 'ikh123wan') {
-            setDeleteError('Kode konfirmasi salah!');
+        if (!deleteConfirmCode.trim()) {
+            setDeleteError('Masukkan kode konfirmasi!');
             return;
         }
 
@@ -97,8 +97,8 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                 setDeleteConfirmCode('');
                 setDeleteError('');
             },
-            onError: () => {
-                setDeleteError('Gagal menghapus data.');
+            onError: (errors) => {
+                setDeleteError(errors?.confirmation_code || 'Kode konfirmasi salah atau gagal menghapus data.');
             }
         });
     };

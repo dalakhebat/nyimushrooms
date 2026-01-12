@@ -9,6 +9,7 @@ use App\Models\Karyawan;
 use App\Models\StokMovement;
 use App\Models\Baglog;
 use App\Models\Kumbung;
+use App\Models\PembelianBahanBaku;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
@@ -86,6 +87,11 @@ class ProduksiBaglogController extends Controller
         // Validasi stok bahan baku
         foreach ($validated['bahan_bakus'] as $item) {
             $bahanBaku = BahanBaku::find($item['bahan_baku_id']);
+            if (!$bahanBaku) {
+                return back()->withErrors([
+                    'bahan_bakus' => "Bahan baku tidak ditemukan"
+                ]);
+            }
             if ($bahanBaku->stok < $item['jumlah']) {
                 return back()->withErrors([
                     'bahan_bakus' => "Stok {$bahanBaku->nama} tidak cukup. Tersedia: {$bahanBaku->stok} {$bahanBaku->satuan}"
@@ -105,7 +111,7 @@ class ProduksiBaglogController extends Controller
 
         // Kurangi stok bahan baku
         foreach ($validated['bahan_bakus'] as $item) {
-            $bahanBaku = BahanBaku::find($item['bahan_baku_id']);
+            $bahanBaku = BahanBaku::findOrFail($item['bahan_baku_id']);
             $stokSebelum = $bahanBaku->stok;
             $stokSesudah = $stokSebelum - $item['jumlah'];
 
@@ -196,24 +202,38 @@ class ProduksiBaglogController extends Controller
 
     public function destroy(ProduksiBaglog $produksiBaglog)
     {
-        // Kembalikan stok bahan baku
+        // Recalculate stok bahan baku (hanya dari pembelian lunas)
         foreach ($produksiBaglog->bahanBakus as $item) {
             $bahanBaku = $item->bahanBaku;
             $stokSebelum = $bahanBaku->stok;
-            $stokSesudah = $stokSebelum + $item->jumlah_digunakan;
 
-            StokMovement::create([
-                'bahan_baku_id' => $bahanBaku->id,
-                'tipe' => 'masuk',
-                'jumlah' => $item->jumlah_digunakan,
-                'stok_sebelum' => $stokSebelum,
-                'stok_sesudah' => $stokSesudah,
-                'referensi' => 'hapus_produksi:' . $produksiBaglog->id,
-                'keterangan' => 'Hapus produksi ' . $produksiBaglog->kode_produksi,
-                'tanggal' => now(),
-            ]);
+            // Hitung stok yang benar: total pembelian lunas - total penggunaan (setelah hapus produksi ini)
+            $totalMasukLunas = PembelianBahanBaku::where('bahan_baku_id', $bahanBaku->id)
+                ->where('status', 'lunas')
+                ->sum('jumlah');
 
-            $bahanBaku->update(['stok' => $stokSesudah]);
+            // Total penggunaan TIDAK termasuk produksi yang akan dihapus
+            $totalKeluar = ProduksiBahanBaku::where('bahan_baku_id', $bahanBaku->id)
+                ->where('produksi_baglog_id', '!=', $produksiBaglog->id)
+                ->sum('jumlah_digunakan');
+
+            $stokSesudah = max(0, $totalMasukLunas - $totalKeluar);
+
+            // Catat movement jika ada perubahan stok
+            if ($stokSebelum != $stokSesudah) {
+                StokMovement::create([
+                    'bahan_baku_id' => $bahanBaku->id,
+                    'tipe' => $stokSesudah > $stokSebelum ? 'masuk' : 'keluar',
+                    'jumlah' => abs($stokSesudah - $stokSebelum),
+                    'stok_sebelum' => $stokSebelum,
+                    'stok_sesudah' => $stokSesudah,
+                    'referensi' => 'hapus_produksi:' . $produksiBaglog->id,
+                    'keterangan' => 'Hapus produksi ' . $produksiBaglog->kode_produksi,
+                    'tanggal' => now(),
+                ]);
+
+                $bahanBaku->update(['stok' => $stokSesudah]);
+            }
         }
 
         $produksiBaglog->delete();

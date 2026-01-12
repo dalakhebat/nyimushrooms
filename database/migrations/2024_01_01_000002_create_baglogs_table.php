@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('tanggal_produksi');
             $table->date('tanggal_tanam')->nullable();
             $table->date('tanggal_estimasi_selesai')->nullable();
-            $table->enum('status', ['produksi', 'ditanam', 'dijual', 'selesai'])->default('produksi');
+            $table->enum('status', ['produksi', 'inkubasi', 'pembibitan', 'masuk_kumbung', 'dijual', 'selesai'])->default('produksi');
             $table->timestamps();
         });
     }

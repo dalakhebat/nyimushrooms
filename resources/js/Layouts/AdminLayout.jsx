@@ -2,48 +2,83 @@ import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { Icon } from '@iconify/react';
 
+// Navigation berdasarkan workflow sistem
 const navigation = [
+    // === OVERVIEW ===
     { name: 'Dashboard', href: '/dashboard', icon: 'solar:widget-bold' },
-    { name: 'Kumbung', href: '/kumbung', icon: 'solar:home-2-bold' },
-    { name: 'Monitoring Kumbung', href: '/monitoring-kumbung', icon: 'solar:temperature-bold' },
-    { name: 'Panen', href: '/panen', icon: 'solar:hand-stars-bold' },
+
+    // === SECTION: PRODUKSI BAGLOG ===
+    // Workflow: Bahan Baku → Pembelian → Produksi → Baglog
+    { type: 'section', name: 'Produksi' },
     {
-        name: 'Produksi',
-        icon: 'solar:test-tube-bold',
+        name: 'Inventory',
+        icon: 'solar:box-bold',
         children: [
-            { name: 'Bahan Baku', href: '/bahan-baku', icon: 'solar:box-bold' },
-            { name: 'Pembelian Bahan', href: '/pembelian-bahan-baku', icon: 'solar:delivery-bold' },
-            { name: 'Produksi Baglog', href: '/produksi-baglog', icon: 'solar:settings-bold' },
+            { name: 'Supplier', href: '/supplier', icon: 'solar:buildings-bold' },
+            { name: 'Bahan Baku', href: '/bahan-baku', icon: 'solar:archive-bold' },
+            { name: 'Pembelian Bahan', href: '/pembelian-bahan-baku', icon: 'solar:cart-large-bold' },
         ],
     },
-    { name: 'Baglog', href: '/baglog', icon: 'solar:layers-bold' },
+    { name: 'Produksi Baglog', href: '/produksi-baglog', icon: 'solar:test-tube-bold' },
+    { name: 'Stok Baglog', href: '/baglog', icon: 'solar:layers-bold' },
+
+    // === SECTION: BUDIDAYA & PANEN ===
+    // Workflow: Kumbung → Monitoring → Panen → Stok Jamur
+    { type: 'section', name: 'Budidaya' },
+    { name: 'Kumbung', href: '/kumbung', icon: 'solar:home-2-bold' },
+    { name: 'Monitoring', href: '/monitoring-kumbung', icon: 'solar:temperature-bold' },
+    { name: 'Panen', href: '/panen', icon: 'solar:hand-stars-bold' },
+
+    // === SECTION: PENJUALAN ===
+    // Workflow: Customer → Penjualan → Kas Masuk
+    { type: 'section', name: 'Sales' },
+    { name: 'Customer', href: '/customer', icon: 'solar:users-group-two-rounded-bold' },
+    { name: 'Penjualan', href: '/penjualan', icon: 'solar:bag-bold' },
+
+    // === SECTION: SDM & PENGGAJIAN ===
+    // Workflow: Karyawan → Absensi → Penggajian
+    { type: 'section', name: 'SDM' },
+    { name: 'Karyawan', href: '/karyawan', icon: 'solar:user-rounded-bold' },
     {
-        name: 'SDM',
-        icon: 'solar:users-group-rounded-bold',
+        name: 'Absensi',
+        icon: 'solar:clock-circle-bold',
         children: [
-            { name: 'Data Karyawan', href: '/karyawan', icon: 'solar:user-rounded-bold' },
-            { name: 'Absensi Manual', href: '/absensi', icon: 'solar:clock-circle-bold' },
-            { name: 'Absensi QR Code', href: '/qr-absensi', icon: 'solar:qr-code-bold' },
-            { name: 'KPI Karyawan', href: '/kpi', icon: 'solar:chart-bold' },
+            { name: 'Absensi Harian', href: '/absensi', icon: 'solar:calendar-mark-bold' },
+            { name: 'Absensi Mingguan', href: '/absensi/mingguan', icon: 'solar:calendar-bold' },
+            { name: 'QR Code', href: '/qr-absensi', icon: 'solar:qr-code-bold' },
+            { name: 'Rekap Absensi', href: '/absensi/rekap', icon: 'solar:clipboard-list-bold' },
         ],
     },
     {
         name: 'Penggajian',
         icon: 'solar:wallet-bold',
         children: [
-            { name: 'Input Absensi Mingguan', href: '/absensi/mingguan', icon: 'solar:calendar-bold' },
             { name: 'Proses Gaji', href: '/penggajian/create', icon: 'solar:card-bold' },
-            { name: 'Riwayat Penggajian', href: '/penggajian', icon: 'solar:clipboard-list-bold' },
+            { name: 'Riwayat Gaji', href: '/penggajian', icon: 'solar:document-text-bold' },
+            { name: 'Pengaturan Upah', href: '/pengaturan-gaji', icon: 'solar:tuning-2-bold' },
         ],
     },
     { name: 'Kasbon', href: '/kasbon', icon: 'solar:banknote-bold' },
-    { name: 'Kas / Keuangan', href: '/kas', icon: 'solar:dollar-bold' },
-    { name: 'Supplier', href: '/supplier', icon: 'solar:buildings-bold' },
-    { name: 'Customer', href: '/customer', icon: 'solar:users-group-two-rounded-bold' },
-    { name: 'Penjualan', href: '/penjualan', icon: 'solar:bag-bold' },
+    { name: 'KPI Karyawan', href: '/kpi', icon: 'solar:chart-bold' },
+
+    // === SECTION: KEUANGAN ===
+    { type: 'section', name: 'Keuangan' },
+    { name: 'Kas', href: '/kas', icon: 'solar:dollar-bold' },
     { name: 'Laporan', href: '/laporan', icon: 'solar:graph-up-bold' },
+    {
+        name: 'Perencanaan',
+        icon: 'solar:calculator-bold',
+        children: [
+            { name: 'Simulasi Kredit', href: '/keuangan/simulasi-kredit', icon: 'solar:chart-2-bold' },
+            { name: 'Target Operasional', href: '/keuangan/target-operasional', icon: 'solar:target-bold' },
+            { name: 'Rekap Pembayaran', href: '/keuangan/rekap-pembayaran', icon: 'solar:clipboard-check-bold' },
+            { name: 'Transolido', href: '/keuangan/transolido', icon: 'solar:diamond-bold' },
+        ],
+    },
+
+    // === SECTION: SISTEM ===
+    { type: 'section', name: 'Sistem' },
     { name: 'Notifikasi', href: '/notifikasi', icon: 'solar:bell-bold' },
-    { name: 'Pengaturan Gaji', href: '/pengaturan-gaji', icon: 'solar:tuning-2-bold' },
 ];
 
 export default function AdminLayout({ children, title }) {
@@ -81,8 +116,14 @@ export default function AdminLayout({ children, title }) {
                     </button>
                 </div>
                 <nav className="mt-4 px-2 space-y-1 overflow-y-auto max-h-[calc(100vh-4rem)]">
-                    {navigation.map((item) => (
-                        item.children ? (
+                    {navigation.map((item, index) => (
+                        item.type === 'section' ? (
+                            <div key={item.name} className={`px-3 pt-4 pb-2 ${index > 0 ? 'mt-2 border-t border-green-700' : ''}`}>
+                                <span className="text-xs font-semibold text-green-400 uppercase tracking-wider">
+                                    {item.name}
+                                </span>
+                            </div>
+                        ) : item.children ? (
                             <div key={item.name}>
                                 <button
                                     onClick={() => toggleDropdown(item.name)}
@@ -142,9 +183,15 @@ export default function AdminLayout({ children, title }) {
                         <Icon icon="solar:leaf-bold" className="w-8 h-8 text-white mr-2" />
                         <span className="text-xl font-bold text-white">Nyimushroom</span>
                     </div>
-                    <nav className="mt-4 flex-1 px-2 space-y-1">
-                        {navigation.map((item) => (
-                            item.children ? (
+                    <nav className="mt-4 flex-1 px-2 space-y-1 overflow-y-auto">
+                        {navigation.map((item, index) => (
+                            item.type === 'section' ? (
+                                <div key={item.name} className={`px-3 pt-4 pb-2 ${index > 0 ? 'mt-2 border-t border-green-700' : ''}`}>
+                                    <span className="text-xs font-semibold text-green-400 uppercase tracking-wider">
+                                        {item.name}
+                                    </span>
+                                </div>
+                            ) : item.children ? (
                                 <div key={item.name}>
                                     <button
                                         onClick={() => toggleDropdown(item.name)}

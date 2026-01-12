@@ -512,8 +512,9 @@ class PenggajianController extends Controller
             'confirmation_code' => 'required|string',
         ]);
 
-        // Check confirmation code
-        if ($validated['confirmation_code'] !== 'ikh123wan') {
+        // Check confirmation code from env
+        $confirmationCode = env('ADMIN_CONFIRMATION_CODE', 'admin123');
+        if ($validated['confirmation_code'] !== $confirmationCode) {
             return redirect('/penggajian')->with('error', 'Kode konfirmasi salah');
         }
 
