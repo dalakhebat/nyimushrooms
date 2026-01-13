@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANSOLINDO Professional Dashboard</title>
+
+    <!-- Google Fonts - Professional -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- SheetJS for Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'pro-dark': '#0F172A',
+                        'pro-darker': '#020617',
+                        'pro-blue': '#3B82F6',
+                        'pro-green': '#10B981',
+                        'pro-purple': '#8B5CF6',
+                        'pro-orange': '#F59E0B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: #F8FAFC;
+            font-size: 16px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-slide-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+
+        .pro-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pro-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-value-pro {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .glass-effect {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .tab-pro {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            color: #94A3B8;
+        }
+
+        .tab-pro:hover {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .tab-pro.active {
+            color: #3B82F6;
+            border-bottom-color: #3B82F6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .editable-input-pro {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #10B981;
+            font-weight: 700;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+
+        .editable-input-pro:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .editable-input-pro:focus {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: #3B82F6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-pro {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-pro:active {
+            transform: translateY(0);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content-pro {
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 1.5rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .progress-pro {
+            height: 14px;
+            background: rgba(148, 163, 184, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-pro-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3B82F6 0%, #10B981 100%);
+            border-radius: 10px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        table tbody tr {
+            background: rgba(30, 41, 59, 0.5);
+            transition: all 0.2s;
+        }
+
+        table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: scale(1.01);
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3B82F6 0%, #10B981 100%);
+            border-radius: 10px;
+        }
+
+        .slider-pro {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(148, 163, 184, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-pro::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3B82F6 0%, #10B981 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .slider-pro::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3B82F6 0%, #10B981 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.5);
+            border: none;
+        }
+
+        .badge-pro {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-6 lg:p-8">
+    <div class="max-w-[1800px] mx-auto">
+        <!-- Header Professional -->
+        <div class="glass-effect rounded-2xl p-6 md:p-8 mb-6 animate-fade-up">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-pro-blue to-pro-green rounded-xl flex items-center justify-center text-3xl shadow-lg">
+                        💎
+                    </div>
+                    <div>
+                        <h1 class="text-4xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
+                            TRANSOLINDO
+                        </h1>
+                        <p class="text-base text-gray-400 font-medium mt-1">Strategic Partner × Mentari Bumi Abadi</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    <div id="live-clock" class="text-lg font-bold text-blue-400"></div>
+                    <button onclick="document.getElementById('excel-import').click()" class="btn-pro flex items-center gap-2">
+                        📂 Import Excel
+                    </button>
+                    <input type="file" id="excel-import" accept=".xlsx,.xls" style="display:none" onchange="importExcel(this)" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="glass-effect rounded-2xl mb-6 flex overflow-x-auto animate-slide-right">
+            <button class="tab-pro active" data-tab="investment" onclick="switchTab('investment')">💰 Investment</button>
+            <button class="tab-pro" data-tab="harvest" onclick="switchTab('harvest')">🌱 Harvest</button>
+            <button class="tab-pro" data-tab="annual" onclick="switchTab('annual')">📅 Annual Simulator</button>
+            <button class="tab-pro" data-tab="monthly" onclick="switchTab('monthly')">📆 Monthly Charts</button>
+            <button class="tab-pro" data-tab="planning" onclick="switchTab('planning')">🎯 Planning</button>
+        </div>
+
+        <!-- Content Container -->
+        <div id="main-content"></div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Investment Modal -->
+    <div id="add-investment-modal" class="modal">
+        <div class="modal-content-pro">
+            <div class="bg-gradient-to-r from-pro-blue to-pro-green p-6 rounded-t-2xl">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold">➕ Add New Investment</h3>
+                    <button onclick="closeModal('add-investment-modal')" class="text-3xl hover:text-gray-300 transition">&times;</button>
+                </div>
+            </div>
+            <div class="p-6">
+                <form id="investment-form" onsubmit="addInvestment(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Investment Name</label>
+                            <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., Kumbung Transol 3" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Amount Invested (IDR)</label>
+                            <input type="number" name="amount" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., 388000000" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Monthly Return (IDR)</label>
+                            <input type="number" name="monthlyReturn" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., 3500000" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Start Date</label>
+                            <input type="text" name="startDate" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., 15 Jan 2026" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Status</label>
+                            <input type="text" name="status" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., ✓ Active" />
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-3">
+                        <button type="submit" class="flex-1 btn-pro">Add Investment</button>
+                        <button type="button" onclick="closeModal('add-investment-modal')" class="px-6 bg-slate-700 text-white font-bold py-3 rounded-lg hover:bg-slate-600 transition">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Monthly Return Modal -->
+    <div id="add-monthly-return-modal" class="modal">
+        <div class="modal-content-pro">
+            <div class="bg-gradient-to-r from-pro-blue to-pro-green p-6 rounded-t-2xl">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold">➕ Add Monthly Return</h3>
+                    <button onclick="closeModal('add-monthly-return-modal')" class="text-3xl hover:text-gray-300 transition">&times;</button>
+                </div>
+            </div>
+            <div class="p-6">
+                <form id="monthly-return-form" onsubmit="addMonthlyReturn(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Month</label>
+                            <input type="text" name="month" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., Jan 2026" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Jamur Kering (IDR)</label>
+                            <input type="number" name="jamurKering" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" value="10000000" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Transolindo Share (IDR)</label>
+                            <input type="number" name="transolidoShare" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" value="5000000" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Defila Share (IDR)</label>
+                            <input type="number" name="defilaShare" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" value="5000000" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Transolindo Kumbung (IDR)</label>
+                            <input type="number" name="transolidoKumbung" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" value="7000000" />
+                        </div>
+                        <div>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" name="received" class="w-5 h-5 rounded" />
+                                <span class="text-sm font-bold text-gray-300">Payment Received</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-3">
+                        <button type="submit" class="flex-1 btn-pro">Add Return</button>
+                        <button type="button" onclick="closeModal('add-monthly-return-modal')" class="px-6 bg-slate-700 text-white font-bold py-3 rounded-lg hover:bg-slate-600 transition">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Harvest Modal -->
+    <div id="add-harvest-modal" class="modal">
+        <div class="modal-content-pro">
+            <div class="bg-gradient-to-r from-pro-green to-emerald-600 p-6 rounded-t-2xl">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold">➕ Add Harvest Data</h3>
+                    <button onclick="closeModal('add-harvest-modal')" class="text-3xl hover:text-gray-300 transition">&times;</button>
+                </div>
+            </div>
+            <div class="p-6">
+                <form id="harvest-form" onsubmit="addHarvest(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Date Range</label>
+                            <input type="text" name="dateRange" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., 10 s/d 16 /12/25" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Week/Month Description</label>
+                            <input type="text" name="weekMonth" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., Minggu ke 14 / Bulan ke 4" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Volume (kg)</label>
+                            <input type="number" name="volume" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., 800" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Gross Revenue (IDR)</label>
+                            <input type="number" name="grossRevenue" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white" placeholder="e.g., 8160000" />
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-3">
+                        <button type="submit" class="flex-1 btn-pro">Add Harvest</button>
+                        <button type="button" onclick="closeModal('add-harvest-modal')" class="px-6 bg-slate-700 text-white font-bold py-3 rounded-lg hover:bg-slate-600 transition">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial Data
+        const INITIAL_INVESTMENTS = [
+            { id: 'jamur-kering', name: 'Jamur Kering', amountInvested: 765000000, monthlyReturn: 5000000, annualROI: 7.84, startDate: '28 Dec 2024', status: '✓ Active (50% split)' },
+            { id: 'kumbung-1', name: 'Kumbung Transol 1 (40rb Baglog)', amountInvested: 388000000, monthlyReturn: 3500000, annualROI: 10.82, startDate: '30 Jul 2025', status: '✓ Active (Panen Okt 2025)' },
+            { id: 'kumbung-2', name: 'Kumbung Transol 2 (40rb Baglog)', amountInvested: 388000000, monthlyReturn: 3500000, annualROI: 10.82, startDate: 'Nov 2025', status: '✓ Active (Starting Nov 2025)' }
+        ];
+
+        const INITIAL_MONTHLY_RETURNS = [
+            { month: 'Mar 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 0, totalTransolido: 5000000, received: true },
+            { month: 'Apr 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 0, totalTransolido: 5000000, received: true },
+            { month: 'May 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 0, totalTransolido: 5000000, received: true },
+            { month: 'Jun 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 0, totalTransolido: 5000000, received: true },
+            { month: 'Jul 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 0, totalTransolido: 5000000, received: true },
+            { month: 'Aug 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 3500000, totalTransolido: 8500000, received: true },
+            { month: 'Sep 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 3500000, totalTransolido: 8500000, received: true },
+            { month: 'Oct 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 3500000, totalTransolido: 8500000, received: true },
+            { month: 'Nov 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 3500000, totalTransolido: 8500000, received: true },
+            { month: 'Dec 2025', jamurKering: 10000000, transolidoShare: 5000000, defilaShare: 5000000, transolidoKumbung: 7000000, totalTransolido: 12000000, received: false }
+        ];
+
+        const INITIAL_HARVEST_DATA = [
+            { id: 'week-1', dateRange: '10 s/d 16 /9/25', weekMonth: 'Minggu ke 1 / Bulan ke 1', volume: 58, grossRevenue: 591600, baglogSavings: 480000, profit: 111600 },
+            { id: 'week-2', dateRange: '17 s/d 23 /9/25', weekMonth: 'Minggu ke 2 / Bulan ke 1', volume: 244, grossRevenue: 2488800, baglogSavings: 1991040, profit: 497760 },
+            { id: 'week-3', dateRange: '24 s/d 30/9/25', weekMonth: 'Minggu ke 3 / Bulan ke 1', volume: 450, grossRevenue: 4590000, baglogSavings: 3672000, profit: 918000 },
+            { id: 'week-4', dateRange: '1 s/d 7/10/25', weekMonth: 'Minggu ke 4 / Bulan ke 1', volume: 491, grossRevenue: 5008200, baglogSavings: 4006560, profit: 1001640 },
+            { id: 'week-5', dateRange: '8 s/d 14/10/25', weekMonth: 'Minggu ke 5 / Bulan ke 2', volume: 600, grossRevenue: 6120000, baglogSavings: 4896000, profit: 1224000 },
+            { id: 'week-6', dateRange: '15 s/d 21/10/25', weekMonth: 'Minggu ke 6 / Bulan ke 2', volume: 756, grossRevenue: 7711200, baglogSavings: 6168960, profit: 1542240 },
+            { id: 'week-7', dateRange: '22 s/d 28/10/25', weekMonth: 'Minggu ke 7 / Bulan ke 2', volume: 801, grossRevenue: 8170200, baglogSavings: 6536160, profit: 1634040 },
+            { id: 'week-8', dateRange: '29 s/d 4/11/25', weekMonth: 'Minggu ke 8 / Bulan ke 2', volume: 825, grossRevenue: 8415000, baglogSavings: 6732000, profit: 1683000 },
+            { id: 'week-9', dateRange: '5 s/d 11/11/25', weekMonth: 'Minggu ke 9 / Bulan ke 3', volume: 1025, grossRevenue: 7175000, baglogSavings: 5740000, profit: 1435000 },
+            { id: 'week-10', dateRange: '12 s/d 18/11/25', weekMonth: 'Minggu ke 10 / Bulan ke 3', volume: 704, grossRevenue: 7180800, baglogSavings: 5744640, profit: 1436160 },
+            { id: 'week-11', dateRange: '19 s/d 25/11/25', weekMonth: 'Minggu ke 11 / Bulan ke 3', volume: 811, grossRevenue: 8272200, baglogSavings: 6617760, profit: 1654440 },
+            { id: 'week-12', dateRange: '26 s/d 2/12/25', weekMonth: 'Minggu ke 12 / Bulan ke 3', volume: 808, grossRevenue: 8241600, baglogSavings: 6593280, profit: 1648320 },
+            { id: 'week-13', dateRange: '3 s/d 9/12/25', weekMonth: 'Minggu ke 13 / Bulan ke 4', volume: 800, grossRevenue: 8160000, baglogSavings: 6528000, profit: 1632000 }
+        ];
+
+        let investments = [];
+        let monthlyReturns = [];
+        let harvestData = [];
+        let monthlyChart = null;
+
+        function loadData() {
+            investments = JSON.parse(localStorage.getItem('transol-investments')) || [...INITIAL_INVESTMENTS];
+            monthlyReturns = JSON.parse(localStorage.getItem('transol-monthly-returns')) || [...INITIAL_MONTHLY_RETURNS];
+            harvestData = JSON.parse(localStorage.getItem('transol-harvest-data')) || [...INITIAL_HARVEST_DATA];
+        }
+
+        function saveData() {
+            localStorage.setItem('transol-investments', JSON.stringify(investments));
+            localStorage.setItem('transol-monthly-returns', JSON.stringify(monthlyReturns));
+            localStorage.setItem('transol-harvest-data', JSON.stringify(harvestData));
+        }
+
+        function formatCurrency(amount) {
+            return 'Rp ' + Math.round(amount).toLocaleString('id-ID');
+        }
+
+        function formatNumber(num) {
+            return Math.round(num).toLocaleString('id-ID');
+        }
+
+        function formatWeight(kg) {
+            return formatNumber(kg) + ' kg';
+        }
+
+        function parseNumber(str) {
+            return parseInt(String(str).replace(/\D/g, '') || '0');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function importExcel(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+
+                    alert('Excel file loaded! Sheet names: ' + workbook.SheetNames.join(', ') + '\n\nYou can now process the data.');
+
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                    console.log('Excel Data:', jsonData);
+
+                } catch (error) {
+                    alert('Error reading Excel file: ' + error.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function addInvestment(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            const newInvestment = {
+                id: 'inv-' + Date.now(),
+                name: formData.get('name'),
+                amountInvested: parseInt(formData.get('amount')),
+                monthlyReturn: parseInt(formData.get('monthlyReturn')),
+                annualROI: ((parseInt(formData.get('monthlyReturn')) * 12) / parseInt(formData.get('amount'))) * 100,
+                startDate: formData.get('startDate'),
+                status: formData.get('status')
+            };
+
+            investments.push(newInvestment);
+            saveData();
+            renderInvestmentTab();
+            closeModal('add-investment-modal');
+            form.reset();
+            alert('Investment added successfully!');
+        }
+
+        function addMonthlyReturn(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            const share = parseInt(formData.get('transolidoShare'));
+            const kumbung = parseInt(formData.get('transolidoKumbung'));
+
+            const newReturn = {
+                month: formData.get('month'),
+                jamurKering: parseInt(formData.get('jamurKering')),
+                transolidoShare: share,
+                defilaShare: parseInt(formData.get('defilaShare')),
+                transolidoKumbung: kumbung,
+                totalTransolido: share + kumbung,
+                received: formData.get('received') === 'on'
+            };
+
+            monthlyReturns.push(newReturn);
+            saveData();
+            renderInvestmentTab();
+            closeModal('add-monthly-return-modal');
+            form.reset();
+            alert('Monthly return added successfully!');
+        }
+
+        function addHarvest(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            const revenue = parseInt(formData.get('grossRevenue'));
+
+            const newHarvest = {
+                id: 'harvest-' + Date.now(),
+                dateRange: formData.get('dateRange'),
+                weekMonth: formData.get('weekMonth'),
+                volume: parseInt(formData.get('volume')),
+                grossRevenue: revenue,
+                baglogSavings: Math.round(revenue * 0.8),
+                profit: Math.round(revenue * 0.2)
+            };
+
+            harvestData.push(newHarvest);
+            saveData();
+            renderHarvestTab();
+            closeModal('add-harvest-modal');
+            form.reset();
+            alert('Harvest data added successfully!');
+        }
+
+        function calculateInvestmentMetrics() {
+            const totalInvestment = investments.reduce((sum, inv) => sum + inv.amountInvested, 0);
+            const totalKumbungFromHarvest = harvestData.reduce((sum, h) => sum + h.profit, 0);
+
+            let transolidoShare = 0;
+
+            monthlyReturns.forEach(month => {
+                if (month.received) {
+                    transolidoShare += month.transolidoShare;
+                }
+            });
+
+            const totalReturnsReceived = transolidoShare + totalKumbungFromHarvest;
+            const currentMonthly = monthlyReturns[monthlyReturns.length - 1]?.totalTransolido || 0;
+
+            return {
+                totalInvestment,
+                totalReturnsReceived,
+                transolidoShare,
+                transolidoKumbung: totalKumbungFromHarvest,
+                currentMonthly
+            };
+        }
+
+        function calculateHarvestMetrics() {
+            const totalVolume = harvestData.reduce((sum, h) => sum + h.volume, 0);
+            const totalRevenue = harvestData.reduce((sum, h) => sum + h.grossRevenue, 0);
+            const weekCount = harvestData.length;
+
+            return {
+                totalVolume,
+                totalRevenue,
+                avgVolumePerWeek: weekCount > 0 ? Math.round(totalVolume / weekCount) : 0,
+                avgRevenuePerWeek: weekCount > 0 ? Math.round(totalRevenue / weekCount) : 0,
+                weekCount
+            };
+        }
+
+        // RENDER INVESTMENT TAB
+        function renderInvestmentTab() {
+            const metrics = calculateInvestmentMetrics();
+
+            const metricCards = [
+                { title: 'TOTAL INVESTMENT', value: formatCurrency(metrics.totalInvestment), subtitle: 'All Investments Combined', gradient: 'from-blue-500 to-cyan-400' },
+                { title: 'TOTAL RETURNS RECEIVED', value: formatCurrency(metrics.totalReturnsReceived), subtitle: 'Jamur + Kumbung (Synced!)', gradient: 'from-green-500 to-emerald-400' },
+                { title: 'TRANSOLINDO SHARE', value: formatCurrency(metrics.transolidoShare), subtitle: '50% Revenue Split (Jamur)', gradient: 'from-purple-500 to-pink-400' },
+                { title: 'KUMBUNG RETURNS', value: formatCurrency(metrics.transolidoKumbung), subtitle: 'From Harvest Data (Synced!)', gradient: 'from-orange-500 to-yellow-400' },
+                { title: 'CURRENT MONTHLY', value: formatCurrency(metrics.currentMonthly), subtitle: 'Latest Month Total', gradient: 'from-pink-500 to-rose-400' }
+            ];
+
+            const content = document.getElementById('main-content');
+            content.innerHTML = `
+                <!-- Action Bar -->
+                <div class="mb-6 flex justify-between items-center animate-fade-up">
+                    <div>
+                        <h2 class="text-3xl font-black">💰 Investment Portfolio</h2>
+                        <p class="text-gray-400 mt-1">Strategic Diversified Investment</p>
+                    </div>
+                    <button onclick="openModal('add-investment-modal')" class="btn-pro">
+                        ➕ Add Investment
+                    </button>
+                </div>
+
+                <!-- Metric Cards 2-2-1 Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    ${metricCards.slice(0, 2).map((card, idx) => `
+                        <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: ${idx * 0.1}s">
+                            <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">${card.title}</div>
+                            <div class="metric-value-pro bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent mb-2">
+                                ${card.value}
+                            </div>
+                            <div class="text-sm font-semibold text-gray-400">${card.subtitle}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    ${metricCards.slice(2, 4).map((card, idx) => `
+                        <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: ${(idx + 2) * 0.1}s">
+                            <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">${card.title}</div>
+                            <div class="metric-value-pro bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent mb-2">
+                                ${card.value}
+                            </div>
+                            <div class="text-sm font-semibold text-gray-400">${card.subtitle}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="flex justify-center mb-8">
+                    <div class="pro-card rounded-2xl p-8 w-full md:w-2/3 lg:w-1/2 animate-fade-up" style="animation-delay: 0.4s">
+                        <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">${metricCards[4].title}</div>
+                        <div class="metric-value-pro bg-gradient-to-r ${metricCards[4].gradient} bg-clip-text text-transparent mb-2">
+                            ${metricCards[4].value}
+                        </div>
+                        <div class="text-sm font-semibold text-gray-400">${metricCards[4].subtitle}</div>
+                    </div>
+                </div>
+
+                <!-- Investment Portfolio Table -->
+                <div class="pro-card rounded-2xl p-8 mb-8 animate-fade-up" style="animation-delay: 0.5s">
+                    <h3 class="text-2xl font-black uppercase mb-6 text-blue-400">📊 Investment Portfolio</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left text-xs font-bold uppercase tracking-wider text-gray-400">
+                                    <th class="pb-4">Type</th>
+                                    <th class="pb-4">Invested</th>
+                                    <th class="pb-4">Monthly</th>
+                                    <th class="pb-4">ROI %</th>
+                                    <th class="pb-4">Start</th>
+                                    <th class="pb-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${investments.map(inv => `
+                                    <tr>
+                                        <td class="py-4 font-bold">${inv.name}</td>
+                                        <td class="py-4 text-blue-400 font-semibold">${formatCurrency(inv.amountInvested)}</td>
+                                        <td class="py-4 text-green-400 font-bold">${formatCurrency(inv.monthlyReturn)}</td>
+                                        <td class="py-4 text-yellow-400 font-bold">${inv.annualROI.toFixed(2)}%</td>
+                                        <td class="py-4">${inv.startDate}</td>
+                                        <td class="py-4"><span class="badge-pro">${inv.status}</span></td>
+                                    </tr>
+                                `).join('')}
+                                <tr class="bg-blue-500/10 font-bold">
+                                    <td class="py-4">TOTAL</td>
+                                    <td class="py-4 text-blue-400">${formatCurrency(investments.reduce((sum, inv) => sum + inv.amountInvested, 0))}</td>
+                                    <td class="py-4 text-green-400">${formatCurrency(investments.reduce((sum, inv) => sum + inv.monthlyReturn, 0))}</td>
+                                    <td class="py-4 text-yellow-400">${((investments.reduce((sum, inv) => sum + inv.monthlyReturn, 0) * 12) / investments.reduce((sum, inv) => sum + inv.amountInvested, 0) * 100).toFixed(2)}%</td>
+                                    <td class="py-4">-</td>
+                                    <td class="py-4">🎯 Active</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Monthly Returns Table -->
+                <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: 0.6s">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-black uppercase text-green-400">📊 Monthly Returns</h3>
+                        <button onclick="openModal('add-monthly-return-modal')" class="btn-pro text-sm">
+                            ➕ Add Monthly Return
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left text-xs font-bold uppercase tracking-wider text-gray-400">
+                                    <th class="pb-4">Month</th>
+                                    <th class="pb-4">Jamur Kering</th>
+                                    <th class="pb-4">Share</th>
+                                    <th class="pb-4">Defila</th>
+                                    <th class="pb-4">Kumbung</th>
+                                    <th class="pb-4">Total</th>
+                                    <th class="pb-4 text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${monthlyReturns.map((month, idx) => `
+                                    <tr>
+                                        <td class="py-4 font-bold">${month.month}</td>
+                                        <td class="py-4 text-green-400">${formatCurrency(month.jamurKering)}</td>
+                                        <td class="py-4">
+                                            <input type="text" class="editable-input-pro" value="${formatNumber(month.transolidoShare)}"
+                                                   onfocus="this.value='${month.transolidoShare}'"
+                                                   onblur="updateMonthlyField(${idx}, 'transolidoShare', this.value)" />
+                                        </td>
+                                        <td class="py-4 text-green-400">${formatCurrency(month.defilaShare)}</td>
+                                        <td class="py-4">
+                                            <input type="text" class="editable-input-pro" value="${formatNumber(month.transolidoKumbung)}"
+                                                   onfocus="this.value='${month.transolidoKumbung}'"
+                                                   onblur="updateMonthlyField(${idx}, 'transolidoKumbung', this.value)" />
+                                        </td>
+                                        <td class="py-4 font-bold text-green-400 text-xl">${formatCurrency(month.totalTransolido)}</td>
+                                        <td class="py-4">
+                                            <label class="flex items-center justify-center gap-2 cursor-pointer">
+                                                <input type="checkbox" ${month.received ? 'checked' : ''}
+                                                       onchange="updateMonthlyReceived(${idx}, this.checked)"
+                                                       class="w-5 h-5 rounded" />
+                                                <span class="text-sm font-bold ${month.received ? 'text-green-400' : 'text-orange-400'}">
+                                                    ${month.received ? '✓ Received' : '📊 Projected'}
+                                                </span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateMonthlyField(idx, field, value) {
+            const numValue = parseNumber(value);
+            monthlyReturns[idx][field] = numValue;
+            monthlyReturns[idx].totalTransolido = monthlyReturns[idx].transolidoShare + monthlyReturns[idx].transolidoKumbung;
+            saveData();
+            renderInvestmentTab();
+        }
+
+        function updateMonthlyReceived(idx, checked) {
+            monthlyReturns[idx].received = checked;
+            saveData();
+            renderInvestmentTab();
+        }
+
+        // RENDER HARVEST TAB
+        function renderHarvestTab() {
+            const metrics = calculateHarvestMetrics();
+
+            const content = document.getElementById('main-content');
+            content.innerHTML = `
+                <!-- Action Bar -->
+                <div class="mb-6 flex justify-between items-center animate-fade-up">
+                    <div>
+                        <h2 class="text-3xl font-black">🌱 Hasil Panen Jamur Tiram</h2>
+                        <p class="text-gray-400 mt-1">Real-time Monitoring & Analytics</p>
+                    </div>
+                    <button onclick="openModal('add-harvest-modal')" class="btn-pro">
+                        ➕ Add Harvest Data
+                    </button>
+                </div>
+
+                <!-- Harvest Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    ${[
+                        { title: 'TOTAL VOLUME', value: formatWeight(metrics.totalVolume), subtitle: metrics.weekCount + ' weeks', gradient: 'from-blue-500 to-cyan-400' },
+                        { title: 'TOTAL REVENUE', value: formatCurrency(metrics.totalRevenue), subtitle: metrics.weekCount + ' weeks', gradient: 'from-green-500 to-emerald-400' },
+                        { title: 'AVG VOLUME/WEEK', value: formatWeight(metrics.avgVolumePerWeek), subtitle: 'Consistent', gradient: 'from-purple-500 to-pink-400' },
+                        { title: 'AVG REVENUE/WEEK', value: formatCurrency(metrics.avgRevenuePerWeek), subtitle: 'Excellent', gradient: 'from-orange-500 to-yellow-400' }
+                    ].map((card, idx) => `
+                        <div class="pro-card rounded-2xl p-6 animate-fade-up" style="animation-delay: ${idx * 0.1}s">
+                            <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">${card.title}</div>
+                            <div class="text-3xl md:text-4xl font-black bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent mb-2">
+                                ${card.value}
+                            </div>
+                            <div class="text-sm text-gray-400">${card.subtitle}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <!-- Harvest Table -->
+                <div class="pro-card rounded-2xl p-8 mb-8 animate-fade-up" style="animation-delay: 0.5s">
+                    <h3 class="text-2xl font-black uppercase mb-6 text-green-400">📊 Harvest Tracking</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left text-xs font-bold uppercase tracking-wider text-gray-400">
+                                    <th class="pb-4">Date</th>
+                                    <th class="pb-4">Week/Month</th>
+                                    <th class="pb-4">Volume</th>
+                                    <th class="pb-4">Revenue</th>
+                                    <th class="pb-4">Baglog (80%)</th>
+                                    <th class="pb-4">Profit (20%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${harvestData.map(h => `
+                                    <tr>
+                                        <td class="py-4 font-bold">${h.dateRange}</td>
+                                        <td class="py-4 text-gray-400">${h.weekMonth}</td>
+                                        <td class="py-4 text-blue-400 font-bold">${formatWeight(h.volume)}</td>
+                                        <td class="py-4 text-green-400 font-bold">${formatCurrency(h.grossRevenue)}</td>
+                                        <td class="py-4 text-green-400">${formatCurrency(h.baglogSavings)}</td>
+                                        <td class="py-4 text-yellow-400 font-bold">${formatCurrency(h.profit)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Progress Bars -->
+                <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: 0.6s">
+                    <h3 class="text-2xl font-black uppercase mb-6 text-pink-400">🎯 Target Progress</h3>
+                    ${[
+                        { label: 'Volume Target', current: metrics.totalRevenue, target: 100000000 },
+                        { label: 'Savings Target (80%)', current: harvestData.reduce((sum, h) => sum + h.baglogSavings, 0), target: 80000000 },
+                        { label: 'Profit Target (20%)', current: harvestData.reduce((sum, h) => sum + h.profit, 0), target: 20000000 }
+                    ].map(p => {
+                        const pct = Math.min((p.current / p.target) * 100, 100);
+                        return `
+                            <div class="mb-6">
+                                <div class="flex justify-between mb-3">
+                                    <span class="font-bold text-lg">${p.label}</span>
+                                    <div class="text-right">
+                                        <div class="font-bold text-green-400 text-lg">${pct.toFixed(1)}%</div>
+                                        <div class="text-sm text-gray-400">${formatCurrency(p.current)} / ${formatCurrency(p.target)}</div>
+                                    </div>
+                                </div>
+                                <div class="progress-pro">
+                                    <div class="progress-pro-fill" style="width: ${pct}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // RENDER ANNUAL SIMULATOR
+        function renderAnnualSimulator() {
+            const content = document.getElementById('main-content');
+            content.innerHTML = `
+                <div class="mb-6 animate-fade-up">
+                    <h2 class="text-3xl font-black">📅 Annual Investment Simulator</h2>
+                    <p class="text-gray-400 mt-1">Play with numbers to achieve your target!</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="pro-card rounded-2xl p-8 animate-fade-up">
+                        <h3 class="text-2xl font-bold mb-6 text-blue-400">🎯 Simulate Annual Target</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block font-bold text-sm text-gray-300 mb-2">Target Annual Income (IDR)</label>
+                                <input type="number" id="sim-annual-target" value="144000000" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white font-bold text-lg" oninput="calculateAnnualSimulation()" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-sm text-gray-300 mb-2">Investment Amount: <span id="sim-investment-value" class="text-blue-400">Rp 1.541.000.000</span></label>
+                                <input type="range" id="sim-investment" min="100000000" max="5000000000" step="10000000" value="1541000000" class="slider-pro" oninput="calculateAnnualSimulation()" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-sm text-gray-300 mb-2">Average ROI: <span id="sim-roi-value" class="text-green-400">9.34%</span></label>
+                                <input type="range" id="sim-roi" min="5" max="15" step="0.1" value="9.34" class="slider-pro" oninput="calculateAnnualSimulation()" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: 0.1s">
+                        <h3 class="text-2xl font-bold mb-6 text-green-400">📊 Simulation Results</h3>
+                        <div id="sim-results"></div>
+                    </div>
+                </div>
+
+                <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: 0.2s">
+                    <h3 class="text-2xl font-bold mb-6 text-purple-400">📈 Yearly Projection (2025-2027)</h3>
+                    <div id="sim-yearly-projection"></div>
+                </div>
+            `;
+            calculateAnnualSimulation();
+        }
+
+        function calculateAnnualSimulation() {
+            const target = parseFloat(document.getElementById('sim-annual-target')?.value) || 0;
+            const investment = parseFloat(document.getElementById('sim-investment')?.value) || 0;
+            const roi = parseFloat(document.getElementById('sim-roi')?.value) || 0;
+
+            if (document.getElementById('sim-investment-value')) {
+                document.getElementById('sim-investment-value').textContent = formatCurrency(investment);
+            }
+            if (document.getElementById('sim-roi-value')) {
+                document.getElementById('sim-roi-value').textContent = roi.toFixed(2) + '%';
+            }
+
+            const annualReturn = investment * (roi / 100);
+            const monthlyReturn = annualReturn / 12;
+            const difference = annualReturn - target;
+            const achievable = difference >= 0;
+
+            const resultsContainer = document.getElementById('sim-results');
+            if (!resultsContainer) return;
+
+            resultsContainer.innerHTML = `
+                <div class="p-6 ${achievable ? 'bg-green-500/20 border-2 border-green-500/50' : 'bg-red-500/20 border-2 border-red-500/50'} rounded-xl mb-6">
+                    <div class="text-sm font-bold mb-2">${achievable ? '✅ Target Achievable!' : '❌ Target Not Met'}</div>
+                    <div class="text-4xl font-black ${achievable ? 'text-green-400' : 'text-red-400'} mb-2">${formatCurrency(annualReturn)}</div>
+                    <div class="text-sm">${achievable ? 'Exceeds' : 'Short by'} ${formatCurrency(Math.abs(difference))}</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                        <div class="text-xs text-gray-400 mb-1">Monthly Return</div>
+                        <div class="text-2xl font-black text-blue-400">${formatCurrency(monthlyReturn)}</div>
+                    </div>
+                    <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                        <div class="text-xs text-gray-400 mb-1">Annual Return</div>
+                        <div class="text-2xl font-black text-blue-400">${formatCurrency(annualReturn)}</div>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-slate-800/50 rounded-xl">
+                    <div class="text-sm font-bold mb-3 text-gray-300">Breakdown:</div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Investment:</span>
+                            <span class="font-bold">${formatCurrency(investment)}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">ROI Rate:</span>
+                            <span class="font-bold text-green-400">${roi.toFixed(2)}%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Annual Return:</span>
+                            <span class="font-bold text-blue-400">${formatCurrency(annualReturn)}</span>
+                        </div>
+                        <div class="flex justify-between pt-2 border-t border-gray-700">
+                            <span class="font-bold">Target:</span>
+                            <span class="font-bold text-yellow-400">${formatCurrency(target)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const projectionContainer = document.getElementById('sim-yearly-projection');
+            if (!projectionContainer) return;
+
+            const years = [2025, 2026, 2027];
+            projectionContainer.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    ${years.map((year, idx) => {
+                        const yearReturn = annualReturn * (1 + (idx * 0.05));
+                        return `
+                            <div class="p-6 bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-blue-500/30 rounded-xl hover:border-blue-500/60 transition">
+                                <div class="text-xl font-black mb-2 text-gray-300">${year}</div>
+                                <div class="text-3xl font-black bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent mb-2">${formatCurrency(yearReturn)}</div>
+                                <div class="text-sm text-gray-400">Projected annual return</div>
+                                <div class="mt-2 text-xs text-green-400 font-bold">+${(idx * 5)}% growth</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // RENDER MONTHLY CHARTS
+        function renderMonthlyCharts() {
+            const data2025 = monthlyReturns.filter(m => m.month.includes('2025'));
+
+            const monthlyKumbungData = {
+                'Mar 2025': 0, 'Apr 2025': 0, 'May 2025': 0, 'Jun 2025': 0, 'Jul 2025': 0,
+                'Aug 2025': 0, 'Sep 2025': 0, 'Oct 2025': 0, 'Nov 2025': 0, 'Dec 2025': 0
+            };
+
+            harvestData.forEach(h => {
+                const dateStr = h.dateRange.toLowerCase();
+                if (dateStr.includes('/9/25')) monthlyKumbungData['Sep 2025'] += h.grossRevenue;
+                else if (dateStr.includes('/10/25')) monthlyKumbungData['Oct 2025'] += h.grossRevenue;
+                else if (dateStr.includes('/11/25')) monthlyKumbungData['Nov 2025'] += h.grossRevenue;
+                else if (dateStr.includes('/12/25')) monthlyKumbungData['Dec 2025'] += h.grossRevenue;
+            });
+
+            const totalKumbungGross = harvestData.reduce((sum, h) => sum + h.grossRevenue, 0);
+
+            const content = document.getElementById('main-content');
+            content.innerHTML = `
+                <div class="mb-6 animate-fade-up">
+                    <h2 class="text-3xl font-black">📆 Monthly Dashboard 2025</h2>
+                    <p class="text-gray-400 mt-1">Visual Analytics & Trends (Jamur 5jt + Kumbung Gross Revenue)</p>
+                </div>
+
+                <div class="pro-card rounded-2xl p-8 mb-8 animate-fade-up">
+                    <h3 class="text-2xl font-bold mb-6 text-blue-400">📊 Monthly Income Trend 2025</h3>
+                    <canvas id="monthly-chart" height="100"></canvas>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: 0.1s">
+                        <h3 class="text-xl font-bold mb-4 text-green-400">📈 Jamur vs Kumbung</h3>
+                        <canvas id="share-chart"></canvas>
+                    </div>
+                    <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: 0.2s">
+                        <h3 class="text-xl font-bold mb-4 text-purple-400">💰 Cumulative Returns</h3>
+                        <canvas id="cumulative-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="pro-card rounded-2xl p-6 animate-fade-up" style="animation-delay: 0.3s">
+                    <h4 class="font-bold text-lg mb-3 text-yellow-400">📌 Chart Data Explanation:</h4>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300">
+                        <li><strong>Jamur Share:</strong> Rp 5.000.000/month (50% revenue split from Jamur Kering)</li>
+                        <li><strong>Kumbung:</strong> Gross Revenue from harvest (SEBELUM dipotong nabung/baglog)</li>
+                        <li><strong>Total Kumbung Gross:</strong> ${formatCurrency(totalKumbungGross)} (dari ${harvestData.length} minggu)</li>
+                        <li><strong>Monthly Breakdown:</strong> Sep: ${formatCurrency(monthlyKumbungData['Sep 2025'])}, Oct: ${formatCurrency(monthlyKumbungData['Oct 2025'])}, Nov: ${formatCurrency(monthlyKumbungData['Nov 2025'])}, Dec: ${formatCurrency(monthlyKumbungData['Dec 2025'])}</li>
+                        <li><strong>Data Source:</strong> Actual harvest data per month (SYNCED!)</li>
+                    </ul>
+                </div>
+            `;
+
+            if (monthlyChart) monthlyChart.destroy();
+
+            // Main Chart
+            const ctx1 = document.getElementById('monthly-chart').getContext('2d');
+            monthlyChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: data2025.map(m => m.month),
+                    datasets: [
+                        {
+                            label: 'Jamur Share (5M)',
+                            data: data2025.map(m => m.transolidoShare),
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Kumbung Gross Revenue',
+                            data: data2025.map(m => monthlyKumbungData[m.month] || 0),
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Total (Jamur + Kumbung)',
+                            data: data2025.map(m => m.transolidoShare + (monthlyKumbungData[m.month] || 0)),
+                            borderColor: '#F59E0B',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#F8FAFC',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => context.dataset.label + ': ' + formatCurrency(context.parsed.y)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#F8FAFC',
+                                callback: (value) => 'Rp ' + (value / 1000000) + 'M'
+                            },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#F8FAFC' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Bar Chart
+            const ctx2 = document.getElementById('share-chart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: data2025.map(m => m.month),
+                    datasets: [
+                        {
+                            label: 'Jamur (5M)',
+                            data: data2025.map(m => m.transolidoShare),
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)'
+                        },
+                        {
+                            label: 'Kumbung (Gross)',
+                            data: data2025.map(m => monthlyKumbungData[m.month] || 0),
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#F8FAFC',
+                                font: { weight: 'bold' }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#F8FAFC',
+                                callback: (value) => 'Rp ' + (value / 1000000) + 'M'
+                            },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#F8FAFC' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Cumulative Chart
+            let cumulative = 0;
+            const cumulativeData = data2025.map(m => {
+                cumulative += m.transolidoShare + (monthlyKumbungData[m.month] || 0);
+                return cumulative;
+            });
+
+            const ctx3 = document.getElementById('cumulative-chart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: data2025.map(m => m.month),
+                    datasets: [{
+                        label: 'Cumulative Total',
+                        data: cumulativeData,
+                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#F8FAFC',
+                                font: { weight: 'bold' }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#F8FAFC',
+                                callback: (value) => 'Rp ' + (value / 1000000) + 'M'
+                            },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#F8FAFC' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // RENDER PLANNING
+        function renderPlanning() {
+            const content = document.getElementById('main-content');
+            content.innerHTML = `
+                <div class="mb-6 animate-fade-up">
+                    <h2 class="text-3xl font-black">🎯 Investment Planning Calculator</h2>
+                    <p class="text-gray-400 mt-1">Calculate Required Investment for Target Income</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="pro-card rounded-2xl p-8 animate-fade-up">
+                        <h3 class="text-2xl font-bold mb-6 text-blue-400">🎯 Target Calculator</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block font-bold text-sm text-gray-300 mb-2">Desired Monthly Income (IDR)</label>
+                                <input type="text" id="target-income" value="20.000.000" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:border-blue-500 focus:outline-none text-white font-bold text-lg" oninput="calculateRequirements()" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-sm text-gray-300 mb-2">Jamur Kering: <span id="jamur-pct" class="text-blue-400">50%</span></label>
+                                <input type="range" id="jamur-percent" min="0" max="100" value="50" class="slider-pro" oninput="document.getElementById('jamur-pct').textContent=this.value+'%'; document.getElementById('kumbung-percent').value=100-this.value; document.getElementById('kumbung-pct').textContent=(100-this.value)+'%'; calculateRequirements()" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-sm text-gray-300 mb-2">Kumbung: <span id="kumbung-pct" class="text-green-400">50%</span></label>
+                                <input type="range" id="kumbung-percent" min="0" max="100" value="50" class="slider-pro" oninput="document.getElementById('kumbung-pct').textContent=this.value+'%'; document.getElementById('jamur-percent').value=100-this.value; document.getElementById('jamur-pct').textContent=(100-this.value)+'%'; calculateRequirements()" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: 0.1s">
+                        <h3 class="text-2xl font-bold mb-6 text-green-400">📊 Required Investment</h3>
+                        <div id="planning-results"></div>
+                    </div>
+                </div>
+
+                <div class="pro-card rounded-2xl p-8 animate-fade-up" style="animation-delay: 0.2s">
+                    <h3 class="text-2xl font-bold mb-6 text-purple-400">💡 Quick Scenarios</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        ${[20000000, 30000000, 50000000].map(target => {
+                            const avgROI = (0.0784 + 0.1082) / 2 / 12;
+                            const required = target / avgROI;
+                            return `
+                                <div class="p-6 bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-blue-500/30 rounded-xl hover:border-blue-500/60 transition cursor-pointer" onclick="document.getElementById('target-income').value='${formatNumber(target)}'; calculateRequirements();">
+                                    <div class="text-lg font-bold mb-2 text-gray-300">${formatCurrency(target)}/mo</div>
+                                    <div class="text-sm text-gray-400 mb-2">Required Investment:</div>
+                                    <div class="text-2xl font-black bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">${formatCurrency(required)}</div>
+                                    <div class="text-xs text-blue-400 font-bold mt-2">Click to calculate →</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            calculateRequirements();
+        }
+
+        function calculateRequirements() {
+            const targetIncomeStr = document.getElementById('target-income')?.value || '20000000';
+            const targetIncome = parseNumber(targetIncomeStr);
+            const jamurPercent = parseFloat(document.getElementById('jamur-percent')?.value || 50) / 100;
+            const kumbungPercent = parseFloat(document.getElementById('kumbung-percent')?.value || 50) / 100;
+
+            const jamurROI = 0.0784 / 12;
+            const kumbungROI = 0.1082 / 12;
+
+            const jamurInv = (targetIncome * jamurPercent) / jamurROI;
+            const kumbungInv = (targetIncome * kumbungPercent) / kumbungROI;
+            const totalInv = jamurInv + kumbungInv;
+
+            const jamurMonthly = jamurInv * jamurROI;
+            const kumbungMonthly = kumbungInv * kumbungROI;
+
+            const resultsContainer = document.getElementById('planning-results');
+            if (!resultsContainer) return;
+
+            resultsContainer.innerHTML = `
+                <div class="p-6 bg-gradient-to-br from-blue-500/20 to-green-500/20 border-2 border-blue-500/50 rounded-xl mb-6">
+                    <div class="text-sm font-bold text-gray-300 mb-2">Total Required Investment</div>
+                    <div class="text-4xl font-black bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">${formatCurrency(totalInv)}</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                        <div class="text-xs text-gray-400 mb-1">Jamur Kering</div>
+                        <div class="text-xl font-black text-blue-400">${formatCurrency(jamurInv)}</div>
+                        <div class="text-xs text-gray-400 mt-1">${formatCurrency(jamurMonthly)}/mo</div>
+                    </div>
+                    <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
+                        <div class="text-xs text-gray-400 mb-1">Kumbung</div>
+                        <div class="text-xl font-black text-green-400">${formatCurrency(kumbungInv)}</div>
+                        <div class="text-xs text-gray-400 mt-1">${formatCurrency(kumbungMonthly)}/mo</div>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-slate-800/50 rounded-xl">
+                    <div class="text-sm font-bold mb-3 text-gray-300">Monthly Breakdown:</div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Jamur (${(jamurPercent*100).toFixed(0)}%):</span>
+                            <span class="font-bold text-blue-400">${formatCurrency(jamurMonthly)}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Kumbung (${(kumbungPercent*100).toFixed(0)}%):</span>
+                            <span class="font-bold text-green-400">${formatCurrency(kumbungMonthly)}</span>
+                        </div>
+                        <div class="flex justify-between pt-2 border-t border-gray-700">
+                            <span class="font-bold">Total Monthly:</span>
+                            <span class="font-bold text-yellow-400">${formatCurrency(jamurMonthly + kumbungMonthly)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-pro').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            const activeButton = document.querySelector(`[data-tab="${tab}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+
+            if (tab === 'investment') renderInvestmentTab();
+            if (tab === 'harvest') renderHarvestTab();
+            if (tab === 'annual') renderAnnualSimulator();
+            if (tab === 'monthly') renderMonthlyCharts();
+            if (tab === 'planning') renderPlanning();
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const formatted = now.toLocaleString('id-ID', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Jakarta'
+            });
+            document.getElementById('live-clock').textContent = formatted;
+        }
+
+        function init() {
+            loadData();
+            switchTab('investment');
+            updateClock();
+            setInterval(updateClock, 60000);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -278,7 +278,7 @@
 
     <div class="footer">
         <p>Dicetak pada: {{ $cetakPada }} WIB</p>
-        <p>Nyimushroom - Sistem Manajemen Usaha Jamur</p>
+        <p>Defila Solusi Bersama Indonesia - Sistem Manajemen Usaha Jamur</p>
     </div>
 </body>
 </html>

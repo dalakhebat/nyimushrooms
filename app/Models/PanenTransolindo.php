@@ -6,12 +6,12 @@ use App\Traits\EncryptsSensitiveData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PanenTransolido extends Model
+class PanenTransolindo extends Model
 {
     use HasFactory, EncryptsSensitiveData;
 
     protected $fillable = [
-        'investasi_transolido_id',
+        'investasi_transolindo_id',
         'tanggal_mulai',
         'tanggal_selesai',
         'minggu_bulan',
@@ -37,7 +37,7 @@ class PanenTransolido extends Model
 
     public function investasi()
     {
-        return $this->belongsTo(InvestasiTransolido::class, 'investasi_transolido_id');
+        return $this->belongsTo(InvestasiTransolindo::class, 'investasi_transolindo_id');
     }
 
     // Calculate in PHP since encrypted fields can't be summed in SQL

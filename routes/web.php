@@ -22,7 +22,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QrAbsensiController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\KeuanganController;
-use App\Http\Controllers\TransolidoController;
+use App\Http\Controllers\TransolindoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -159,25 +159,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/keuangan/pembayaran/{pembayaranKredit}', [KeuanganController::class, 'destroyPembayaran'])->name('keuangan.pembayaran.destroy');
 
     // Transolido
-    Route::get('/keuangan/transolido', [TransolidoController::class, 'index'])->name('keuangan.transolido');
+    Route::get('/keuangan/transolindo', [TransolindoController::class, 'index'])->name('keuangan.transolindo');
     // Investasi Transolido
-    Route::post('/keuangan/transolido/investasi', [TransolidoController::class, 'storeInvestasi'])->name('transolido.investasi.store');
-    Route::put('/keuangan/transolido/investasi/{investasi}', [TransolidoController::class, 'updateInvestasi'])->name('transolido.investasi.update');
-    Route::delete('/keuangan/transolido/investasi/{investasi}', [TransolidoController::class, 'destroyInvestasi'])->name('transolido.investasi.destroy');
-    Route::patch('/keuangan/transolido/investasi/{investasi}/fase', [TransolidoController::class, 'updateFase'])->name('transolido.investasi.update-fase');
+    Route::post('/keuangan/transolindo/investasi', [TransolindoController::class, 'storeInvestasi'])->name('transolindo.investasi.store');
+    Route::put('/keuangan/transolindo/investasi/{investasi}', [TransolindoController::class, 'updateInvestasi'])->name('transolindo.investasi.update');
+    Route::delete('/keuangan/transolindo/investasi/{investasi}', [TransolindoController::class, 'destroyInvestasi'])->name('transolindo.investasi.destroy');
+    Route::patch('/keuangan/transolindo/investasi/{investasi}/fase', [TransolindoController::class, 'updateFase'])->name('transolindo.investasi.update-fase');
     // Return Bulanan Transolido
-    Route::post('/keuangan/transolido/return', [TransolidoController::class, 'storeReturn'])->name('transolido.return.store');
-    Route::put('/keuangan/transolido/return/{returnBulanan}', [TransolidoController::class, 'updateReturn'])->name('transolido.return.update');
-    Route::delete('/keuangan/transolido/return/{returnBulanan}', [TransolidoController::class, 'destroyReturn'])->name('transolido.return.destroy');
-    Route::patch('/keuangan/transolido/return/{returnBulanan}/toggle', [TransolidoController::class, 'toggleReturnStatus'])->name('transolido.return.toggle');
+    Route::post('/keuangan/transolindo/return', [TransolindoController::class, 'storeReturn'])->name('transolindo.return.store');
+    Route::put('/keuangan/transolindo/return/{returnBulanan}', [TransolindoController::class, 'updateReturn'])->name('transolindo.return.update');
+    Route::delete('/keuangan/transolindo/return/{returnBulanan}', [TransolindoController::class, 'destroyReturn'])->name('transolindo.return.destroy');
+    Route::patch('/keuangan/transolindo/return/{returnBulanan}/toggle', [TransolindoController::class, 'toggleReturnStatus'])->name('transolindo.return.toggle');
     // Panen Transolido
-    Route::post('/keuangan/transolido/panen', [TransolidoController::class, 'storePanen'])->name('transolido.panen.store');
-    Route::put('/keuangan/transolido/panen/{panen}', [TransolidoController::class, 'updatePanen'])->name('transolido.panen.update');
-    Route::delete('/keuangan/transolido/panen/{panen}', [TransolidoController::class, 'destroyPanen'])->name('transolido.panen.destroy');
+    Route::post('/keuangan/transolindo/panen', [TransolindoController::class, 'storePanen'])->name('transolindo.panen.store');
+    Route::put('/keuangan/transolindo/panen/{panen}', [TransolindoController::class, 'updatePanen'])->name('transolindo.panen.update');
+    Route::delete('/keuangan/transolindo/panen/{panen}', [TransolindoController::class, 'destroyPanen'])->name('transolindo.panen.destroy');
     // Kas Transolido
-    Route::post('/keuangan/transolido/kas', [TransolidoController::class, 'storeKas'])->name('transolido.kas.store');
-    Route::put('/keuangan/transolido/kas/{kas}', [TransolidoController::class, 'updateKas'])->name('transolido.kas.update');
-    Route::delete('/keuangan/transolido/kas/{kas}', [TransolidoController::class, 'destroyKas'])->name('transolido.kas.destroy');
-    Route::post('/keuangan/transolido/kas/{kas}/reimburse', [TransolidoController::class, 'reimburseKas'])->name('transolido.kas.reimburse');
+    Route::post('/keuangan/transolindo/kas', [TransolindoController::class, 'storeKas'])->name('transolindo.kas.store');
+    Route::put('/keuangan/transolindo/kas/{kas}', [TransolindoController::class, 'updateKas'])->name('transolindo.kas.update');
+    Route::delete('/keuangan/transolindo/kas/{kas}', [TransolindoController::class, 'destroyKas'])->name('transolindo.kas.destroy');
+    Route::post('/keuangan/transolindo/kas/{kas}/reimburse', [TransolindoController::class, 'reimburseKas'])->name('transolindo.kas.reimburse');
 });
 require __DIR__.'/auth.php';

@@ -67,7 +67,7 @@
 <body>
     <div class="header">
         <h1>REKAP ABSENSI KARYAWAN</h1>
-        <p>Nyimushroom Farm</p>
+        <p>Defila Solusi Bersama Indonesia Farm</p>
         <p style="margin-top: 10px;">Periode: {{ $periode }}</p>
     </div>
 

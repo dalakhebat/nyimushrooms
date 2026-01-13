@@ -46,7 +46,7 @@ export default function ScanPublic() {
                             <Icon icon="solar:qr-code-bold" className="w-8 h-8 text-white" />
                         </div>
                         <h1 className="text-2xl font-bold text-gray-800">Absensi Karyawan</h1>
-                        <p className="text-gray-600">Nyimushroom Farm</p>
+                        <p className="text-gray-600">Defila Solusi Bersama Indonesia</p>
                     </div>
 
                     {/* Success Message */}

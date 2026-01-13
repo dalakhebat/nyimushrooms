@@ -16,16 +16,16 @@ return new class extends Migration
     public function up(): void
     {
         // 1. InvestasiTransolido - encrypt modal, return_bulanan, roi_tahunan
-        $this->encryptTable('investasi_transolidos', ['modal', 'return_bulanan', 'roi_tahunan']);
+        $this->encryptTable('investasi_transolindos', ['modal', 'return_bulanan', 'roi_tahunan']);
 
         // 2. ReturnBulananTransolido - encrypt financial fields
-        $this->encryptTable('return_bulanan_transolidos', ['jamur_kering', 'share_transolido', 'share_defila', 'kumbung', 'total']);
+        $this->encryptTable('return_bulanan_transolindos', ['jamur_kering', 'share_transolindo', 'share_defila', 'kumbung', 'total']);
 
         // 3. PanenTransolido - encrypt financial fields
-        $this->encryptTable('panen_transolidos', ['volume_kg', 'pendapatan_kotor', 'tabungan_baglog', 'profit']);
+        $this->encryptTable('panen_transolindos', ['volume_kg', 'pendapatan_kotor', 'tabungan_baglog', 'profit']);
 
         // 4. KasTransolido - encrypt jumlah
-        $this->encryptTable('kas_transolido', ['jumlah']);
+        $this->encryptTable('kas_transolindo', ['jumlah']);
     }
 
     /**
@@ -74,28 +74,28 @@ return new class extends Migration
     public function down(): void
     {
         // Decrypt and change back to DECIMAL
-        $this->decryptTable('investasi_transolidos', [
+        $this->decryptTable('investasi_transolindos', [
             'modal' => 'decimal(15,2)',
             'return_bulanan' => 'decimal(15,2)',
             'roi_tahunan' => 'decimal(5,2)',
         ]);
 
-        $this->decryptTable('return_bulanan_transolidos', [
+        $this->decryptTable('return_bulanan_transolindos', [
             'jamur_kering' => 'decimal(15,2)',
-            'share_transolido' => 'decimal(15,2)',
+            'share_transolindo' => 'decimal(15,2)',
             'share_defila' => 'decimal(15,2)',
             'kumbung' => 'decimal(15,2)',
             'total' => 'decimal(15,2)',
         ]);
 
-        $this->decryptTable('panen_transolidos', [
+        $this->decryptTable('panen_transolindos', [
             'volume_kg' => 'decimal(10,2)',
             'pendapatan_kotor' => 'decimal(15,2)',
             'tabungan_baglog' => 'decimal(15,2)',
             'profit' => 'decimal(15,2)',
         ]);
 
-        $this->decryptTable('kas_transolido', [
+        $this->decryptTable('kas_transolindo', [
             'jumlah' => 'decimal(15,2)',
         ]);
     }

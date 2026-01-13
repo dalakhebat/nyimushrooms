@@ -6,7 +6,7 @@ use App\Traits\EncryptsSensitiveData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ReturnBulananTransolido extends Model
+class ReturnBulananTransolindo extends Model
 {
     use HasFactory, EncryptsSensitiveData;
 

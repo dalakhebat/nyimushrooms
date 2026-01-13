@@ -2,49 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InvestasiTransolido;
-use App\Models\ReturnBulananTransolido;
-use App\Models\PanenTransolido;
-use App\Models\KasTransolido;
+use App\Models\InvestasiTransolindo;
+use App\Models\ReturnBulananTransolindo;
+use App\Models\PanenTransolindo;
+use App\Models\KasTransolindo;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 
-class TransolidoController extends Controller
+class TransolindoController extends Controller
 {
     public function index()
     {
         // Investasi data (kumbung only for status tracking)
-        $investasis = InvestasiTransolido::orderBy('created_at', 'asc')->get();
-        $kumbungs = InvestasiTransolido::where('tipe', 'kumbung')->orderBy('created_at', 'asc')->get();
+        $investasis = InvestasiTransolindo::orderBy('created_at', 'asc')->get();
+        $kumbungs = InvestasiTransolindo::where('tipe', 'kumbung')->orderBy('created_at', 'asc')->get();
 
         // Return bulanan data
-        $returnBulanans = ReturnBulananTransolido::orderBy('bulan', 'asc')->get();
+        $returnBulanans = ReturnBulananTransolindo::orderBy('bulan', 'asc')->get();
 
         // Panen data
-        $panens = PanenTransolido::with('investasi')
+        $panens = PanenTransolindo::with('investasi')
             ->orderBy('tanggal_mulai', 'asc')
             ->get();
 
         // Summary calculations
         $summary = [
-            'totalModal' => InvestasiTransolido::getTotalModal(),
-            'totalReturnBulanan' => InvestasiTransolido::getTotalReturnBulanan(),
-            'averageROI' => InvestasiTransolido::getAverageROI(),
-            'totalDiterima' => ReturnBulananTransolido::getTotalDiterima(),
-            'totalShareTransolido' => ReturnBulananTransolido::getTotalShareTransolido(),
-            'totalKumbung' => PanenTransolido::getTotalProfit(),
-            'totalVolumePanen' => PanenTransolido::getTotalVolume(),
-            'totalPendapatanPanen' => PanenTransolido::getTotalPendapatan(),
-            'avgVolumePerWeek' => PanenTransolido::getAverageVolumePerWeek(),
-            'jumlahMingguPanen' => PanenTransolido::count(),
+            'totalModal' => InvestasiTransolindo::getTotalModal(),
+            'totalReturnBulanan' => InvestasiTransolindo::getTotalReturnBulanan(),
+            'averageROI' => InvestasiTransolindo::getAverageROI(),
+            'totalDiterima' => ReturnBulananTransolindo::getTotalDiterima(),
+            'totalShareTransolindo' => ReturnBulananTransolindo::getTotalShareTransolindo(),
+            'totalKumbung' => PanenTransolindo::getTotalProfit(),
+            'totalVolumePanen' => PanenTransolindo::getTotalVolume(),
+            'totalPendapatanPanen' => PanenTransolindo::getTotalPendapatan(),
+            'avgVolumePerWeek' => PanenTransolindo::getAverageVolumePerWeek(),
+            'jumlahMingguPanen' => PanenTransolindo::count(),
         ];
 
         // Chart data - Monthly returns
         $chartData = $returnBulanans->map(function ($item) {
             return [
                 'bulan' => Carbon::createFromFormat('Y-m', $item->bulan)->translatedFormat('M Y'),
-                'jamur' => (float) $item->share_transolido,
+                'jamur' => (float) $item->share_transolindo,
                 'kumbung' => (float) $item->kumbung,
                 'total' => (float) $item->total,
             ];
@@ -56,8 +56,8 @@ class TransolidoController extends Controller
         // Payment Reminders/Alerts
         $paymentAlerts = $this->generatePaymentAlerts($returnBulanans);
 
-        // Kas Transolido data
-        $kasTransaksis = KasTransolido::orderBy('tanggal', 'desc')
+        // Kas Transolindo data
+        $kasTransaksis = KasTransolindo::orderBy('tanggal', 'desc')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -74,20 +74,20 @@ class TransolidoController extends Controller
         })->reverse()->values();
 
         $kasSummary = [
-            'saldo' => KasTransolido::getSaldo(),
-            'totalMasuk' => KasTransolido::getTotalMasuk(),
-            'totalKeluar' => KasTransolido::getTotalKeluar(),
-            'totalReimburse' => KasTransolido::getTotalReimburse(),
-            'pendingReimburse' => KasTransolido::getTotalPendingReimburse(),
+            'saldo' => KasTransolindo::getSaldo(),
+            'totalMasuk' => KasTransolindo::getTotalMasuk(),
+            'totalKeluar' => KasTransolindo::getTotalKeluar(),
+            'totalReimburse' => KasTransolindo::getTotalReimburse(),
+            'pendingReimburse' => KasTransolindo::getTotalPendingReimburse(),
         ];
 
         // Get pending reimburse transactions
-        $pendingReimburseList = KasTransolido::where('tipe', 'keluar')
+        $pendingReimburseList = KasTransolindo::where('tipe', 'keluar')
             ->where('status', 'pending_reimburse')
             ->orderBy('tanggal', 'desc')
             ->get();
 
-        return Inertia::render('Keuangan/Transolido', [
+        return Inertia::render('Keuangan/Transolindo', [
             'investasis' => $investasis,
             'kumbungs' => $kumbungs,
             'returnBulanans' => $returnBulanans,
@@ -95,12 +95,12 @@ class TransolidoController extends Controller
             'summary' => $summary,
             'chartData' => $chartData,
             'rekapBulanan' => $rekapBulanan,
-            'faseLabels' => InvestasiTransolido::FASE_LABELS,
-            'faseColors' => InvestasiTransolido::FASE_COLORS,
+            'faseLabels' => InvestasiTransolindo::FASE_LABELS,
+            'faseColors' => InvestasiTransolindo::FASE_COLORS,
             'kasTransaksis' => $kasWithSaldo,
             'kasSummary' => $kasSummary,
             'pendingReimburseList' => $pendingReimburseList,
-            'kategoriOptions' => KasTransolido::KATEGORI_OPTIONS,
+            'kategoriOptions' => KasTransolindo::KATEGORI_OPTIONS,
             'paymentAlerts' => $paymentAlerts,
         ]);
     }
@@ -134,11 +134,11 @@ class TransolidoController extends Controller
                 }
             }
 
-            if ($panen->investasi_transolido_id && isset($rekap[$bulan]['kumbungs'][$panen->investasi_transolido_id])) {
-                $rekap[$bulan]['kumbungs'][$panen->investasi_transolido_id]['volume'] += (float) $panen->volume_kg;
-                $rekap[$bulan]['kumbungs'][$panen->investasi_transolido_id]['pendapatan'] += (float) $panen->pendapatan_kotor;
-                $rekap[$bulan]['kumbungs'][$panen->investasi_transolido_id]['profit'] += (float) $panen->profit;
-                $rekap[$bulan]['kumbungs'][$panen->investasi_transolido_id]['minggu_count']++;
+            if ($panen->investasi_transolindo_id && isset($rekap[$bulan]['kumbungs'][$panen->investasi_transolindo_id])) {
+                $rekap[$bulan]['kumbungs'][$panen->investasi_transolindo_id]['volume'] += (float) $panen->volume_kg;
+                $rekap[$bulan]['kumbungs'][$panen->investasi_transolindo_id]['pendapatan'] += (float) $panen->pendapatan_kotor;
+                $rekap[$bulan]['kumbungs'][$panen->investasi_transolindo_id]['profit'] += (float) $panen->profit;
+                $rekap[$bulan]['kumbungs'][$panen->investasi_transolindo_id]['minggu_count']++;
             }
 
             $rekap[$bulan]['total_volume'] += (float) $panen->volume_kg;
@@ -190,7 +190,7 @@ class TransolidoController extends Controller
                     'message' => 'Return bulan ' . $today->translatedFormat('F Y') . ' sudah tercatat tapi belum ditandai diterima.',
                     'due_date' => $dueDate3rd->format('Y-m-d'),
                     'days_overdue' => $today->day - 3,
-                    'amount' => (float) $currentMonthReturn->share_transolido,
+                    'amount' => (float) $currentMonthReturn->share_transolindo,
                     'return_id' => $currentMonthReturn->id,
                 ];
             }
@@ -206,7 +206,7 @@ class TransolidoController extends Controller
                     'message' => 'Return bulan ' . $today->translatedFormat('F Y') . ' jatuh tempo dalam ' . $daysUntilDue . ' hari (tanggal 3).',
                     'due_date' => $dueDate3rd->format('Y-m-d'),
                     'days_until_due' => $daysUntilDue,
-                    'amount' => $currentMonthReturn ? (float) $currentMonthReturn->share_transolido : 5000000,
+                    'amount' => $currentMonthReturn ? (float) $currentMonthReturn->share_transolindo : 5000000,
                 ];
             }
         }
@@ -221,7 +221,7 @@ class TransolidoController extends Controller
         }
 
         // Check if there's been a payment this week (kas masuk with kategori return_kumbung since last Wednesday)
-        $weeklyKumbungPayment = KasTransolido::where('tipe', 'masuk')
+        $weeklyKumbungPayment = KasTransolindo::where('tipe', 'masuk')
             ->where('kategori', 'return_kumbung')
             ->whereBetween('tanggal', [$lastWednesday->format('Y-m-d'), $today->format('Y-m-d')])
             ->exists();
@@ -291,12 +291,12 @@ class TransolidoController extends Controller
             $validated['roi_tahunan'] = ($validated['return_bulanan'] * 12 / $validated['modal']) * 100;
         }
 
-        InvestasiTransolido::create($validated);
+        InvestasiTransolindo::create($validated);
 
         return redirect()->back()->with('success', 'Investasi berhasil ditambahkan');
     }
 
-    public function updateInvestasi(Request $request, InvestasiTransolido $investasi)
+    public function updateInvestasi(Request $request, InvestasiTransolindo $investasi)
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
@@ -317,13 +317,13 @@ class TransolidoController extends Controller
         return redirect()->back()->with('success', 'Investasi berhasil diupdate');
     }
 
-    public function destroyInvestasi(InvestasiTransolido $investasi)
+    public function destroyInvestasi(InvestasiTransolindo $investasi)
     {
         $investasi->delete();
         return redirect()->back()->with('success', 'Investasi berhasil dihapus');
     }
 
-    public function updateFase(Request $request, InvestasiTransolido $investasi)
+    public function updateFase(Request $request, InvestasiTransolindo $investasi)
     {
         $validated = $request->validate([
             'fase' => 'required|in:persiapan,inkubasi,panen,istirahat',
@@ -343,7 +343,7 @@ class TransolidoController extends Controller
         $validated = $request->validate([
             'bulan' => 'required|string', // Format: YYYY-MM
             'jamur_kering' => 'required|numeric|min:0',
-            'share_transolido' => 'required|numeric|min:0',
+            'share_transolindo' => 'required|numeric|min:0',
             'share_defila' => 'required|numeric|min:0',
             'kumbung' => 'required|numeric|min:0',
             'diterima' => 'boolean',
@@ -351,19 +351,19 @@ class TransolidoController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        $validated['total'] = $validated['share_transolido'] + $validated['kumbung'];
+        $validated['total'] = $validated['share_transolindo'] + $validated['kumbung'];
 
-        ReturnBulananTransolido::create($validated);
+        ReturnBulananTransolindo::create($validated);
 
         return redirect()->back()->with('success', 'Return bulanan berhasil ditambahkan');
     }
 
-    public function updateReturn(Request $request, ReturnBulananTransolido $returnBulanan)
+    public function updateReturn(Request $request, ReturnBulananTransolindo $returnBulanan)
     {
         $validated = $request->validate([
             'bulan' => 'required|string',
             'jamur_kering' => 'required|numeric|min:0',
-            'share_transolido' => 'required|numeric|min:0',
+            'share_transolindo' => 'required|numeric|min:0',
             'share_defila' => 'required|numeric|min:0',
             'kumbung' => 'required|numeric|min:0',
             'diterima' => 'boolean',
@@ -371,20 +371,20 @@ class TransolidoController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        $validated['total'] = $validated['share_transolido'] + $validated['kumbung'];
+        $validated['total'] = $validated['share_transolindo'] + $validated['kumbung'];
 
         $returnBulanan->update($validated);
 
         return redirect()->back()->with('success', 'Return bulanan berhasil diupdate');
     }
 
-    public function destroyReturn(ReturnBulananTransolido $returnBulanan)
+    public function destroyReturn(ReturnBulananTransolindo $returnBulanan)
     {
         $returnBulanan->delete();
         return redirect()->back()->with('success', 'Return bulanan berhasil dihapus');
     }
 
-    public function toggleReturnStatus(ReturnBulananTransolido $returnBulanan)
+    public function toggleReturnStatus(ReturnBulananTransolindo $returnBulanan)
     {
         $returnBulanan->update([
             'diterima' => !$returnBulanan->diterima,
@@ -398,7 +398,7 @@ class TransolidoController extends Controller
     public function storePanen(Request $request)
     {
         $validated = $request->validate([
-            'investasi_transolido_id' => 'nullable|exists:investasi_transolidos,id',
+            'investasi_transolindo_id' => 'nullable|exists:investasi_transolindos,id',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'minggu_bulan' => 'required|string|max:100',
@@ -411,15 +411,15 @@ class TransolidoController extends Controller
         $validated['tabungan_baglog'] = $validated['pendapatan_kotor'] * 0.8;
         $validated['profit'] = $validated['pendapatan_kotor'] * 0.2;
 
-        PanenTransolido::create($validated);
+        PanenTransolindo::create($validated);
 
         return redirect()->back()->with('success', 'Data panen berhasil ditambahkan');
     }
 
-    public function updatePanen(Request $request, PanenTransolido $panen)
+    public function updatePanen(Request $request, PanenTransolindo $panen)
     {
         $validated = $request->validate([
-            'investasi_transolido_id' => 'nullable|exists:investasi_transolidos,id',
+            'investasi_transolindo_id' => 'nullable|exists:investasi_transolindos,id',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'minggu_bulan' => 'required|string|max:100',
@@ -436,13 +436,13 @@ class TransolidoController extends Controller
         return redirect()->back()->with('success', 'Data panen berhasil diupdate');
     }
 
-    public function destroyPanen(PanenTransolido $panen)
+    public function destroyPanen(PanenTransolindo $panen)
     {
         $panen->delete();
         return redirect()->back()->with('success', 'Data panen berhasil dihapus');
     }
 
-    // Kas Transolido CRUD
+    // Kas Transolindo CRUD
     public function storeKas(Request $request)
     {
         $validated = $request->validate([
@@ -451,8 +451,8 @@ class TransolidoController extends Controller
             'jumlah' => 'required|numeric|min:0',
             'keterangan' => 'required|string|max:255',
             'kategori' => 'nullable|string|max:100',
-            'return_bulanan_id' => 'nullable|exists:return_bulanan_transolidos,id',
-            'reimburse_ref_id' => 'nullable|exists:kas_transolido,id',
+            'return_bulanan_id' => 'nullable|exists:return_bulanan_transolindos,id',
+            'reimburse_ref_id' => 'nullable|exists:kas_transolindo,id',
             'status' => 'nullable|in:settled,pending_reimburse',
         ]);
 
@@ -461,18 +461,18 @@ class TransolidoController extends Controller
             $validated['status'] = $validated['tipe'] === 'keluar' ? 'pending_reimburse' : 'settled';
         }
 
-        $kas = KasTransolido::create($validated);
+        $kas = KasTransolindo::create($validated);
 
         // If this is a reimburse, update the referenced transaction status
         if ($validated['tipe'] === 'reimburse' && !empty($validated['reimburse_ref_id'])) {
-            KasTransolido::where('id', $validated['reimburse_ref_id'])
+            KasTransolindo::where('id', $validated['reimburse_ref_id'])
                 ->update(['status' => 'settled']);
         }
 
         return redirect()->back()->with('success', 'Transaksi kas berhasil ditambahkan');
     }
 
-    public function updateKas(Request $request, KasTransolido $kas)
+    public function updateKas(Request $request, KasTransolindo $kas)
     {
         $validated = $request->validate([
             'tanggal' => 'required|date',
@@ -480,8 +480,8 @@ class TransolidoController extends Controller
             'jumlah' => 'required|numeric|min:0',
             'keterangan' => 'required|string|max:255',
             'kategori' => 'nullable|string|max:100',
-            'return_bulanan_id' => 'nullable|exists:return_bulanan_transolidos,id',
-            'reimburse_ref_id' => 'nullable|exists:kas_transolido,id',
+            'return_bulanan_id' => 'nullable|exists:return_bulanan_transolindos,id',
+            'reimburse_ref_id' => 'nullable|exists:kas_transolindo,id',
             'status' => 'nullable|in:settled,pending_reimburse',
         ]);
 
@@ -490,11 +490,11 @@ class TransolidoController extends Controller
         return redirect()->back()->with('success', 'Transaksi kas berhasil diupdate');
     }
 
-    public function destroyKas(KasTransolido $kas)
+    public function destroyKas(KasTransolindo $kas)
     {
         // If deleting a reimburse, set the referenced transaction back to pending
         if ($kas->tipe === 'reimburse' && $kas->reimburse_ref_id) {
-            KasTransolido::where('id', $kas->reimburse_ref_id)
+            KasTransolindo::where('id', $kas->reimburse_ref_id)
                 ->update(['status' => 'pending_reimburse']);
         }
 
@@ -502,10 +502,10 @@ class TransolidoController extends Controller
         return redirect()->back()->with('success', 'Transaksi kas berhasil dihapus');
     }
 
-    public function reimburseKas(KasTransolido $kas)
+    public function reimburseKas(KasTransolindo $kas)
     {
         // Create reimburse transaction
-        KasTransolido::create([
+        KasTransolindo::create([
             'tanggal' => now(),
             'tipe' => 'reimburse',
             'jumlah' => $kas->jumlah,

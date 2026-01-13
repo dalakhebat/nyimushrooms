@@ -3,7 +3,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 
-export default function Transolido({ investasis, kumbungs = [], returnBulanans, panens, summary, chartData, rekapBulanan = [], faseLabels = {}, faseColors = {}, kasTransaksis = [], kasSummary = {}, pendingReimburseList = [], kategoriOptions = {}, paymentAlerts = [] }) {
+export default function Transolindo({ investasis, kumbungs = [], returnBulanans, panens, summary, chartData, rekapBulanan = [], faseLabels = {}, faseColors = {}, kasTransaksis = [], kasSummary = {}, pendingReimburseList = [], kategoriOptions = {}, paymentAlerts = [] }) {
     const [activeTab, setActiveTab] = useState('status');
     const [showInvestasiForm, setShowInvestasiForm] = useState(false);
     const [showReturnForm, setShowReturnForm] = useState(false);
@@ -37,7 +37,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
     const returnForm = useForm({
         bulan: new Date().toISOString().slice(0, 7),
         jamur_kering: 10000000,
-        share_transolido: 5000000,
+        share_transolindo: 5000000,
         share_defila: 5000000,
         kumbung: 0,
         diterima: false,
@@ -46,7 +46,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
     });
 
     const panenForm = useForm({
-        investasi_transolido_id: '',
+        investasi_transolindo_id: '',
         tanggal_mulai: '',
         tanggal_selesai: '',
         minggu_bulan: '',
@@ -152,7 +152,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
 
     const handleSubmitFase = (e) => {
         e.preventDefault();
-        faseForm.patch(route('transolido.investasi.update-fase', editingFase.id), {
+        faseForm.patch(route('transolindo.investasi.update-fase', editingFase.id), {
             onSuccess: () => {
                 setEditingFase(null);
                 faseForm.reset();
@@ -184,7 +184,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
     const handleSubmitInvestasi = (e) => {
         e.preventDefault();
         if (editingInvestasi) {
-            investasiForm.put(route('transolido.investasi.update', editingInvestasi.id), {
+            investasiForm.put(route('transolindo.investasi.update', editingInvestasi.id), {
                 onSuccess: () => {
                     setShowInvestasiForm(false);
                     setEditingInvestasi(null);
@@ -192,7 +192,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                 },
             });
         } else {
-            investasiForm.post(route('transolido.investasi.store'), {
+            investasiForm.post(route('transolindo.investasi.store'), {
                 onSuccess: () => {
                     setShowInvestasiForm(false);
                     investasiForm.reset();
@@ -217,7 +217,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
 
     const handleDeleteInvestasi = (id) => {
         if (confirm('Yakin ingin menghapus investasi ini?')) {
-            router.delete(route('transolido.investasi.destroy', id));
+            router.delete(route('transolindo.investasi.destroy', id));
         }
     };
 
@@ -225,7 +225,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
     const handleSubmitReturn = (e) => {
         e.preventDefault();
         if (editingReturn) {
-            returnForm.put(route('transolido.return.update', editingReturn.id), {
+            returnForm.put(route('transolindo.return.update', editingReturn.id), {
                 onSuccess: () => {
                     setShowReturnForm(false);
                     setEditingReturn(null);
@@ -233,7 +233,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                 },
             });
         } else {
-            returnForm.post(route('transolido.return.store'), {
+            returnForm.post(route('transolindo.return.store'), {
                 onSuccess: () => {
                     setShowReturnForm(false);
                     returnForm.reset();
@@ -243,7 +243,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
     };
 
     const handleToggleReturn = (id) => {
-        router.patch(route('transolido.return.toggle', id));
+        router.patch(route('transolindo.return.toggle', id));
     };
 
     const handleEditReturn = (item) => {
@@ -251,7 +251,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
         returnForm.setData({
             bulan: item.bulan,
             jamur_kering: parseFloat(item.jamur_kering) || 0,
-            share_transolido: parseFloat(item.share_transolido) || 0,
+            share_transolindo: parseFloat(item.share_transolindo) || 0,
             share_defila: parseFloat(item.share_defila) || 0,
             kumbung: parseFloat(item.kumbung) || 0,
             diterima: item.diterima,
@@ -263,7 +263,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
 
     const handleDeleteReturn = (id) => {
         if (confirm('Yakin ingin menghapus return ini?')) {
-            router.delete(route('transolido.return.destroy', id));
+            router.delete(route('transolindo.return.destroy', id));
         }
     };
 
@@ -271,7 +271,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
     const handleSubmitPanen = (e) => {
         e.preventDefault();
         if (editingPanen) {
-            panenForm.put(route('transolido.panen.update', editingPanen.id), {
+            panenForm.put(route('transolindo.panen.update', editingPanen.id), {
                 onSuccess: () => {
                     setShowPanenForm(false);
                     setEditingPanen(null);
@@ -279,7 +279,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                 },
             });
         } else {
-            panenForm.post(route('transolido.panen.store'), {
+            panenForm.post(route('transolindo.panen.store'), {
                 onSuccess: () => {
                     setShowPanenForm(false);
                     panenForm.reset();
@@ -290,7 +290,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
 
     const handleDeletePanen = (id) => {
         if (confirm('Yakin ingin menghapus data panen ini?')) {
-            router.delete(route('transolido.panen.destroy', id));
+            router.delete(route('transolindo.panen.destroy', id));
         }
     };
 
@@ -298,7 +298,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
     const handleSubmitKas = (e) => {
         e.preventDefault();
         if (editingKas) {
-            kasForm.put(route('transolido.kas.update', editingKas.id), {
+            kasForm.put(route('transolindo.kas.update', editingKas.id), {
                 onSuccess: () => {
                     setShowKasForm(false);
                     setEditingKas(null);
@@ -306,7 +306,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                 },
             });
         } else {
-            kasForm.post(route('transolido.kas.store'), {
+            kasForm.post(route('transolindo.kas.store'), {
                 onSuccess: () => {
                     setShowKasForm(false);
                     kasForm.reset();
@@ -332,13 +332,13 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
 
     const handleDeleteKas = (id) => {
         if (confirm('Yakin ingin menghapus transaksi ini?')) {
-            router.delete(route('transolido.kas.destroy', id));
+            router.delete(route('transolindo.kas.destroy', id));
         }
     };
 
     const handleReimburseKas = (kas) => {
         if (confirm(`Reimburse "${kas.keterangan}" sebesar ${formatRupiah(kas.jumlah)}?`)) {
-            router.post(route('transolido.kas.reimburse', kas.id));
+            router.post(route('transolindo.kas.reimburse', kas.id));
         }
     };
 
@@ -370,8 +370,8 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
     const simDifference = simAnnualReturn - simTarget;
 
     return (
-        <AdminLayout title="Transolido Dashboard">
-            <Head title="Transolido Dashboard" />
+        <AdminLayout title="Transolindo Dashboard">
+            <Head title="Transolindo Dashboard" />
 
             <div className="space-y-6">
                 {/* Header */}
@@ -461,7 +461,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                     {alert.type === 'overdue' && alert.return_id && (
                                         <button
                                             onClick={() => {
-                                                router.patch(route('transolido.return.toggle', alert.return_id));
+                                                router.patch(route('transolindo.return.toggle', alert.return_id));
                                             }}
                                             className="flex-shrink-0 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                                         >
@@ -747,7 +747,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <h2 className="text-lg font-semibold">Kas Transolido</h2>
+                                        <h2 className="text-lg font-semibold">Kas Transolindo</h2>
                                         <p className="text-sm text-gray-500">Tracking saldo dan arus kas dari investasi</p>
                                     </div>
                                     <button
@@ -1256,11 +1256,11 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Share Transolido *</label>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Share Transolindo *</label>
                                                     <input
                                                         type="number"
-                                                        value={returnForm.data.share_transolido}
-                                                        onChange={(e) => returnForm.setData('share_transolido', parseFloat(e.target.value) || 0)}
+                                                        value={returnForm.data.share_transolindo}
+                                                        onChange={(e) => returnForm.setData('share_transolindo', parseFloat(e.target.value) || 0)}
                                                         className="w-full px-3 py-2 border rounded-lg"
                                                     />
                                                 </div>
@@ -1286,7 +1286,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Total</label>
                                                     <input
                                                         type="text"
-                                                        value={formatRupiah(returnForm.data.share_transolido + returnForm.data.kumbung)}
+                                                        value={formatRupiah(returnForm.data.share_transolindo + returnForm.data.kumbung)}
                                                         readOnly
                                                         className="w-full px-3 py-2 border rounded-lg bg-gray-100"
                                                     />
@@ -1333,7 +1333,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                             <tr>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bulan</th>
                                                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Jamur Kering</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Share Transolido</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Share Transolindo</th>
                                                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Share Defila</th>
                                                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Kumbung</th>
                                                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
@@ -1347,7 +1347,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                                     <tr key={item.id} className="hover:bg-gray-50">
                                                         <td className="px-4 py-3 font-medium">{formatBulan(item.bulan)}</td>
                                                         <td className="px-4 py-3 text-right text-amber-600">{formatRupiah(item.jamur_kering)}</td>
-                                                        <td className="px-4 py-3 text-right text-purple-600">{formatRupiah(item.share_transolido)}</td>
+                                                        <td className="px-4 py-3 text-right text-purple-600">{formatRupiah(item.share_transolindo)}</td>
                                                         <td className="px-4 py-3 text-right text-gray-600">{formatRupiah(item.share_defila)}</td>
                                                         <td className="px-4 py-3 text-right text-green-600">{formatRupiah(item.kumbung)}</td>
                                                         <td className="px-4 py-3 text-right font-bold text-indigo-600">{formatRupiah(item.total)}</td>
@@ -1412,7 +1412,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                 {kumbungs.length > 0 && panens.length > 0 && (() => {
                                     // Calculate per kumbung stats
                                     const kumbungStats = kumbungs.map(k => {
-                                        const kPanens = panens.filter(p => p.investasi_transolido_id === k.id);
+                                        const kPanens = panens.filter(p => p.investasi_transolindo_id === k.id);
                                         const totalVolume = kPanens.reduce((sum, p) => sum + parseFloat(p.volume_kg || 0), 0);
                                         const totalPendapatan = kPanens.reduce((sum, p) => sum + parseFloat(p.pendapatan_kotor || 0), 0);
                                         const totalProfit = kPanens.reduce((sum, p) => sum + parseFloat(p.profit || 0), 0);
@@ -1610,8 +1610,8 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Kumbung</label>
                                                     <select
-                                                        value={panenForm.data.investasi_transolido_id}
-                                                        onChange={(e) => panenForm.setData('investasi_transolido_id', e.target.value)}
+                                                        value={panenForm.data.investasi_transolindo_id}
+                                                        onChange={(e) => panenForm.setData('investasi_transolindo_id', e.target.value)}
                                                         className="w-full px-3 py-2 border rounded-lg"
                                                     >
                                                         <option value="">-- Pilih Kumbung --</option>
@@ -1697,7 +1697,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
 
                                 {/* Panen Table - Grouped by Kumbung */}
                                 {kumbungs.map((kumbung) => {
-                                    const kumbungPanens = panens.filter(p => p.investasi_transolido_id === kumbung.id);
+                                    const kumbungPanens = panens.filter(p => p.investasi_transolindo_id === kumbung.id);
                                     if (kumbungPanens.length === 0) return null;
 
                                     const totalVolume = kumbungPanens.reduce((sum, p) => sum + parseFloat(p.volume_kg || 0), 0);
@@ -1928,7 +1928,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
 
                                 {/* Smooth Line Chart Visual */}
                                 <div className="bg-gray-50 rounded-xl p-6">
-                                    <h3 className="font-medium mb-4 text-gray-700">Return Bulanan (Share Transolido + Kumbung)</h3>
+                                    <h3 className="font-medium mb-4 text-gray-700">Return Bulanan (Share Transolindo + Kumbung)</h3>
                                     {chartData.length > 0 ? (
                                         <div className="relative">
                                             {/* SVG Smooth Line Chart */}
@@ -2007,7 +2007,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                                                 strokeLinecap="round"
                                                             />
 
-                                                            {/* Share Transolido Smooth Line (indigo) */}
+                                                            {/* Share Transolindo Smooth Line (indigo) */}
                                                             <path
                                                                 d={generateSmoothPath(jamurPoints)}
                                                                 fill="none"
@@ -2072,7 +2072,7 @@ export default function Transolido({ investasis, kumbungs = [], returnBulanans, 
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#6366f1" strokeWidth="2" strokeDasharray="4,2" /></svg>
-                                                    <span className="text-sm text-gray-600">Share Transolido</span>
+                                                    <span className="text-sm text-gray-600">Share Transolindo</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" strokeWidth="2" strokeDasharray="4,2" /></svg>

@@ -6,7 +6,7 @@ use App\Traits\EncryptsSensitiveData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class InvestasiTransolido extends Model
+class InvestasiTransolindo extends Model
 {
     use HasFactory, EncryptsSensitiveData;
 
@@ -53,7 +53,7 @@ class InvestasiTransolido extends Model
 
     public function panens()
     {
-        return $this->hasMany(PanenTransolido::class);
+        return $this->hasMany(PanenTransolindo::class);
     }
 
     // Calculate in PHP since encrypted fields can't be summed in SQL

@@ -111,7 +111,7 @@
 <body>
     <div class="header">
         <h1>ABSENSI MINGGUAN KARYAWAN</h1>
-        <p>Nyimushroom Farm</p>
+        <p>Defila Solusi Bersama Indonesia Farm</p>
         <p style="margin-top: 8px; font-weight: bold;">{{ $bulan }} - Minggu {{ $minggu }}</p>
         <p>Periode: {{ $periode }}</p>
     </div>

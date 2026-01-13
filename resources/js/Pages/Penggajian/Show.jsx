@@ -114,7 +114,7 @@ export default function PenggajianShow({ penggajian }) {
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-2xl font-bold">SLIP GAJI</h1>
-                            <p className="text-green-200 mt-1">Nyimushroom Farm</p>
+                            <p className="text-green-200 mt-1">Defila Solusi Bersama Indonesia</p>
                         </div>
                         <div className="text-right">
                             <p className="text-sm text-green-200">Periode</p>

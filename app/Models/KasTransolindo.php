@@ -6,11 +6,11 @@ use App\Traits\EncryptsSensitiveData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KasTransolido extends Model
+class KasTransolindo extends Model
 {
     use HasFactory, EncryptsSensitiveData;
 
-    protected $table = 'kas_transolido';
+    protected $table = 'kas_transolindo';
 
     protected $fillable = [
         'tanggal',
@@ -51,17 +51,17 @@ class KasTransolido extends Model
 
     public function returnBulanan()
     {
-        return $this->belongsTo(ReturnBulananTransolido::class, 'return_bulanan_id');
+        return $this->belongsTo(ReturnBulananTransolindo::class, 'return_bulanan_id');
     }
 
     public function reimburseRef()
     {
-        return $this->belongsTo(KasTransolido::class, 'reimburse_ref_id');
+        return $this->belongsTo(KasTransolindo::class, 'reimburse_ref_id');
     }
 
     public function reimburses()
     {
-        return $this->hasMany(KasTransolido::class, 'reimburse_ref_id');
+        return $this->hasMany(KasTransolindo::class, 'reimburse_ref_id');
     }
 
     // Calculate in PHP since encrypted fields can't be summed in SQL

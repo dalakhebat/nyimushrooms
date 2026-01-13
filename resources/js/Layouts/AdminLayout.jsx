@@ -72,7 +72,7 @@ const navigation = [
             { name: 'Simulasi Kredit', href: '/keuangan/simulasi-kredit', icon: 'solar:chart-2-bold' },
             { name: 'Target Operasional', href: '/keuangan/target-operasional', icon: 'solar:target-bold' },
             { name: 'Rekap Pembayaran', href: '/keuangan/rekap-pembayaran', icon: 'solar:clipboard-check-bold' },
-            { name: 'Transolido', href: '/keuangan/transolido', icon: 'solar:diamond-bold' },
+            { name: 'Transolindo', href: '/keuangan/transolido', icon: 'solar:diamond-bold' },
         ],
     },
 
@@ -110,7 +110,10 @@ export default function AdminLayout({ children, title }) {
             {/* Mobile sidebar */}
             <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-green-800 transform transition-transform duration-300 ease-in-out lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="flex items-center justify-between h-16 px-4 bg-green-900">
-                    <span className="text-xl font-bold text-white">Nyimushroom</span>
+                    <div className="flex flex-col">
+                        <span className="text-lg font-bold text-white leading-tight">Defila Solusi Bersama</span>
+                        <span className="text-[10px] text-green-300 leading-tight">Managed By Transendensi Solusi Indonesia</span>
+                    </div>
                     <button onClick={() => setSidebarOpen(false)} className="text-white">
                         <Icon icon="solar:close-circle-bold" className="w-6 h-6" />
                     </button>
@@ -180,8 +183,11 @@ export default function AdminLayout({ children, title }) {
             <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
                 <div className="flex flex-col flex-grow bg-green-800 overflow-y-auto">
                     <div className="flex items-center h-16 px-4 bg-green-900">
-                        <Icon icon="solar:leaf-bold" className="w-8 h-8 text-white mr-2" />
-                        <span className="text-xl font-bold text-white">Nyimushroom</span>
+                        <Icon icon="solar:leaf-bold" className="w-8 h-8 text-white mr-3" />
+                        <div className="flex flex-col">
+                            <span className="text-lg font-bold text-white leading-tight">Defila Solusi Bersama</span>
+                            <span className="text-[10px] text-green-300 leading-tight">Managed By Transendensi Solusi Indonesia</span>
+                        </div>
                     </div>
                     <nav className="mt-4 flex-1 px-2 space-y-1 overflow-y-auto">
                         {navigation.map((item, index) => (

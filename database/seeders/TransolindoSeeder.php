@@ -2,24 +2,24 @@
 
 namespace Database\Seeders;
 
-use App\Models\InvestasiTransolido;
-use App\Models\ReturnBulananTransolido;
-use App\Models\PanenTransolido;
+use App\Models\InvestasiTransolindo;
+use App\Models\ReturnBulananTransolindo;
+use App\Models\PanenTransolindo;
 use Illuminate\Database\Seeder;
 
-class TransolidoSeeder extends Seeder
+class TransolindoSeeder extends Seeder
 {
     public function run(): void
     {
         // Clear existing data
-        PanenTransolido::truncate();
-        ReturnBulananTransolido::truncate();
-        InvestasiTransolido::truncate();
+        PanenTransolindo::truncate();
+        ReturnBulananTransolindo::truncate();
+        InvestasiTransolindo::truncate();
 
         // === INVESTASI ===
 
         // 1. Jamur Kering
-        $jamurKering = InvestasiTransolido::create([
+        $jamurKering = InvestasiTransolindo::create([
             'nama' => 'Jamur Kering',
             'tipe' => 'jamur_kering',
             'modal' => 765000000,
@@ -31,7 +31,7 @@ class TransolidoSeeder extends Seeder
         ]);
 
         // 2. Autoclave (Invest Produksi) - Starting Dec 2025
-        $autoclave = InvestasiTransolido::create([
+        $autoclave = InvestasiTransolindo::create([
             'nama' => 'Mesin Autoclave',
             'tipe' => 'jamur_kering',
             'modal' => 150000000,
@@ -43,7 +43,7 @@ class TransolidoSeeder extends Seeder
         ]);
 
         // 3. Kumbung Transol 1
-        $kumbung1 = InvestasiTransolido::create([
+        $kumbung1 = InvestasiTransolindo::create([
             'nama' => 'Kumbung Transol 1',
             'tipe' => 'kumbung',
             'modal' => 388000000,
@@ -59,7 +59,7 @@ class TransolidoSeeder extends Seeder
         ]);
 
         // 4. Kumbung Transol 2
-        $kumbung2 = InvestasiTransolido::create([
+        $kumbung2 = InvestasiTransolindo::create([
             'nama' => 'Kumbung Transol 2',
             'tipe' => 'kumbung',
             'modal' => 388000000,
@@ -75,8 +75,8 @@ class TransolidoSeeder extends Seeder
         ]);
 
         // === RETURN BULANAN ===
-        // Jamur Kering = 10jt total, dibagi 50:50 (5jt Transolido, 5jt Defila)
-        // Autoclave = 1.875jt/bulan mulai Des 2025 (100% ke Transolido)
+        // Jamur Kering = 10jt total, dibagi 50:50 (5jt Transolindo, 5jt Defila)
+        // Autoclave = 1.875jt/bulan mulai Des 2025 (100% ke Transolindo)
         $returnData = [
             ['bulan' => '2025-03', 'tanggal_terima' => '2025-03-03', 'jamur_kering' => 10000000, 'autoclave' => 0],
             ['bulan' => '2025-04', 'tanggal_terima' => '2025-04-03', 'jamur_kering' => 10000000, 'autoclave' => 0],
@@ -92,16 +92,16 @@ class TransolidoSeeder extends Seeder
         ];
 
         foreach ($returnData as $data) {
-            $shareTransolido = ($data['jamur_kering'] / 2) + $data['autoclave']; // 50% JK (5jt) + autoclave
+            $shareTransolindo = ($data['jamur_kering'] / 2) + $data['autoclave']; // 50% JK (5jt) + autoclave
             $shareDefila = $data['jamur_kering'] / 2; // 50% JK (5jt)
 
-            ReturnBulananTransolido::create([
+            ReturnBulananTransolindo::create([
                 'bulan' => $data['bulan'],
                 'jamur_kering' => $data['jamur_kering'],
-                'share_transolido' => $shareTransolido,
+                'share_transolindo' => $shareTransolindo,
                 'share_defila' => $shareDefila,
                 'kumbung' => 0,
-                'total' => $shareTransolido,
+                'total' => $shareTransolindo,
                 'diterima' => $data['bulan'] !== '2026-01',
                 'tanggal_terima' => $data['bulan'] !== '2026-01' ? $data['tanggal_terima'] : null,
                 'keterangan' => $data['autoclave'] > 0 ? 'Termasuk return Autoclave' : null,
@@ -130,8 +130,8 @@ class TransolidoSeeder extends Seeder
 
         foreach ($panenT1 as $data) {
             $pendapatan = $data['volume'] * $data['harga'];
-            PanenTransolido::create([
-                'investasi_transolido_id' => $kumbung1->id,
+            PanenTransolindo::create([
+                'investasi_transolindo_id' => $kumbung1->id,
                 'tanggal_mulai' => $data['tgl_mulai'],
                 'tanggal_selesai' => $data['tgl_selesai'],
                 'minggu_bulan' => $data['minggu'],
@@ -153,8 +153,8 @@ class TransolidoSeeder extends Seeder
 
         foreach ($panenT2 as $data) {
             $pendapatan = $data['volume'] * $data['harga'];
-            PanenTransolido::create([
-                'investasi_transolido_id' => $kumbung2->id,
+            PanenTransolindo::create([
+                'investasi_transolindo_id' => $kumbung2->id,
                 'tanggal_mulai' => $data['tgl_mulai'],
                 'tanggal_selesai' => $data['tgl_selesai'],
                 'minggu_bulan' => $data['minggu'],

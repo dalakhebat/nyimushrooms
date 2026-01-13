@@ -190,7 +190,7 @@
             <div class="value">{{ $penggajian->periode_mulai->locale('id')->isoFormat('D MMM') }} - {{ $penggajian->periode_selesai->locale('id')->isoFormat('D MMM Y') }}</div>
         </div>
         <h1>SLIP GAJI</h1>
-        <p>Nyimushroom Farm</p>
+        <p>Defila Solusi Bersama Indonesia Farm</p>
     </div>
 
     <div class="status-badge {{ $penggajian->status === 'dibayar' ? 'status-dibayar' : 'status-pending' }}">
@@ -278,7 +278,7 @@
     </div>
 
     <div class="footer">
-        Dicetak pada: {{ now()->locale('id')->isoFormat('D MMM Y HH:mm') }} WIB | Nyimushroom Farm
+        Dicetak pada: {{ now()->locale('id')->isoFormat('D MMM Y HH:mm') }} WIB | Defila Solusi Bersama Indonesia Farm
     </div>
 </body>
 </html>
