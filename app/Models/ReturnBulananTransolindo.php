@@ -13,7 +13,7 @@ class ReturnBulananTransolindo extends Model
     protected $fillable = [
         'bulan',
         'jamur_kering',
-        'share_transolido',
+        'share_transolindo',
         'share_defila',
         'kumbung',
         'total',
@@ -25,7 +25,7 @@ class ReturnBulananTransolindo extends Model
     // Fields that will be encrypted in database
     protected $encryptedFields = [
         'jamur_kering',
-        'share_transolido',
+        'share_transolindo',
         'share_defila',
         'kumbung',
         'total',
@@ -44,10 +44,10 @@ class ReturnBulananTransolindo extends Model
         });
     }
 
-    public static function getTotalShareTransolido()
+    public static function getTotalShareTransolindo()
     {
         return self::where('diterima', true)->get()->sum(function ($item) {
-            return (float) $item->share_transolido;
+            return (float) $item->share_transolindo;
         });
     }
 
