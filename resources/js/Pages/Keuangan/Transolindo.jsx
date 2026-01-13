@@ -382,7 +382,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 <Icon icon="solar:diamond-bold" className="w-8 h-8" />
                             </div>
                             <div>
-                                <h1 className="text-2xl font-bold">TRANSOLIDO</h1>
+                                <h1 className="text-2xl font-bold">TRANSOLINDO</h1>
                                 <p className="text-indigo-200">Strategic Partner - Mentari Bumi Abadi</p>
                             </div>
                         </div>

@@ -72,7 +72,7 @@ const navigation = [
             { name: 'Simulasi Kredit', href: '/keuangan/simulasi-kredit', icon: 'solar:chart-2-bold' },
             { name: 'Target Operasional', href: '/keuangan/target-operasional', icon: 'solar:target-bold' },
             { name: 'Rekap Pembayaran', href: '/keuangan/rekap-pembayaran', icon: 'solar:clipboard-check-bold' },
-            { name: 'Transolindo', href: '/keuangan/transolido', icon: 'solar:diamond-bold' },
+            { name: 'Transolindo', href: '/keuangan/transolindo', icon: 'solar:diamond-bold' },
         ],
     },
 
