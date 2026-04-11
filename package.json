@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
-        "@iconify/react": "^6.0.2"
+        "@iconify/react": "^6.0.2",
+        "lucide-react": "^1.7.0"
     }
 }

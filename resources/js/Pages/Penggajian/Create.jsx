@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
+import FormAlert from '@/Components/FormAlert';
+import EmptyOption from '@/Components/EmptyOption';
 
 export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, minggu, weeks, periode }) {
     const [selectedKaryawans, setSelectedKaryawans] = useState(
@@ -142,7 +144,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
             mingguan: { class: 'bg-blue-100 text-blue-700', label: 'Mingguan' },
             borongan: { class: 'bg-orange-100 text-orange-700', label: 'Borongan' },
         };
-        return badges[tipeGaji] || { class: 'bg-gray-100 text-gray-700', label: tipeGaji };
+        return badges[tipeGaji] || { class: 'bg-surface-container-low text-on-surface-variant', label: tipeGaji };
     };
 
     const selectedCount = selectedKaryawans.filter((k) => k.selected).length;
@@ -157,40 +159,40 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
             <div className="mb-6">
                 <Link
                     href="/penggajian"
-                    className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+                    className="inline-flex items-center text-sm text-on-surface-variant hover:text-on-surface"
                 >
-                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
+                    <MIcon name="arrow_back" className="text-base mr-1" />
                     Kembali ke Penggajian
                 </Link>
             </div>
 
             {/* Filter Periode */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-                <h2 className="text-lg font-semibold text-gray-800 mb-4">Pilih Periode Gaji</h2>
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6 mb-6">
+                <h2 className="text-lg font-bold text-on-surface mb-4">Pilih Periode Gaji</h2>
 
                 <div className="flex flex-wrap items-center gap-4">
                     {/* Tipe Toggle */}
-                    <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                    <div className="flex items-center bg-surface-container-low rounded-xl p-1">
                         <button
                             onClick={() => handleTipeChange('bulanan')}
                             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                                 tipe === 'bulanan'
-                                    ? 'bg-white text-green-700 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-900'
+                                    ? 'bg-surface-container-lowest text-secondary shadow-clinical-sm'
+                                    : 'text-on-surface-variant hover:text-on-surface'
                             }`}
                         >
-                            <Icon icon="solar:calendar-bold" className="w-4 h-4 inline mr-1" />
+                            <MIcon name="date_range" className="text-base inline mr-1" />
                             Bulanan
                         </button>
                         <button
                             onClick={() => handleTipeChange('mingguan')}
                             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                                 tipe === 'mingguan'
-                                    ? 'bg-white text-green-700 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-900'
+                                    ? 'bg-surface-container-lowest text-secondary shadow-clinical-sm'
+                                    : 'text-on-surface-variant hover:text-on-surface'
                             }`}
                         >
-                            <Icon icon="solar:clock-circle-bold" className="w-4 h-4 inline mr-1" />
+                            <MIcon name="schedule" className="text-base inline mr-1" />
                             Mingguan
                         </button>
                     </div>
@@ -199,7 +201,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                     <select
                         value={bulan}
                         onChange={handleBulanChange}
-                        className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                        className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                     >
                         {getMonthOptions().map((opt) => (
                             <option key={opt.value} value={opt.value}>
@@ -213,7 +215,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                         <select
                             value={minggu}
                             onChange={handleMingguChange}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                         >
                             {weeks.map((w) => (
                                 <option key={w.week} value={w.week}>
@@ -223,8 +225,8 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                         </select>
                     )}
 
-                    <div className="bg-green-50 px-4 py-2 rounded-lg">
-                        <p className="text-sm text-green-700 font-medium">
+                    <div className="bg-emerald-50 px-4 py-2 rounded-xl">
+                        <p className="text-sm text-secondary font-medium">
                             Periode: {periode.label}
                         </p>
                     </div>
@@ -233,43 +235,45 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
 
             {/* Form */}
             <form onSubmit={handleSubmit}>
-                <div className="bg-white rounded-xl shadow-sm mb-6">
-                    <div className="p-6 border-b border-gray-200">
+                    <FormAlert errors={errors} />
+
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm mb-6">
+                    <div className="p-6 border-b border-outline-variant/15">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-semibold text-gray-800">Daftar Karyawan</h3>
+                            <h3 className="text-lg font-headline font-bold text-on-surface">Daftar Karyawan</h3>
                             <div className="flex items-center space-x-2">
                                 <input
                                     type="checkbox"
                                     onChange={handleSelectAll}
                                     checked={selectedKaryawans.every((k) => k.selected)}
-                                    className="rounded border-gray-300 text-green-600"
+                                    className="rounded border-outline-variant/30 text-secondary"
                                 />
-                                <span className="text-sm text-gray-500">Pilih Semua</span>
+                                <span className="text-sm text-on-tertiary-container">Pilih Semua</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-gray-50">
+                            <thead className="bg-surface-container-low">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-10"></th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase min-w-[140px]">Karyawan</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-14">Hadir</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-14">Izin</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-14">Sakit</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-14">Alpha</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase min-w-[100px]">Gaji Pokok</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase min-w-[90px]">Potongan</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-[120px]">Bonus</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-[140px]">Pot. Kasbon</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase min-w-[110px]">Total</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase w-10"></th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase min-w-[140px]">Karyawan</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase w-14">Hadir</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase w-14">Izin</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase w-14">Sakit</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase w-14">Alpha</th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase min-w-[100px]">Gaji Pokok</th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase min-w-[90px]">Potongan</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase w-[120px]">Bonus</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase w-[140px]">Pot. Kasbon</th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase min-w-[110px]">Total</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {selectedKaryawans.length === 0 ? (
                                     <tr>
-                                        <td colSpan="11" className="px-4 py-12 text-center text-gray-500">
+                                        <td colSpan="11" className="px-4 py-12 text-center text-on-tertiary-container">
                                             {existingIds.length > 0
                                                 ? 'Semua karyawan sudah diproses untuk periode ini'
                                                 : 'Tidak ada karyawan yang ditemukan'}
@@ -283,23 +287,23 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                                             karyawan.gaji_pokok > 0;
 
                                         return (
-                                        <tr key={karyawan.id} className={`${karyawan.selected ? 'bg-green-50' : 'bg-gray-50 opacity-50'} ${hasZeroAttendanceIssue ? 'bg-red-50' : ''}`}>
+                                        <tr key={karyawan.id} className={`${karyawan.selected ? 'bg-emerald-50' : 'bg-surface-container-low opacity-50'} ${hasZeroAttendanceIssue ? 'bg-red-50' : ''}`}>
                                             <td className="px-4 py-4">
                                                 <input
                                                     type="checkbox"
                                                     checked={karyawan.selected}
                                                     onChange={() => handleSelectKaryawan(karyawan.id)}
-                                                    className="rounded border-gray-300 text-green-600"
+                                                    className="rounded border-outline-variant/30 text-secondary"
                                                 />
                                             </td>
                                             <td className="px-4 py-4">
-                                                <p className="text-sm font-medium text-gray-900">{karyawan.nama}</p>
+                                                <p className="text-sm font-medium text-on-surface">{karyawan.nama}</p>
                                                 <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${getTipeGajiBadge(karyawan.tipe_gaji).class}`}>
                                                     {getTipeGajiBadge(karyawan.tipe_gaji).label}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-4 text-center">
-                                                <span className="inline-flex items-center justify-center w-8 h-8 text-sm font-medium bg-green-100 text-green-700 rounded-full">
+                                                <span className="inline-flex items-center justify-center w-8 h-8 text-sm font-medium bg-emerald-100 text-secondary rounded-full">
                                                     {karyawan.jumlah_hadir}
                                                 </span>
                                             </td>
@@ -318,7 +322,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                                                     {karyawan.jumlah_alpha}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-4 text-right text-sm text-gray-700">
+                                            <td className="px-4 py-4 text-right text-sm text-on-surface-variant">
                                                 {formatCurrency(karyawan.gaji_pokok)}
                                             </td>
                                             <td className="px-4 py-4 text-right text-sm text-red-600">
@@ -330,7 +334,7 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                                                     value={karyawan.bonus}
                                                     onChange={(e) => handleBonusChange(karyawan.id, e.target.value)}
                                                     disabled={!karyawan.selected}
-                                                    className="w-full max-w-[100px] px-2 py-1.5 text-right text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500 disabled:bg-gray-100"
+                                                    className="w-full max-w-[100px] px-2 py-1.5 text-right text-sm border border-outline-variant/30 rounded focus:ring-2 focus:ring-secondary disabled:bg-surface-container-low"
                                                 />
                                             </td>
                                             <td className="px-2 py-4 text-center">
@@ -342,17 +346,17 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
                                                             onChange={(e) => handlePotonganKasbonChange(karyawan.id, e.target.value)}
                                                             disabled={!karyawan.selected}
                                                             max={karyawan.sisa_kasbon}
-                                                            className="w-full max-w-[100px] px-2 py-1.5 text-right text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500 disabled:bg-gray-100"
+                                                            className="w-full max-w-[100px] px-2 py-1.5 text-right text-sm border border-outline-variant/30 rounded focus:ring-2 focus:ring-secondary disabled:bg-surface-container-low"
                                                         />
-                                                        <p className="text-xs text-gray-500 mt-1 whitespace-nowrap">
+                                                        <p className="text-xs text-on-tertiary-container mt-1 whitespace-nowrap">
                                                             Sisa: {formatCurrency(karyawan.sisa_kasbon)}
                                                         </p>
                                                     </div>
                                                 ) : (
-                                                    <span className="text-sm text-gray-400 text-center block">-</span>
+                                                    <span className="text-sm text-slate-400 text-center block">-</span>
                                                 )}
                                             </td>
-                                            <td className="px-4 py-4 text-right text-sm font-semibold text-gray-900">
+                                            <td className="px-4 py-4 text-right text-sm font-bold text-on-surface">
                                                 {formatCurrency(karyawan.gaji_pokok - karyawan.potongan + karyawan.bonus - (karyawan.potongan_kasbon || 0))}
                                             </td>
                                         </tr>
@@ -366,18 +370,18 @@ export default function PenggajianCreate({ karyawans, existingIds, tipe, bulan, 
 
                 {/* Summary & Submit */}
                 {selectedKaryawans.length > 0 && (
-                    <div className="bg-white rounded-xl shadow-sm p-6">
+                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500">Total Dipilih: {selectedCount} karyawan</p>
-                                <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalGaji)}</p>
+                                <p className="text-sm text-on-tertiary-container">Total Dipilih: {selectedCount} karyawan</p>
+                                <p className="text-2xl font-bold text-on-surface">{formatCurrency(totalGaji)}</p>
                             </div>
                             <button
                                 type="submit"
                                 disabled={selectedCount === 0}
-                                className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
                             >
-                                <Icon icon="solar:check-circle-bold" className="w-5 h-5 mr-2" />
+                                <MIcon name="check_circle" className="text-xl mr-2" />
                                 Proses Penggajian
                             </button>
                         </div>

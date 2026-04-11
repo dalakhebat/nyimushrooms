@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 
 export default function PembelianBahanBakuIndex({ pembelians, summary, filters }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -47,87 +47,87 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-white rounded-xl shadow-sm p-4">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4">
                     <div className="flex items-center">
-                        <div className="p-3 bg-blue-100 rounded-lg">
-                            <Icon icon="solar:cart-bold" className="w-6 h-6 text-blue-600" />
+                        <div className="p-3 bg-blue-100 rounded-xl">
+                            <MIcon name="cart" className="text-2xl text-blue-600" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm text-gray-500">Total Bulan Ini</p>
-                            <p className="text-lg font-bold text-gray-800">{formatRupiah(summary.totalBulanIni)}</p>
+                            <p className="text-sm text-on-tertiary-container">Total Bulan Ini</p>
+                            <p className="text-lg font-headline font-bold text-on-surface">{formatRupiah(summary.totalBulanIni)}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-4">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4">
                     <div className="flex items-center">
-                        <div className="p-3 bg-yellow-100 rounded-lg">
-                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-yellow-600" />
+                        <div className="p-3 bg-yellow-100 rounded-xl">
+                            <MIcon name="schedule" className="text-2xl text-yello" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm text-gray-500">Pending</p>
+                            <p className="text-sm text-on-tertiary-container">Pending</p>
                             <p className="text-lg font-bold text-yellow-600">{formatRupiah(summary.pendingBulanIni)}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-4">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4">
                     <div className="flex items-center">
-                        <div className="p-3 bg-green-100 rounded-lg">
-                            <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-green-600" />
+                        <div className="p-3 bg-emerald-100 rounded-xl">
+                            <MIcon name="check_circle" className="text-2xl text-secondary" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm text-gray-500">Lunas</p>
-                            <p className="text-lg font-bold text-green-600">{formatRupiah(summary.lunasBulanIni)}</p>
+                            <p className="text-sm text-on-tertiary-container">Lunas</p>
+                            <p className="text-lg font-bold text-secondary">{formatRupiah(summary.lunasBulanIni)}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-4">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4">
                     <div className="flex items-center">
-                        <div className="p-3 bg-purple-100 rounded-lg">
-                            <Icon icon="solar:cart-bold" className="w-6 h-6 text-purple-600" />
+                        <div className="p-3 bg-purple-100 rounded-xl">
+                            <MIcon name="cart" className="text-2xl text-purple-600" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm text-gray-500">Transaksi</p>
-                            <p className="text-lg font-bold text-gray-800">{summary.countBulanIni}</p>
+                            <p className="text-sm text-on-tertiary-container">Transaksi</p>
+                            <p className="text-lg font-headline font-bold text-on-surface">{summary.countBulanIni}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm">
-                <div className="p-6 border-b border-gray-200">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm">
+                <div className="p-6 border-b border-outline-variant/15">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <h2 className="text-lg font-semibold text-gray-800">Daftar Pembelian</h2>
+                        <h2 className="text-lg font-headline font-bold text-on-surface">Daftar Pembelian</h2>
                         <div className="flex flex-col md:flex-row gap-3">
                             <div className="flex gap-2">
                                 <div className="relative">
-                                    <Icon icon="solar:magnifer-bold" className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <MIcon name="search" className="text-xl absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                                     <input
                                         type="text"
                                         placeholder="Cari..."
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
                                         onKeyDown={(e) => e.key === 'Enter' && handleFilter()}
-                                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                        className="pl-10 pr-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                                     />
                                 </div>
                                 <select
                                     value={status}
                                     onChange={(e) => setStatus(e.target.value)}
-                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                    className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                                 >
                                     <option value="">Semua Status</option>
                                     <option value="pending">Pending</option>
                                     <option value="lunas">Lunas</option>
                                 </select>
-                                <button onClick={handleFilter} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                                <button onClick={handleFilter} className="px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-xl hover:bg-gray-200">
                                     Filter
                                 </button>
                             </div>
                             <Link
                                 href="/pembelian-bahan-baku/create"
-                                className="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                                className="inline-flex items-center justify-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary"
                             >
-                                <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
+                                <MIcon name="add_circle" className="text-xl mr-1" />
                                 Tambah
                             </Link>
                         </div>
@@ -136,57 +136,57 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
 
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-surface-container-low">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bahan Baku</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jumlah</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kode</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Tanggal</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Bahan Baku</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Supplier</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Jumlah</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Total</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Status</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {pembelians.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan="8" className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan="8" className="px-6 py-12 text-center text-on-tertiary-container">
                                         Belum ada data pembelian
                                     </td>
                                 </tr>
                             ) : (
                                 pembelians.data.map((item) => (
-                                    <tr key={item.id} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <tr key={item.id} className="hover:bg-surface-container-low">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-on-surface">
                                             {item.kode_transaksi}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">
                                             {new Date(item.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">
                                             {item.bahan_baku?.nama}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">
                                             {item.supplier?.nama || '-'}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">
                                             {item.jumlah} {item.bahan_baku?.satuan}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-on-surface">
                                             {formatRupiah(item.total_harga)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {item.status === 'lunas' ? (
-                                                <span className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                                                    <Icon icon="solar:check-circle-bold" className="w-4 h-4 mr-1" />
+                                                <span className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-emerald-100 text-primary">
+                                                    <MIcon name="check_circle" className="text-base mr-1" />
                                                     Lunas
                                                 </span>
                                             ) : (
                                                 <select
                                                     value={item.status}
                                                     onChange={(e) => handleUpdateStatus(item.id, e.target.value, item.status)}
-                                                    className="px-2 py-1 text-xs font-medium rounded-lg border border-yellow-300 bg-yellow-50 text-yellow-800 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 cursor-pointer"
+                                                    className="px-2 py-1 text-xs font-medium rounded-xl border border-yellow-300 bg-yellow-50 text-yellow-800 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 cursor-pointer"
                                                 >
                                                     <option value="pending">Pending</option>
                                                     <option value="lunas">Lunas</option>
@@ -197,16 +197,16 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
                                                     href={`/pembelian-bahan-baku/${item.id}/edit`}
-                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl"
                                                 >
-                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                    <MIcon name="edit" className="text-xl" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(item.id)}
                                                     disabled={deleting === item.id}
-                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-xl disabled:opacity-50"
                                                 >
-                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                    <MIcon name="delete" className="text-xl" />
                                                 </button>
                                             </div>
                                         </td>
@@ -218,9 +218,9 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                 </div>
 
                 {pembelians.links && pembelians.links.length > 3 && (
-                    <div className="px-6 py-4 border-t border-gray-200">
+                    <div className="px-6 py-4 border-t border-outline-variant/15">
                         <div className="flex items-center justify-between">
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-on-tertiary-container">
                                 Showing {pembelians.from} to {pembelians.to} of {pembelians.total} results
                             </p>
                             <div className="flex space-x-1">
@@ -229,7 +229,7 @@ export default function PembelianBahanBakuIndex({ pembelians, summary, filters }
                                         key={index}
                                         href={link.url || '#'}
                                         className={`px-3 py-1 text-sm rounded ${
-                                            link.active ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            link.active ? 'bg-primary text-white' : 'bg-surface-container-low text-on-surface-variant hover:bg-gray-200'
                                         } ${!link.url && 'opacity-50 cursor-not-allowed'}`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />

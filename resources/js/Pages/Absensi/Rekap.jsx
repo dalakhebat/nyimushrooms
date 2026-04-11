@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 
 export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tanggalAwal, tanggalAkhir, periode }) {
     // Helper function untuk format tanggal lokal (tanpa timezone conversion)
@@ -151,7 +151,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
             mingguan: { class: 'bg-blue-100 text-blue-700', label: 'Mingguan' },
             borongan: { class: 'bg-orange-100 text-orange-700', label: 'Borongan' },
         };
-        return badges[tipeGaji] || { class: 'bg-gray-100 text-gray-700', label: tipeGaji };
+        return badges[tipeGaji] || { class: 'bg-surface-container-low text-on-surface-variant', label: tipeGaji };
     };
 
     const formatCurrency = (amount) => {
@@ -169,77 +169,77 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
             <div className="mb-6">
                 <Link
                     href="/absensi"
-                    className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+                    className="inline-flex items-center text-sm text-on-surface-variant hover:text-on-surface"
                 >
-                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
+                    <MIcon name="arrow_back" className="text-base mr-1" />
                     Kembali ke Absensi
                 </Link>
             </div>
 
             {/* Header with Filter & Export */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6 mb-6">
                 <div className="flex flex-col gap-4">
                     {/* Title & Periode */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                            <h2 className="text-xl font-semibold text-gray-800">Rekap Absensi</h2>
-                            <p className="text-sm text-gray-500 mt-1">
+                            <h2 className="text-xl font-bold text-on-surface">Rekap Absensi</h2>
+                            <p className="text-sm text-on-tertiary-container mt-1">
                                 Periode: {periode?.start} - {periode?.end}
                             </p>
                         </div>
                         <div className="flex items-center space-x-2">
                             <button
                                 onClick={handleExportExcel}
-                                className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                                className="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary transition-colors"
                             >
-                                <Icon icon="solar:file-text-bold" className="w-5 h-5 mr-2" />
+                                <MIcon name="file_text" className="text-xl mr-2" />
                                 Export Excel
                             </button>
                             <button
                                 onClick={handleExportPdf}
-                                className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
+                                className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-xl hover:bg-red-700 transition-colors"
                             >
-                                <Icon icon="solar:document-download-bold" className="w-5 h-5 mr-2" />
+                                <MIcon name="document_download" className="text-xl mr-2" />
                                 Export PDF
                             </button>
                         </div>
                     </div>
 
                     {/* Tipe Toggle & Date Filters */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-gray-200">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-outline-variant/15">
                         {/* Tipe Toggle */}
-                        <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                        <div className="flex items-center bg-surface-container-low rounded-xl p-1">
                             <button
                                 onClick={() => handleTipeChange('bulanan')}
                                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                                     tipe === 'bulanan'
-                                        ? 'bg-white text-green-700 shadow-sm'
-                                        : 'text-gray-600 hover:text-gray-900'
+                                        ? 'bg-surface-container-lowest text-secondary shadow-clinical-sm'
+                                        : 'text-on-surface-variant hover:text-on-surface'
                                 }`}
                             >
-                                <Icon icon="solar:calendar-bold" className="w-4 h-4 inline mr-1" />
+                                <MIcon name="date_range" className="text-base inline mr-1" />
                                 Bulanan
                             </button>
                             <button
                                 onClick={() => handleTipeChange('mingguan')}
                                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                                     tipe === 'mingguan'
-                                        ? 'bg-white text-green-700 shadow-sm'
-                                        : 'text-gray-600 hover:text-gray-900'
+                                        ? 'bg-surface-container-lowest text-secondary shadow-clinical-sm'
+                                        : 'text-on-surface-variant hover:text-on-surface'
                                 }`}
                             >
-                                <Icon icon="solar:clock-circle-bold" className="w-4 h-4 inline mr-1" />
+                                <MIcon name="schedule" className="text-base inline mr-1" />
                                 Mingguan
                             </button>
                         </div>
 
                         {/* Bulan Selector */}
                         <div className="flex items-center space-x-2">
-                            <Icon icon="solar:calendar-bold" className="w-5 h-5 text-gray-400" />
+                            <MIcon name="date_range" className="text-xl text-slate-400" />
                             <select
                                 value={currentBulan}
                                 onChange={handleBulanChange}
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                             >
                                 {getMonthOptions().map((opt) => (
                                     <option key={opt.value} value={opt.value}>
@@ -252,11 +252,11 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                         {/* Minggu Selector (hanya tampil jika tipe mingguan) */}
                         {tipe === 'mingguan' && (
                             <div className="flex items-center space-x-2">
-                                <Icon icon="solar:clock-circle-bold" className="w-5 h-5 text-gray-400" />
+                                <MIcon name="schedule" className="text-xl text-slate-400" />
                                 <select
                                     value={currentMinggu}
                                     onChange={handleMingguChange}
-                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                    className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                 >
                                     {weekOptions.map((opt) => (
                                         <option key={opt.value} value={opt.value}>
@@ -272,87 +272,87 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
 
             {/* Summary Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-green-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-secondary p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="check_circle" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Total Hadir</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary?.totalHadir || 0}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Total Hadir</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary?.totalHadir || 0}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-blue-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:document-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-blue-500 p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="description" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Total Izin</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary?.totalIzin || 0}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Total Izin</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary?.totalIzin || 0}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:danger-triangle-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-yellow-500 p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="warning" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Total Sakit</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary?.totalSakit || 0}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Total Sakit</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary?.totalSakit || 0}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-red-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:close-circle-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-red-500 p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="close" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Total Alpha</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary?.totalAlpha || 0}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Total Alpha</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary?.totalAlpha || 0}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl shadow-sm">
-                <div className="p-6 border-b border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-800">Detail Rekap Per Karyawan</h3>
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm">
+                <div className="p-6 border-b border-outline-variant/15">
+                    <h3 className="text-lg font-headline font-bold text-on-surface">Detail Rekap Per Karyawan</h3>
                 </div>
 
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-surface-container-low">
                             <tr>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     No
                                 </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Nama Karyawan
                                 </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Tipe Gaji
                                 </th>
-                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Nominal
                                 </th>
-                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Hadir
                                 </th>
-                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Izin
                                 </th>
-                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Sakit
                                 </th>
-                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Alpha
                                 </th>
-                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Total Hari
                                 </th>
                             </tr>
@@ -360,17 +360,17 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                         <tbody className="divide-y divide-gray-200">
                             {(!rekap || rekap.length === 0) ? (
                                 <tr>
-                                    <td colSpan="9" className="px-4 py-12 text-center text-gray-500">
+                                    <td colSpan="9" className="px-4 py-12 text-center text-on-tertiary-container">
                                         Tidak ada data absensi untuk periode ini
                                     </td>
                                 </tr>
                             ) : (
                                 rekap.map((row, index) => (
-                                    <tr key={row.id} className="hover:bg-gray-50">
-                                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <tr key={row.id} className="hover:bg-surface-container-low">
+                                        <td className="px-4 py-4 whitespace-nowrap text-sm text-on-tertiary-container">
                                             {index + 1}
                                         </td>
-                                        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-on-surface">
                                             {row.nama}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
@@ -378,11 +378,11 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                                                 {getTipeGajiBadge(row.tipe_gaji).label}
                                             </span>
                                         </td>
-                                        <td className="px-4 py-4 whitespace-nowrap text-right text-sm text-gray-700">
+                                        <td className="px-4 py-4 whitespace-nowrap text-right text-sm text-on-surface-variant">
                                             {formatCurrency(row.nominal_gaji || 0)}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap text-center">
-                                            <span className="inline-flex items-center justify-center w-8 h-8 text-sm font-medium bg-green-100 text-green-700 rounded-full">
+                                            <span className="inline-flex items-center justify-center w-8 h-8 text-sm font-medium bg-emerald-100 text-secondary rounded-full">
                                                 {row.hadir}
                                             </span>
                                         </td>
@@ -401,7 +401,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                                                 {row.alpha}
                                             </span>
                                         </td>
-                                        <td className="px-4 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
+                                        <td className="px-4 py-4 whitespace-nowrap text-center text-sm font-bold text-on-surface">
                                             {row.total_hari_kerja}
                                         </td>
                                     </tr>
@@ -409,12 +409,12 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                             )}
                         </tbody>
                         {rekap && rekap.length > 0 && (
-                            <tfoot className="bg-gray-50 font-semibold">
+                            <tfoot className="bg-surface-container-low font-bold">
                                 <tr>
-                                    <td colSpan="4" className="px-4 py-4 text-sm text-gray-700">
+                                    <td colSpan="4" className="px-4 py-4 text-sm text-on-surface-variant">
                                         Total
                                     </td>
-                                    <td className="px-4 py-4 text-center text-sm text-green-700">
+                                    <td className="px-4 py-4 text-center text-sm text-secondary">
                                         {summary?.totalHadir || 0}
                                     </td>
                                     <td className="px-4 py-4 text-center text-sm text-blue-700">
@@ -426,7 +426,7 @@ export default function AbsensiRekap({ rekap, summary, tipe, bulan, minggu, tang
                                     <td className="px-4 py-4 text-center text-sm text-red-700">
                                         {summary?.totalAlpha || 0}
                                     </td>
-                                    <td className="px-4 py-4 text-center text-sm text-gray-900">
+                                    <td className="px-4 py-4 text-center text-sm text-on-surface">
                                         {(summary?.totalHadir || 0) + (summary?.totalIzin || 0) + (summary?.totalSakit || 0) + (summary?.totalAlpha || 0)}
                                     </td>
                                 </tr>

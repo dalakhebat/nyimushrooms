@@ -1,7 +1,7 @@
 import { Head, useForm, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { useState } from 'react';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 
 export default function Transolindo({ investasis, kumbungs = [], returnBulanans, panens, summary, chartData, rekapBulanan = [], faseLabels = {}, faseColors = {}, kasTransaksis = [], kasSummary = {}, pendingReimburseList = [], kategoriOptions = {}, paymentAlerts = [] }) {
     const [activeTab, setActiveTab] = useState('status');
@@ -164,8 +164,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
         const colors = {
             persiapan: 'bg-blue-100 text-blue-700 border-blue-300',
             inkubasi: 'bg-amber-100 text-amber-700 border-amber-300',
-            panen: 'bg-green-100 text-green-700 border-green-300',
-            istirahat: 'bg-gray-100 text-gray-700 border-gray-300',
+            panen: 'bg-emerald-100 text-secondary border-green-300',
+            istirahat: 'bg-surface-container-low text-on-surface-variant border-outline-variant/30',
         };
         return colors[fase] || colors.persiapan;
     };
@@ -344,10 +344,10 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
 
     const getTipeColor = (tipe) => {
         switch (tipe) {
-            case 'masuk': return 'bg-green-100 text-green-700';
+            case 'masuk': return 'bg-emerald-100 text-secondary';
             case 'keluar': return 'bg-red-100 text-red-700';
             case 'reimburse': return 'bg-blue-100 text-blue-700';
-            default: return 'bg-gray-100 text-gray-700';
+            default: return 'bg-surface-container-low text-on-surface-variant';
         }
     };
 
@@ -378,8 +378,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                 <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-xl p-6 text-white">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                         <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                                <Icon icon="solar:diamond-bold" className="w-8 h-8" />
+                            <div className="w-14 h-14 bg-surface-container-lowest/20 rounded-xl flex items-center justify-center">
+                                <MIcon name="diamond" className="text-3xl" />
                             </div>
                             <div>
                                 <h1 className="text-2xl font-bold">TRANSOLINDO</h1>
@@ -437,11 +437,11 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap">
-                                            <h4 className="font-semibold">{alert.title}</h4>
+                                            <h4 className="font-bold">{alert.title}</h4>
                                             <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                                                 alert.category === 'jamur_kering'
                                                     ? 'bg-purple-100 text-purple-700'
-                                                    : 'bg-green-100 text-green-700'
+                                                    : 'bg-emerald-100 text-secondary'
                                             }`}>
                                                 {alert.category === 'jamur_kering' ? 'Jamur Kering' : 'Kumbung'}
                                             </span>
@@ -463,7 +463,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             onClick={() => {
                                                 router.patch(route('transolindo.return.toggle', alert.return_id));
                                             }}
-                                            className="flex-shrink-0 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                                            className="flex-shrink-0 px-3 py-1.5 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary transition-colors"
                                         >
                                             Tandai Diterima
                                         </button>
@@ -476,65 +476,65 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
 
                 {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div className="bg-white rounded-xl shadow-sm p-5">
+                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500">Total Modal</p>
+                                <p className="text-sm text-on-tertiary-container">Total Modal</p>
                                 <p className="text-xl font-bold text-indigo-600">{formatRupiah(summary.totalModal)}</p>
                             </div>
-                            <div className="p-3 bg-indigo-100 rounded-lg">
-                                <Icon icon="solar:wallet-money-bold" className="w-6 h-6 text-indigo-600" />
+                            <div className="p-3 bg-indigo-100 rounded-xl">
+                                <MIcon name="wallet_money" className="text-2xl text-indigo-600" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white rounded-xl shadow-sm p-5">
+                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500">Return Diterima</p>
-                                <p className="text-xl font-bold text-green-600">{formatRupiah(summary.totalDiterima)}</p>
+                                <p className="text-sm text-on-tertiary-container">Return Diterima</p>
+                                <p className="text-xl font-bold text-secondary">{formatRupiah(summary.totalDiterima)}</p>
                             </div>
-                            <div className="p-3 bg-green-100 rounded-lg">
-                                <Icon icon="solar:hand-money-bold" className="w-6 h-6 text-green-600" />
+                            <div className="p-3 bg-emerald-100 rounded-xl">
+                                <MIcon name="hand_money" className="text-2xl text-secondary" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white rounded-xl shadow-sm p-5">
+                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500">Saldo Kas</p>
+                                <p className="text-sm text-on-tertiary-container">Saldo Kas</p>
                                 <p className={`text-xl font-bold ${kasSummary.saldo >= 0 ? 'text-purple-600' : 'text-red-600'}`}>{formatRupiah(kasSummary.saldo)}</p>
                             </div>
-                            <div className="p-3 bg-purple-100 rounded-lg">
-                                <Icon icon="solar:wallet-2-bold" className="w-6 h-6 text-purple-600" />
+                            <div className="p-3 bg-purple-100 rounded-xl">
+                                <MIcon name="wallet_2" className="text-2xl text-purple-600" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white rounded-xl shadow-sm p-5">
+                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500">Profit Kumbung</p>
+                                <p className="text-sm text-on-tertiary-container">Profit Kumbung</p>
                                 <p className="text-xl font-bold text-amber-600">{formatRupiah(summary.totalKumbung)}</p>
                             </div>
-                            <div className="p-3 bg-amber-100 rounded-lg">
-                                <Icon icon="solar:home-bold" className="w-6 h-6 text-amber-600" />
+                            <div className="p-3 bg-amber-100 rounded-xl">
+                                <MIcon name="home" className="text-2xl text-amber-600" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white rounded-xl shadow-sm p-5">
+                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500">ROI Rata-rata</p>
+                                <p className="text-sm text-on-tertiary-container">ROI Rata-rata</p>
                                 <p className="text-xl font-bold text-blue-600">{parseFloat(summary.averageROI || 0).toFixed(2)}%</p>
                             </div>
-                            <div className="p-3 bg-blue-100 rounded-lg">
-                                <Icon icon="solar:graph-up-bold" className="w-6 h-6 text-blue-600" />
+                            <div className="p-3 bg-blue-100 rounded-xl">
+                                <MIcon name="analytics" className="text-2xl text-blue-600" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Tab Navigation */}
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden">
                     <div className="flex border-b overflow-x-auto">
                         {tabs.map((tab) => (
                             <button
@@ -543,7 +543,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 className={`flex items-center px-6 py-4 text-sm font-medium whitespace-nowrap transition-colors ${
                                     activeTab === tab.id
                                         ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                        : 'text-on-tertiary-container hover:text-on-surface-variant hover:bg-surface-container-low'
                                 }`}
                             >
                                 <Icon icon={tab.icon} className="w-5 h-5 mr-2" />
@@ -558,49 +558,49 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <h2 className="text-lg font-semibold">Status Kumbung Real-time</h2>
-                                        <p className="text-sm text-gray-500">Tracking fase dan progres setiap kumbung</p>
+                                        <h2 className="text-lg font-bold">Status Kumbung Real-time</h2>
+                                        <p className="text-sm text-on-tertiary-container">Tracking fase dan progres setiap kumbung</p>
                                     </div>
                                 </div>
 
                                 {/* Kumbung Status Cards */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {kumbungs.length > 0 ? kumbungs.map((kumbung) => (
-                                        <div key={kumbung.id} className={`bg-white rounded-xl shadow-sm border-2 ${getFaseColor(kumbung.fase)} overflow-hidden`}>
+                                        <div key={kumbung.id} className={`bg-surface-container-lowest rounded-xl shadow-clinical-sm border-2 ${getFaseColor(kumbung.fase)} overflow-hidden`}>
                                             <div className="p-6">
                                                 <div className="flex items-start justify-between mb-4">
                                                     <div>
-                                                        <h3 className="font-bold text-lg text-gray-800">{kumbung.nama}</h3>
-                                                        <p className="text-sm text-gray-500">Siklus ke-{kumbung.siklus_ke || 1}</p>
+                                                        <h3 className="font-bold text-lg text-on-surface">{kumbung.nama}</h3>
+                                                        <p className="text-sm text-on-tertiary-container">Siklus ke-{kumbung.siklus_ke || 1}</p>
                                                     </div>
                                                     <button
                                                         onClick={() => handleEditFase(kumbung)}
-                                                        className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg"
+                                                        className="p-2 text-on-tertiary-container hover:text-indigo-600 hover:bg-indigo-50 rounded-xl"
                                                     >
-                                                        <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                        <MIcon name="edit" className="text-xl" />
                                                     </button>
                                                 </div>
 
                                                 {/* Fase Badge */}
                                                 <div className={`inline-flex items-center px-4 py-2 rounded-full ${getFaseColor(kumbung.fase)} mb-4`}>
                                                     <Icon icon={getFaseIcon(kumbung.fase)} className="w-5 h-5 mr-2" />
-                                                    <span className="font-semibold">{faseLabels[kumbung.fase] || 'Persiapan Baglog'}</span>
+                                                    <span className="font-bold">{faseLabels[kumbung.fase] || 'Persiapan Baglog'}</span>
                                                 </div>
 
                                                 {/* Progress Info */}
                                                 <div className="space-y-3">
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-gray-600">Minggu ke:</span>
+                                                        <span className="text-on-surface-variant">Minggu ke:</span>
                                                         <span className="font-bold text-xl">{kumbung.minggu_fase || 1}</span>
                                                     </div>
                                                     {kumbung.tanggal_mulai_fase && (
                                                         <div className="flex justify-between items-center">
-                                                            <span className="text-gray-600">Mulai fase:</span>
+                                                            <span className="text-on-surface-variant">Mulai fase:</span>
                                                             <span className="font-medium">{formatDate(kumbung.tanggal_mulai_fase)}</span>
                                                         </div>
                                                     )}
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-gray-600">Modal:</span>
+                                                        <span className="text-on-surface-variant">Modal:</span>
                                                         <span className="font-medium text-indigo-600">{formatRupiah(kumbung.modal)}</span>
                                                     </div>
                                                 </div>
@@ -609,19 +609,19 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                 {kumbung.fase === 'panen' && (
                                                     <div className="mt-4">
                                                         <div className="flex justify-between text-sm mb-1">
-                                                            <span className="text-gray-500">Progress Panen</span>
-                                                            <span className="text-green-600 font-medium">Aktif</span>
+                                                            <span className="text-on-tertiary-container">Progress Panen</span>
+                                                            <span className="text-secondary font-medium">Aktif</span>
                                                         </div>
                                                         <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                            <div className="h-full bg-green-500 rounded-full animate-pulse" style={{ width: '100%' }}></div>
+                                                            <div className="h-full bg-secondary rounded-full animate-pulse" style={{ width: '100%' }}></div>
                                                         </div>
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
                                     )) : (
-                                        <div className="col-span-2 text-center py-12 text-gray-500">
-                                            <Icon icon="solar:home-2-bold" className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                                        <div className="col-span-2 text-center py-12 text-on-tertiary-container">
+                                            <MIcon name="house" className="text-4xl mx-auto mb-4 text-slate-300" />
                                             <p className="text-lg">Belum ada data kumbung</p>
                                             <p className="text-sm">Tambahkan investasi tipe "Kumbung" terlebih dahulu</p>
                                         </div>
@@ -630,16 +630,16 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
 
                                 {/* Edit Fase Modal */}
                                 {editingFase && (
-                                    <div className="bg-gray-50 rounded-xl p-6">
+                                    <div className="bg-surface-container-low rounded-xl p-6">
                                         <h3 className="font-medium mb-4">Update Status: {editingFase.nama}</h3>
                                         <form onSubmit={handleSubmitFase} className="space-y-4">
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Fase *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Fase *</label>
                                                     <select
                                                         value={faseForm.data.fase}
                                                         onChange={(e) => faseForm.setData('fase', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     >
                                                         <option value="persiapan">Persiapan Baglog</option>
                                                         <option value="inkubasi">Inkubasi</option>
@@ -648,32 +648,32 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Minggu ke-</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Minggu ke-</label>
                                                     <input
                                                         type="number"
                                                         value={faseForm.data.minggu_fase}
                                                         onChange={(e) => faseForm.setData('minggu_fase', parseInt(e.target.value) || 1)}
                                                         min="1"
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai Fase</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Tanggal Mulai Fase</label>
                                                     <input
                                                         type="date"
                                                         value={faseForm.data.tanggal_mulai_fase}
                                                         onChange={(e) => faseForm.setData('tanggal_mulai_fase', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Siklus ke-</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Siklus ke-</label>
                                                     <input
                                                         type="number"
                                                         value={faseForm.data.siklus_ke}
                                                         onChange={(e) => faseForm.setData('siklus_ke', parseInt(e.target.value) || 1)}
                                                         min="1"
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                             </div>
@@ -681,14 +681,14 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                 <button
                                                     type="submit"
                                                     disabled={faseForm.processing}
-                                                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                                                    className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
                                                 >
                                                     Simpan
                                                 </button>
                                                 <button
                                                     type="button"
                                                     onClick={() => setEditingFase(null)}
-                                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                                                    className="px-4 py-2 bg-gray-300 text-on-surface-variant rounded-xl hover:bg-gray-400"
                                                 >
                                                     Batal
                                                 </button>
@@ -698,43 +698,43 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 )}
 
                                 {/* Fase Legend */}
-                                <div className="bg-white rounded-xl shadow-sm p-6">
+                                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
                                     <h3 className="font-medium mb-4">Keterangan Fase</h3>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                                <Icon icon="solar:box-bold" className="w-5 h-5 text-blue-600" />
+                                            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                                                <MIcon name="inventory_2" className="text-xl text-blue-600" />
                                             </div>
                                             <div>
                                                 <p className="font-medium text-sm">Persiapan</p>
-                                                <p className="text-xs text-gray-500">Isi baglog baru</p>
+                                                <p className="text-xs text-on-tertiary-container">Isi baglog baru</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                                                <Icon icon="solar:hourglass-bold" className="w-5 h-5 text-amber-600" />
+                                            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                                                <MIcon name="hourglass" className="text-xl text-amber-600" />
                                             </div>
                                             <div>
                                                 <p className="font-medium text-sm">Inkubasi</p>
-                                                <p className="text-xs text-gray-500">Tunggu miselium</p>
+                                                <p className="text-xs text-on-tertiary-container">Tunggu miselium</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                                <Icon icon="solar:leaf-bold" className="w-5 h-5 text-green-600" />
+                                            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                                <MIcon name="eco" className="text-xl text-secondary" />
                                             </div>
                                             <div>
                                                 <p className="font-medium text-sm">Panen Aktif</p>
-                                                <p className="text-xs text-gray-500">Sedang panen</p>
+                                                <p className="text-xs text-on-tertiary-container">Sedang panen</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                                                <Icon icon="solar:moon-bold" className="w-5 h-5 text-gray-600" />
+                                            <div className="w-10 h-10 bg-surface-container-low rounded-xl flex items-center justify-center">
+                                                <MIcon name="moon" className="text-xl text-on-surface-variant" />
                                             </div>
                                             <div>
                                                 <p className="font-medium text-sm">Istirahat</p>
-                                                <p className="text-xs text-gray-500">Persiapan siklus baru</p>
+                                                <p className="text-xs text-on-tertiary-container">Persiapan siklus baru</p>
                                             </div>
                                         </div>
                                     </div>
@@ -747,8 +747,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <h2 className="text-lg font-semibold">Kas Transolindo</h2>
-                                        <p className="text-sm text-gray-500">Tracking saldo dan arus kas dari investasi</p>
+                                        <h2 className="text-lg font-bold">Kas Transolindo</h2>
+                                        <p className="text-sm text-on-tertiary-container">Tracking saldo dan arus kas dari investasi</p>
                                     </div>
                                     <button
                                         onClick={() => {
@@ -757,9 +757,9 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             kasForm.setData('tanggal', new Date().toISOString().slice(0, 10));
                                             setShowKasForm(true);
                                         }}
-                                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center"
+                                        className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 flex items-center"
                                     >
-                                        <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-2" />
+                                        <MIcon name="add_circle" className="text-xl mr-2" />
                                         Tambah Transaksi
                                     </button>
                                 </div>
@@ -768,32 +768,32 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white">
                                         <div className="flex items-center justify-between mb-2">
-                                            <Icon icon="solar:wallet-2-bold" className="w-8 h-8 opacity-80" />
-                                            <span className="text-xs bg-white/20 px-2 py-1 rounded">Saldo</span>
+                                            <MIcon name="wallet_2" className="text-3xl opacity-80" />
+                                            <span className="text-xs bg-surface-container-lowest/20 px-2 py-1 rounded">Saldo</span>
                                         </div>
                                         <p className="text-2xl font-bold">{formatRupiah(kasSummary.saldo || 0)}</p>
                                         <p className="text-xs text-green-100 mt-1">Saldo saat ini</p>
                                     </div>
                                     <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
                                         <div className="flex items-center justify-between mb-2">
-                                            <Icon icon="solar:arrow-down-bold" className="w-8 h-8 opacity-80" />
-                                            <span className="text-xs bg-white/20 px-2 py-1 rounded">Masuk</span>
+                                            <MIcon name="trending_down" className="text-3xl opacity-80" />
+                                            <span className="text-xs bg-surface-container-lowest/20 px-2 py-1 rounded">Masuk</span>
                                         </div>
                                         <p className="text-2xl font-bold">{formatRupiah(kasSummary.totalMasuk || 0)}</p>
                                         <p className="text-xs text-blue-100 mt-1">Total uang masuk</p>
                                     </div>
                                     <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white">
                                         <div className="flex items-center justify-between mb-2">
-                                            <Icon icon="solar:arrow-up-bold" className="w-8 h-8 opacity-80" />
-                                            <span className="text-xs bg-white/20 px-2 py-1 rounded">Keluar</span>
+                                            <MIcon name="trending_up" className="text-3xl opacity-80" />
+                                            <span className="text-xs bg-surface-container-lowest/20 px-2 py-1 rounded">Keluar</span>
                                         </div>
                                         <p className="text-2xl font-bold">{formatRupiah(kasSummary.totalKeluar || 0)}</p>
                                         <p className="text-xs text-red-100 mt-1">Total uang keluar</p>
                                     </div>
                                     <div className="bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl p-4 text-white">
                                         <div className="flex items-center justify-between mb-2">
-                                            <Icon icon="solar:danger-triangle-bold" className="w-8 h-8 opacity-80" />
-                                            <span className="text-xs bg-white/20 px-2 py-1 rounded">Pending</span>
+                                            <MIcon name="warning" className="text-3xl opacity-80" />
+                                            <span className="text-xs bg-surface-container-lowest/20 px-2 py-1 rounded">Pending</span>
                                         </div>
                                         <p className="text-2xl font-bold">{formatRupiah(kasSummary.pendingReimburse || 0)}</p>
                                         <p className="text-xs text-amber-100 mt-1">Belum di-reimburse</p>
@@ -804,23 +804,23 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 {pendingReimburseList.length > 0 && (
                                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
                                         <div className="flex items-center gap-2 mb-3">
-                                            <Icon icon="solar:danger-triangle-bold" className="w-5 h-5 text-amber-600" />
-                                            <h3 className="font-semibold text-amber-800">Perlu Di-reimburse ({pendingReimburseList.length})</h3>
+                                            <MIcon name="warning" className="text-xl text-amber-600" />
+                                            <h3 className="font-bold text-amber-800">Perlu Di-reimburse ({pendingReimburseList.length})</h3>
                                         </div>
                                         <div className="space-y-2">
                                             {pendingReimburseList.map((item) => (
-                                                <div key={item.id} className="flex items-center justify-between bg-white rounded-lg p-3 border border-amber-200">
+                                                <div key={item.id} className="flex items-center justify-between bg-surface-container-lowest rounded-xl p-3 border border-amber-200">
                                                     <div>
-                                                        <p className="font-medium text-gray-800">{item.keterangan}</p>
-                                                        <p className="text-sm text-gray-500">{formatDate(item.tanggal)} - {kategoriOptions[item.kategori] || item.kategori || '-'}</p>
+                                                        <p className="font-medium text-on-surface">{item.keterangan}</p>
+                                                        <p className="text-sm text-on-tertiary-container">{formatDate(item.tanggal)} - {kategoriOptions[item.kategori] || item.kategori || '-'}</p>
                                                     </div>
                                                     <div className="flex items-center gap-3">
                                                         <span className="font-bold text-red-600">{formatRupiah(item.jumlah)}</span>
                                                         <button
                                                             onClick={() => handleReimburseKas(item)}
-                                                            className="px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 flex items-center"
+                                                            className="px-3 py-1 bg-primary text-white text-sm rounded-xl hover:bg-primary flex items-center"
                                                         >
-                                                            <Icon icon="solar:check-circle-bold" className="w-4 h-4 mr-1" />
+                                                            <MIcon name="check_circle" className="text-base mr-1" />
                                                             Reimburse
                                                         </button>
                                                     </div>
@@ -832,26 +832,26 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
 
                                 {/* Kas Form */}
                                 {showKasForm && (
-                                    <div className="bg-gray-50 rounded-xl p-6">
+                                    <div className="bg-surface-container-low rounded-xl p-6">
                                         <h3 className="font-medium mb-4">{editingKas ? 'Edit Transaksi' : 'Tambah Transaksi Baru'}</h3>
                                         <form onSubmit={handleSubmitKas} className="space-y-4">
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Tanggal</label>
                                                     <input
                                                         type="date"
                                                         value={kasForm.data.tanggal}
                                                         onChange={(e) => kasForm.setData('tanggal', e.target.value)}
-                                                        className="w-full rounded-lg border-gray-300"
+                                                        className="w-full rounded-xl border-outline-variant/30"
                                                         required
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Tipe</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Tipe</label>
                                                     <select
                                                         value={kasForm.data.tipe}
                                                         onChange={(e) => kasForm.setData('tipe', e.target.value)}
-                                                        className="w-full rounded-lg border-gray-300"
+                                                        className="w-full rounded-xl border-outline-variant/30"
                                                         required
                                                     >
                                                         <option value="masuk">Masuk</option>
@@ -860,22 +860,22 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Jumlah</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Jumlah</label>
                                                     <input
                                                         type="number"
                                                         value={kasForm.data.jumlah}
                                                         onChange={(e) => kasForm.setData('jumlah', e.target.value)}
-                                                        className="w-full rounded-lg border-gray-300"
+                                                        className="w-full rounded-xl border-outline-variant/30"
                                                         required
                                                         min="0"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Kategori</label>
                                                     <select
                                                         value={kasForm.data.kategori}
                                                         onChange={(e) => kasForm.setData('kategori', e.target.value)}
-                                                        className="w-full rounded-lg border-gray-300"
+                                                        className="w-full rounded-xl border-outline-variant/30"
                                                     >
                                                         <option value="">Pilih Kategori</option>
                                                         {Object.entries(kategoriOptions).map(([key, label]) => (
@@ -885,12 +885,12 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                 </div>
                                             </div>
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">Keterangan</label>
+                                                <label className="block text-sm font-medium text-on-surface-variant mb-1">Keterangan</label>
                                                 <input
                                                     type="text"
                                                     value={kasForm.data.keterangan}
                                                     onChange={(e) => kasForm.setData('keterangan', e.target.value)}
-                                                    className="w-full rounded-lg border-gray-300"
+                                                    className="w-full rounded-xl border-outline-variant/30"
                                                     placeholder="Contoh: Return Jamur Kering Maret 2025"
                                                     required
                                                 />
@@ -902,9 +902,9 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                         id="needReimburse"
                                                         checked={kasForm.data.status === 'pending_reimburse'}
                                                         onChange={(e) => kasForm.setData('status', e.target.checked ? 'pending_reimburse' : 'settled')}
-                                                        className="rounded border-gray-300 text-indigo-600"
+                                                        className="rounded border-outline-variant/30 text-indigo-600"
                                                     />
-                                                    <label htmlFor="needReimburse" className="text-sm text-gray-600">Perlu di-reimburse nanti</label>
+                                                    <label htmlFor="needReimburse" className="text-sm text-on-surface-variant">Perlu di-reimburse nanti</label>
                                                 </div>
                                             )}
                                             <div className="flex gap-2">
@@ -915,14 +915,14 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                         setEditingKas(null);
                                                         kasForm.reset();
                                                     }}
-                                                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                                                    className="px-4 py-2 border border-outline-variant/30 rounded-xl hover:bg-surface-container-low"
                                                 >
                                                     Batal
                                                 </button>
                                                 <button
                                                     type="submit"
                                                     disabled={kasForm.processing}
-                                                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                                                    className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
                                                 >
                                                     {kasForm.processing ? 'Menyimpan...' : 'Simpan'}
                                                 </button>
@@ -932,38 +932,38 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 )}
 
                                 {/* Kas Table */}
-                                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden">
                                     <div className="overflow-x-auto">
                                         <table className="w-full">
-                                            <thead className="bg-gray-50">
+                                            <thead className="bg-surface-container-low">
                                                 <tr>
-                                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
-                                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Keterangan</th>
-                                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategori</th>
-                                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Debit</th>
-                                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Kredit</th>
-                                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Saldo</th>
-                                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
-                                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                                    <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Tanggal</th>
+                                                    <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Tipe</th>
+                                                    <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Keterangan</th>
+                                                    <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kategori</th>
+                                                    <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Debit</th>
+                                                    <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Kredit</th>
+                                                    <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Saldo</th>
+                                                    <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Status</th>
+                                                    <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-gray-200">
                                                 {kasTransaksis.length > 0 ? (
                                                     kasTransaksis.map((kas, idx) => (
-                                                        <tr key={kas.id} className={`hover:bg-gray-50 ${kas.status === 'pending_reimburse' ? 'bg-amber-50' : ''}`}>
-                                                            <td className="px-4 py-3 text-gray-600">{formatDate(kas.tanggal)}</td>
+                                                        <tr key={kas.id} className={`hover:bg-surface-container-low ${kas.status === 'pending_reimburse' ? 'bg-amber-50' : ''}`}>
+                                                            <td className="px-4 py-3 text-on-surface-variant">{formatDate(kas.tanggal)}</td>
                                                             <td className="px-4 py-3">
                                                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTipeColor(kas.tipe)}`}>
                                                                     <Icon icon={getTipeIcon(kas.tipe)} className="w-3 h-3 mr-1" />
                                                                     {kas.tipe.charAt(0).toUpperCase() + kas.tipe.slice(1)}
                                                                 </span>
                                                             </td>
-                                                            <td className="px-4 py-3 font-medium text-gray-800">{kas.keterangan}</td>
-                                                            <td className="px-4 py-3 text-sm text-gray-500">{kategoriOptions[kas.kategori] || kas.kategori || '-'}</td>
+                                                            <td className="px-4 py-3 font-medium text-on-surface">{kas.keterangan}</td>
+                                                            <td className="px-4 py-3 text-sm text-on-tertiary-container">{kategoriOptions[kas.kategori] || kas.kategori || '-'}</td>
                                                             <td className="px-4 py-3 text-right">
                                                                 {(kas.tipe === 'masuk' || kas.tipe === 'reimburse') ? (
-                                                                    <span className="font-medium text-green-600">+ {formatRupiah(kas.jumlah)}</span>
+                                                                    <span className="font-medium text-secondary">+ {formatRupiah(kas.jumlah)}</span>
                                                                 ) : '-'}
                                                             </td>
                                                             <td className="px-4 py-3 text-right">
@@ -971,16 +971,16 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                                     <span className="font-medium text-red-600">- {formatRupiah(kas.jumlah)}</span>
                                                                 ) : '-'}
                                                             </td>
-                                                            <td className="px-4 py-3 text-right font-bold text-gray-800">{formatRupiah(kas.saldo)}</td>
+                                                            <td className="px-4 py-3 text-right font-bold text-on-surface">{formatRupiah(kas.saldo)}</td>
                                                             <td className="px-4 py-3 text-center">
                                                                 {kas.status === 'pending_reimburse' ? (
                                                                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
-                                                                        <Icon icon="solar:clock-circle-bold" className="w-3 h-3 mr-1" />
+                                                                        <MIcon name="schedule" className="text-base mr-1" />
                                                                         Pending
                                                                     </span>
                                                                 ) : (
-                                                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                                                        <Icon icon="solar:check-circle-bold" className="w-3 h-3 mr-1" />
+                                                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-secondary">
+                                                                        <MIcon name="check_circle" className="text-base mr-1" />
                                                                         Settled
                                                                     </span>
                                                                 )}
@@ -990,10 +990,10 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                                     {kas.status === 'pending_reimburse' && (
                                                                         <button
                                                                             onClick={() => handleReimburseKas(kas)}
-                                                                            className="p-1 text-green-600 hover:bg-green-50 rounded"
+                                                                            className="p-1 text-secondary hover:bg-emerald-50 rounded"
                                                                             title="Reimburse"
                                                                         >
-                                                                            <Icon icon="solar:check-circle-bold" className="w-5 h-5" />
+                                                                            <MIcon name="check_circle" className="text-xl" />
                                                                         </button>
                                                                     )}
                                                                     <button
@@ -1001,14 +1001,14 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                                         className="p-1 text-indigo-600 hover:bg-indigo-50 rounded"
                                                                         title="Edit"
                                                                     >
-                                                                        <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                                        <MIcon name="edit" className="text-xl" />
                                                                     </button>
                                                                     <button
                                                                         onClick={() => handleDeleteKas(kas.id)}
                                                                         className="p-1 text-red-600 hover:bg-red-50 rounded"
                                                                         title="Hapus"
                                                                     >
-                                                                        <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                                        <MIcon name="delete" className="text-xl" />
                                                                     </button>
                                                                 </div>
                                                             </td>
@@ -1016,8 +1016,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                     ))
                                                 ) : (
                                                     <tr>
-                                                        <td colSpan="9" className="px-4 py-8 text-center text-gray-500">
-                                                            <Icon icon="solar:wallet-2-bold" className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                                        <td colSpan="9" className="px-4 py-8 text-center text-on-tertiary-container">
+                                                            <MIcon name="wallet_2" className="text-4xl mx-auto mb-2 text-slate-300" />
                                                             <p>Belum ada transaksi kas</p>
                                                             <p className="text-sm">Klik "Tambah Transaksi" untuk memulai</p>
                                                         </td>
@@ -1034,80 +1034,80 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                         {activeTab === 'investasi' && (
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-lg font-semibold">Portfolio Investasi</h2>
+                                    <h2 className="text-lg font-bold">Portfolio Investasi</h2>
                                     <button
                                         onClick={() => {
                                             setEditingInvestasi(null);
                                             investasiForm.reset();
                                             setShowInvestasiForm(true);
                                         }}
-                                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center"
+                                        className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 flex items-center"
                                     >
-                                        <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-2" />
+                                        <MIcon name="add_circle" className="text-xl mr-2" />
                                         Tambah Investasi
                                     </button>
                                 </div>
 
                                 {/* Investasi Form */}
                                 {showInvestasiForm && (
-                                    <div className="bg-gray-50 rounded-xl p-6">
+                                    <div className="bg-surface-container-low rounded-xl p-6">
                                         <h3 className="font-medium mb-4">{editingInvestasi ? 'Edit Investasi' : 'Tambah Investasi Baru'}</h3>
                                         <form onSubmit={handleSubmitInvestasi} className="space-y-4">
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nama Investasi *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Nama Investasi *</label>
                                                     <input
                                                         type="text"
                                                         value={investasiForm.data.nama}
                                                         onChange={(e) => investasiForm.setData('nama', e.target.value)}
                                                         placeholder="e.g., Kumbung Transol 1"
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Tipe *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Tipe *</label>
                                                     <select
                                                         value={investasiForm.data.tipe}
                                                         onChange={(e) => investasiForm.setData('tipe', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     >
                                                         <option value="jamur_kering">Jamur Kering</option>
                                                         <option value="kumbung">Kumbung</option>
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Modal *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Modal *</label>
                                                     <input
                                                         type="number"
                                                         value={investasiForm.data.modal}
                                                         onChange={(e) => investasiForm.setData('modal', parseFloat(e.target.value) || 0)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Return Bulanan *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Return Bulanan *</label>
                                                     <input
                                                         type="number"
                                                         value={investasiForm.data.return_bulanan}
                                                         onChange={(e) => investasiForm.setData('return_bulanan', parseFloat(e.target.value) || 0)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Tanggal Mulai</label>
                                                     <input
                                                         type="date"
                                                         value={investasiForm.data.tanggal_mulai}
                                                         onChange={(e) => investasiForm.setData('tanggal_mulai', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Status</label>
                                                     <select
                                                         value={investasiForm.data.status}
                                                         onChange={(e) => investasiForm.setData('status', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     >
                                                         <option value="active">Active</option>
                                                         <option value="inactive">Inactive</option>
@@ -1121,14 +1121,14 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                         setShowInvestasiForm(false);
                                                         setEditingInvestasi(null);
                                                     }}
-                                                    className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+                                                    className="px-4 py-2 border rounded-xl hover:bg-surface-container-low"
                                                 >
                                                     Batal
                                                 </button>
                                                 <button
                                                     type="submit"
                                                     disabled={investasiForm.processing}
-                                                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                                                    className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
                                                 >
                                                     {investasiForm.processing ? 'Menyimpan...' : 'Simpan'}
                                                 </button>
@@ -1140,37 +1140,37 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 {/* Investasi Table */}
                                 <div className="overflow-x-auto">
                                     <table className="w-full">
-                                        <thead className="bg-gray-50">
+                                        <thead className="bg-surface-container-low">
                                             <tr>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Modal</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Return/Bulan</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">ROI</th>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mulai</th>
-                                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
-                                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Nama</th>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Tipe</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Modal</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Return/Bulan</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">ROI</th>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Mulai</th>
+                                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Status</th>
+                                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200">
                                             {investasis.length > 0 ? (
                                                 investasis.map((item) => (
-                                                    <tr key={item.id} className="hover:bg-gray-50">
-                                                        <td className="px-4 py-3 font-medium text-gray-900">{item.nama}</td>
+                                                    <tr key={item.id} className="hover:bg-surface-container-low">
+                                                        <td className="px-4 py-3 font-medium text-on-surface">{item.nama}</td>
                                                         <td className="px-4 py-3">
                                                             <span className={`px-2 py-1 text-xs rounded-full ${
-                                                                item.tipe === 'jamur_kering' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
+                                                                item.tipe === 'jamur_kering' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-secondary'
                                                             }`}>
                                                                 {item.tipe === 'jamur_kering' ? 'Jamur Kering' : 'Kumbung'}
                                                             </span>
                                                         </td>
                                                         <td className="px-4 py-3 text-right text-indigo-600 font-medium">{formatRupiah(item.modal)}</td>
-                                                        <td className="px-4 py-3 text-right text-green-600 font-medium">{formatRupiah(item.return_bulanan)}</td>
+                                                        <td className="px-4 py-3 text-right text-secondary font-medium">{formatRupiah(item.return_bulanan)}</td>
                                                         <td className="px-4 py-3 text-right text-amber-600 font-medium">{parseFloat(item.roi_tahunan || 0).toFixed(2)}%</td>
-                                                        <td className="px-4 py-3 text-gray-600">{formatDate(item.tanggal_mulai)}</td>
+                                                        <td className="px-4 py-3 text-on-surface-variant">{formatDate(item.tanggal_mulai)}</td>
                                                         <td className="px-4 py-3 text-center">
                                                             <span className={`px-2 py-1 text-xs rounded-full ${
-                                                                item.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                                                                item.status === 'active' ? 'bg-emerald-100 text-secondary' : 'bg-surface-container-low text-on-surface-variant'
                                                             }`}>
                                                                 {item.status === 'active' ? 'Active' : 'Inactive'}
                                                             </span>
@@ -1178,10 +1178,10 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                         <td className="px-4 py-3 text-center">
                                                             <div className="flex justify-center space-x-2">
                                                                 <button onClick={() => handleEditInvestasi(item)} className="text-blue-600 hover:text-blue-800">
-                                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                                    <MIcon name="edit" className="text-xl" />
                                                                 </button>
                                                                 <button onClick={() => handleDeleteInvestasi(item.id)} className="text-red-600 hover:text-red-800">
-                                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                                    <MIcon name="delete" className="text-xl" />
                                                                 </button>
                                                             </div>
                                                         </td>
@@ -1189,8 +1189,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                 ))
                                             ) : (
                                                 <tr>
-                                                    <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
-                                                        <Icon icon="solar:wallet-bold" className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                                    <td colSpan="8" className="px-4 py-8 text-center text-on-tertiary-container">
+                                                        <MIcon name="account_balance_wallet" className="text-4xl mx-auto mb-2 text-slate-300" />
                                                         <p>Belum ada data investasi</p>
                                                     </td>
                                                 </tr>
@@ -1202,7 +1202,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                     <td className="px-4 py-3">TOTAL</td>
                                                     <td className="px-4 py-3"></td>
                                                     <td className="px-4 py-3 text-right text-indigo-600">{formatRupiah(summary.totalModal)}</td>
-                                                    <td className="px-4 py-3 text-right text-green-600">{formatRupiah(summary.totalReturnBulanan)}</td>
+                                                    <td className="px-4 py-3 text-right text-secondary">{formatRupiah(summary.totalReturnBulanan)}</td>
                                                     <td className="px-4 py-3 text-right text-amber-600">{parseFloat(summary.averageROI || 0).toFixed(2)}%</td>
                                                     <td colSpan="3"></td>
                                                 </tr>
@@ -1217,78 +1217,78 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                         {activeTab === 'return' && (
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-lg font-semibold">Return Bulanan</h2>
+                                    <h2 className="text-lg font-bold">Return Bulanan</h2>
                                     <button
                                         onClick={() => {
                                             setEditingReturn(null);
                                             returnForm.reset();
                                             setShowReturnForm(true);
                                         }}
-                                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center"
+                                        className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 flex items-center"
                                     >
-                                        <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-2" />
+                                        <MIcon name="add_circle" className="text-xl mr-2" />
                                         Tambah Return
                                     </button>
                                 </div>
 
                                 {/* Return Form */}
                                 {showReturnForm && (
-                                    <div className="bg-gray-50 rounded-xl p-6">
+                                    <div className="bg-surface-container-low rounded-xl p-6">
                                         <h3 className="font-medium mb-4">{editingReturn ? 'Edit Return' : 'Tambah Return Baru'}</h3>
                                         <form onSubmit={handleSubmitReturn} className="space-y-4">
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Bulan *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Bulan *</label>
                                                     <input
                                                         type="month"
                                                         value={returnForm.data.bulan}
                                                         onChange={(e) => returnForm.setData('bulan', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Jamur Kering *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Jamur Kering *</label>
                                                     <input
                                                         type="number"
                                                         value={returnForm.data.jamur_kering}
                                                         onChange={(e) => returnForm.setData('jamur_kering', parseFloat(e.target.value) || 0)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Share Transolindo *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Share Transolindo *</label>
                                                     <input
                                                         type="number"
                                                         value={returnForm.data.share_transolindo}
                                                         onChange={(e) => returnForm.setData('share_transolindo', parseFloat(e.target.value) || 0)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Share Defila *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Share Defila *</label>
                                                     <input
                                                         type="number"
                                                         value={returnForm.data.share_defila}
                                                         onChange={(e) => returnForm.setData('share_defila', parseFloat(e.target.value) || 0)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Kumbung *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Kumbung *</label>
                                                     <input
                                                         type="number"
                                                         value={returnForm.data.kumbung}
                                                         onChange={(e) => returnForm.setData('kumbung', parseFloat(e.target.value) || 0)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Total</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Total</label>
                                                     <input
                                                         type="text"
                                                         value={formatRupiah(returnForm.data.share_transolindo + returnForm.data.kumbung)}
                                                         readOnly
-                                                        className="w-full px-3 py-2 border rounded-lg bg-gray-100"
+                                                        className="w-full px-3 py-2 border rounded-xl bg-surface-container-low"
                                                     />
                                                 </div>
                                                 <div className="flex items-end">
@@ -1310,14 +1310,14 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                         setShowReturnForm(false);
                                                         setEditingReturn(null);
                                                     }}
-                                                    className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+                                                    className="px-4 py-2 border rounded-xl hover:bg-surface-container-low"
                                                 >
                                                     Batal
                                                 </button>
                                                 <button
                                                     type="submit"
                                                     disabled={returnForm.processing}
-                                                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                                                    className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
                                                 >
                                                     {returnForm.processing ? 'Menyimpan...' : 'Simpan'}
                                                 </button>
@@ -1329,33 +1329,33 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 {/* Return Table */}
                                 <div className="overflow-x-auto">
                                     <table className="w-full">
-                                        <thead className="bg-gray-50">
+                                        <thead className="bg-surface-container-low">
                                             <tr>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bulan</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Jamur Kering</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Share Transolindo</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Share Defila</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Kumbung</th>
-                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
-                                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
-                                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Bulan</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Jamur Kering</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Share Transolindo</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Share Defila</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Kumbung</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Total</th>
+                                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Status</th>
+                                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200">
                                             {returnBulanans.length > 0 ? (
                                                 returnBulanans.map((item) => (
-                                                    <tr key={item.id} className="hover:bg-gray-50">
+                                                    <tr key={item.id} className="hover:bg-surface-container-low">
                                                         <td className="px-4 py-3 font-medium">{formatBulan(item.bulan)}</td>
                                                         <td className="px-4 py-3 text-right text-amber-600">{formatRupiah(item.jamur_kering)}</td>
                                                         <td className="px-4 py-3 text-right text-purple-600">{formatRupiah(item.share_transolindo)}</td>
-                                                        <td className="px-4 py-3 text-right text-gray-600">{formatRupiah(item.share_defila)}</td>
-                                                        <td className="px-4 py-3 text-right text-green-600">{formatRupiah(item.kumbung)}</td>
+                                                        <td className="px-4 py-3 text-right text-on-surface-variant">{formatRupiah(item.share_defila)}</td>
+                                                        <td className="px-4 py-3 text-right text-secondary">{formatRupiah(item.kumbung)}</td>
                                                         <td className="px-4 py-3 text-right font-bold text-indigo-600">{formatRupiah(item.total)}</td>
                                                         <td className="px-4 py-3 text-center">
                                                             <button
                                                                 onClick={() => handleToggleReturn(item.id)}
                                                                 className={`px-2 py-1 text-xs rounded-full ${
-                                                                    item.diterima ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                                                                    item.diterima ? 'bg-emerald-100 text-secondary' : 'bg-orange-100 text-orange-700'
                                                                 }`}
                                                             >
                                                                 {item.diterima ? 'Diterima' : 'Pending'}
@@ -1364,10 +1364,10 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                         <td className="px-4 py-3 text-center">
                                                             <div className="flex justify-center space-x-2">
                                                                 <button onClick={() => handleEditReturn(item)} className="text-blue-600 hover:text-blue-800">
-                                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                                    <MIcon name="edit" className="text-xl" />
                                                                 </button>
                                                                 <button onClick={() => handleDeleteReturn(item.id)} className="text-red-600 hover:text-red-800">
-                                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                                    <MIcon name="delete" className="text-xl" />
                                                                 </button>
                                                             </div>
                                                         </td>
@@ -1375,8 +1375,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                 ))
                                             ) : (
                                                 <tr>
-                                                    <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
-                                                        <Icon icon="solar:chart-2-bold" className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                                    <td colSpan="8" className="px-4 py-8 text-center text-on-tertiary-container">
+                                                        <MIcon name="show_chart" className="text-4xl mx-auto mb-2 text-slate-300" />
                                                         <p>Belum ada data return bulanan</p>
                                                     </td>
                                                 </tr>
@@ -1392,8 +1392,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <h2 className="text-lg font-semibold">Hasil Panen Kumbung</h2>
-                                        <p className="text-sm text-gray-500">Total: {formatNumber(summary.totalVolumePanen)} kg dari {summary.jumlahMingguPanen} minggu</p>
+                                        <h2 className="text-lg font-bold">Hasil Panen Kumbung</h2>
+                                        <p className="text-sm text-on-tertiary-container">Total: {formatNumber(summary.totalVolumePanen)} kg dari {summary.jumlahMingguPanen} minggu</p>
                                     </div>
                                     <button
                                         onClick={() => {
@@ -1401,9 +1401,9 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             panenForm.reset();
                                             setShowPanenForm(true);
                                         }}
-                                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center"
+                                        className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary flex items-center"
                                     >
-                                        <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-2" />
+                                        <MIcon name="add_circle" className="text-xl mr-2" />
                                         Tambah Panen
                                     </button>
                                 </div>
@@ -1450,55 +1450,55 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                     return (
                                         <>
                                             {/* Summary Table per Kumbung */}
-                                            <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                                            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden border border-outline-variant/15">
                                                 <div className="bg-gradient-to-r from-green-600 to-teal-600 px-6 py-4">
                                                     <h3 className="text-lg font-bold text-white flex items-center">
-                                                        <Icon icon="solar:chart-2-bold" className="w-6 h-6 mr-2" />
+                                                        <MIcon name="show_chart" className="text-2xl mr-2" />
                                                         GRAND SUMMARY PANEN
                                                     </h3>
                                                 </div>
                                                 <div className="overflow-x-auto">
                                                     <table className="w-full">
-                                                        <thead className="bg-gray-50">
+                                                        <thead className="bg-surface-container-low">
                                                             <tr>
-                                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kumbung</th>
-                                                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Fase</th>
-                                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Minggu</th>
-                                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Volume (kg)</th>
-                                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Avg Harga</th>
-                                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Pendapatan</th>
-                                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase bg-red-50">Bayar Baglog</th>
-                                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase bg-green-50">Profit Bersih</th>
+                                                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kumbung</th>
+                                                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Fase</th>
+                                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Minggu</th>
+                                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Volume (kg)</th>
+                                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Avg Harga</th>
+                                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Pendapatan</th>
+                                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase bg-red-50">Bayar Baglog</th>
+                                                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase bg-emerald-50">Profit Bersih</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody className="divide-y divide-gray-200">
                                                             {kumbungStats.map((k, idx) => {
                                                                 const profitBersih = k.totalPendapatan - k.baglogPaid;
                                                                 return (
-                                                                    <tr key={k.id} className={`hover:bg-gray-50 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                                                                    <tr key={k.id} className={`hover:bg-surface-container-low ${idx % 2 === 0 ? 'bg-surface-container-lowest' : 'bg-surface-container-low/50'}`}>
                                                                         <td className="px-4 py-3">
-                                                                            <div className="font-medium text-gray-900">{k.nama}</div>
-                                                                            <div className="text-xs text-gray-500">Siklus {k.siklus}</div>
+                                                                            <div className="font-medium text-on-surface">{k.nama}</div>
+                                                                            <div className="text-xs text-on-tertiary-container">Siklus {k.siklus}</div>
                                                                         </td>
                                                                         <td className="px-4 py-3 text-center">
                                                                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getFaseColor(k.fase)}`}>
                                                                                 {faseLabels[k.fase] || 'Persiapan'}
                                                                             </span>
                                                                         </td>
-                                                                        <td className="px-4 py-3 text-right font-medium text-gray-700">{k.weeks}</td>
+                                                                        <td className="px-4 py-3 text-right font-medium text-on-surface-variant">{k.weeks}</td>
                                                                         <td className="px-4 py-3 text-right font-bold text-blue-600">{formatNumber(k.totalVolume)}</td>
-                                                                        <td className="px-4 py-3 text-right text-gray-600">{formatRupiah(k.avgHarga)}</td>
-                                                                        <td className="px-4 py-3 text-right font-bold text-green-600">{formatRupiah(k.totalPendapatan)}</td>
+                                                                        <td className="px-4 py-3 text-right text-on-surface-variant">{formatRupiah(k.avgHarga)}</td>
+                                                                        <td className="px-4 py-3 text-right font-bold text-secondary">{formatRupiah(k.totalPendapatan)}</td>
                                                                         <td className="px-4 py-3 text-right bg-red-50">
                                                                             {k.baglogPaid > 0 ? (
                                                                                 <span className="font-medium text-red-600">- {formatRupiah(k.baglogPaid)}</span>
                                                                             ) : (
-                                                                                <span className="text-gray-400 text-xs">Belum bayar</span>
+                                                                                <span className="text-slate-400 text-xs">Belum bayar</span>
                                                                             )}
                                                                         </td>
-                                                                        <td className="px-4 py-3 text-right bg-green-50">
+                                                                        <td className="px-4 py-3 text-right bg-emerald-50">
                                                                             {k.baglogPaid > 0 ? (
-                                                                                <span className="font-bold text-green-600">{formatRupiah(profitBersih)}</span>
+                                                                                <span className="font-bold text-secondary">{formatRupiah(profitBersih)}</span>
                                                                             ) : (
                                                                                 <span className="text-yellow-600 text-xs">Pending</span>
                                                                             )}
@@ -1512,10 +1512,10 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                                 <td className="px-4 py-3 text-indigo-700" colSpan="2">GRAND TOTAL</td>
                                                                 <td className="px-4 py-3 text-right text-indigo-700">{kumbungStats.reduce((sum, k) => sum + k.weeks, 0)}</td>
                                                                 <td className="px-4 py-3 text-right text-blue-700">{formatNumber(grandTotalVolume)}</td>
-                                                                <td className="px-4 py-3 text-right text-gray-600">{formatRupiah(grandTotalVolume > 0 ? grandTotalPendapatan / grandTotalVolume : 0)}</td>
-                                                                <td className="px-4 py-3 text-right text-green-700">{formatRupiah(grandTotalPendapatan)}</td>
+                                                                <td className="px-4 py-3 text-right text-on-surface-variant">{formatRupiah(grandTotalVolume > 0 ? grandTotalPendapatan / grandTotalVolume : 0)}</td>
+                                                                <td className="px-4 py-3 text-right text-secondary">{formatRupiah(grandTotalPendapatan)}</td>
                                                                 <td className="px-4 py-3 text-right text-red-600 bg-red-50">- {formatRupiah(grandTotalBaglogPaid)}</td>
-                                                                <td className="px-4 py-3 text-right text-green-700 bg-green-50">{formatRupiah(kumbungStats.filter(k => k.baglogPaid > 0).reduce((sum, k) => sum + (k.totalPendapatan - k.baglogPaid), 0))}</td>
+                                                                <td className="px-4 py-3 text-right text-secondary bg-emerald-50">{formatRupiah(kumbungStats.filter(k => k.baglogPaid > 0).reduce((sum, k) => sum + (k.totalPendapatan - k.baglogPaid), 0))}</td>
                                                             </tr>
                                                         </tfoot>
                                                     </table>
@@ -1525,7 +1525,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             {/* Profit Calculation - Simple: Pendapatan - Baglog = Profit */}
                                             <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
                                                 <h3 className="text-lg font-bold text-amber-800 mb-4 flex items-center">
-                                                    <Icon icon="solar:calculator-bold" className="w-6 h-6 mr-2" />
+                                                    <MIcon name="calculate" className="text-2xl mr-2" />
                                                     KALKULASI PROFIT BERSIH
                                                 </h3>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1533,17 +1533,17 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                         const profitBersih = k.totalPendapatan - k.baglogPaid;
                                                         const isLunas = k.baglogPaid > 0;
                                                         return (
-                                                            <div key={k.id} className={`bg-white rounded-lg p-4 shadow-sm ${!isLunas ? 'border-2 border-dashed border-yellow-300' : ''}`}>
+                                                            <div key={k.id} className={`bg-surface-container-lowest rounded-xl p-4 shadow-clinical-sm ${!isLunas ? 'border-2 border-dashed border-yellow-300' : ''}`}>
                                                                 <div className="flex justify-between items-center mb-3">
-                                                                    <h4 className="font-bold text-gray-800">{k.nama}</h4>
-                                                                    <span className={`px-2 py-1 rounded text-xs font-medium ${isLunas ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                                                                    <h4 className="font-bold text-on-surface">{k.nama}</h4>
+                                                                    <span className={`px-2 py-1 rounded text-xs font-medium ${isLunas ? 'bg-emerald-100 text-secondary' : 'bg-yellow-100 text-yellow-700'}`}>
                                                                         {isLunas ? 'Baglog LUNAS' : 'Masih Berjalan'}
                                                                     </span>
                                                                 </div>
                                                                 <div className="space-y-2 text-sm">
                                                                     <div className="flex justify-between">
-                                                                        <span className="text-gray-600">Total Pendapatan:</span>
-                                                                        <span className="font-medium text-green-600">{formatRupiah(k.totalPendapatan)}</span>
+                                                                        <span className="text-on-surface-variant">Total Pendapatan:</span>
+                                                                        <span className="font-medium text-secondary">{formatRupiah(k.totalPendapatan)}</span>
                                                                     </div>
                                                                     {isLunas ? (
                                                                         <>
@@ -1552,8 +1552,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                                                 <span>- {formatRupiah(k.baglogPaid)}</span>
                                                                             </div>
                                                                             <div className="flex justify-between border-t-2 border-green-300 pt-3 mt-3">
-                                                                                <span className="font-bold text-gray-800">PROFIT BERSIH:</span>
-                                                                                <span className="font-bold text-xl text-green-600">{formatRupiah(profitBersih)}</span>
+                                                                                <span className="font-bold text-on-surface">PROFIT BERSIH:</span>
+                                                                                <span className="font-bold text-xl text-secondary">{formatRupiah(profitBersih)}</span>
                                                                             </div>
                                                                         </>
                                                                     ) : (
@@ -1577,16 +1577,16 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
 
                                                     return (
                                                         <div className="mt-6 pt-4 border-t border-amber-200">
-                                                            <div className="bg-white rounded-lg p-4 shadow-sm">
+                                                            <div className="bg-surface-container-lowest rounded-xl p-4 shadow-clinical-sm">
                                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                                     {/* Profit dari yang sudah LUNAS */}
-                                                                    <div className="bg-green-100 rounded-lg p-4 text-center">
-                                                                        <p className="text-xs text-green-700 mb-1">PROFIT BERSIH (Baglog Lunas)</p>
-                                                                        <p className="text-2xl font-bold text-green-600">{formatRupiah(totalProfitLunas)}</p>
-                                                                        <p className="text-xs text-green-600 mt-1">dari {lunasStats.length} kumbung</p>
+                                                                    <div className="bg-emerald-100 rounded-xl p-4 text-center">
+                                                                        <p className="text-xs text-secondary mb-1">PROFIT BERSIH (Baglog Lunas)</p>
+                                                                        <p className="text-2xl font-bold text-secondary">{formatRupiah(totalProfitLunas)}</p>
+                                                                        <p className="text-xs text-secondary mt-1">dari {lunasStats.length} kumbung</p>
                                                                     </div>
                                                                     {/* Saldo yang masih pending */}
-                                                                    <div className="bg-yellow-50 rounded-lg p-4 text-center border border-dashed border-yellow-300">
+                                                                    <div className="bg-yellow-50 rounded-xl p-4 text-center border border-dashed border-yellow-300">
                                                                         <p className="text-xs text-yellow-700 mb-1">Saldo Sementara (Masih Berjalan)</p>
                                                                         <p className="text-2xl font-bold text-yellow-600">{formatRupiah(totalSaldoPending)}</p>
                                                                         <p className="text-xs text-yellow-600 mt-1">dari {pendingStats.length} kumbung</p>
@@ -1603,16 +1603,16 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
 
                                 {/* Panen Form */}
                                 {showPanenForm && (
-                                    <div className="bg-gray-50 rounded-xl p-6">
+                                    <div className="bg-surface-container-low rounded-xl p-6">
                                         <h3 className="font-medium mb-4">{editingPanen ? 'Edit Panen' : 'Tambah Data Panen'}</h3>
                                         <form onSubmit={handleSubmitPanen} className="space-y-4">
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Kumbung</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Kumbung</label>
                                                     <select
                                                         value={panenForm.data.investasi_transolindo_id}
                                                         onChange={(e) => panenForm.setData('investasi_transolindo_id', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     >
                                                         <option value="">-- Pilih Kumbung --</option>
                                                         {investasis.filter(i => i.tipe === 'kumbung').map((inv) => (
@@ -1621,53 +1621,53 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Tanggal Mulai *</label>
                                                     <input
                                                         type="date"
                                                         value={panenForm.data.tanggal_mulai}
                                                         onChange={(e) => panenForm.setData('tanggal_mulai', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Tanggal Selesai *</label>
                                                     <input
                                                         type="date"
                                                         value={panenForm.data.tanggal_selesai}
                                                         onChange={(e) => panenForm.setData('tanggal_selesai', e.target.value)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Minggu/Bulan *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Minggu/Bulan *</label>
                                                     <input
                                                         type="text"
                                                         value={panenForm.data.minggu_bulan}
                                                         onChange={(e) => panenForm.setData('minggu_bulan', e.target.value)}
                                                         placeholder="e.g., Minggu ke 1 / Bulan ke 1"
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Volume (kg) *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Volume (kg) *</label>
                                                     <input
                                                         type="number"
                                                         value={panenForm.data.volume_kg}
                                                         onChange={(e) => panenForm.setData('volume_kg', parseFloat(e.target.value) || 0)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Pendapatan Kotor *</label>
+                                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">Pendapatan Kotor *</label>
                                                     <input
                                                         type="number"
                                                         value={panenForm.data.pendapatan_kotor}
                                                         onChange={(e) => panenForm.setData('pendapatan_kotor', parseFloat(e.target.value) || 0)}
-                                                        className="w-full px-3 py-2 border rounded-lg"
+                                                        className="w-full px-3 py-2 border rounded-xl"
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                            <div className="bg-blue-50 p-4 rounded-xl">
                                                 <p className="text-sm text-blue-600">Kalkulasi Otomatis:</p>
                                                 <p className="text-sm">Tabungan Baglog (80%): <strong>{formatRupiah(panenForm.data.pendapatan_kotor * 0.8)}</strong></p>
                                                 <p className="text-sm">Profit (20%): <strong>{formatRupiah(panenForm.data.pendapatan_kotor * 0.2)}</strong></p>
@@ -1679,14 +1679,14 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                         setShowPanenForm(false);
                                                         setEditingPanen(null);
                                                     }}
-                                                    className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+                                                    className="px-4 py-2 border rounded-xl hover:bg-surface-container-low"
                                                 >
                                                     Batal
                                                 </button>
                                                 <button
                                                     type="submit"
                                                     disabled={panenForm.processing}
-                                                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                                                    className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary"
                                                 >
                                                     {panenForm.processing ? 'Menyimpan...' : 'Simpan'}
                                                 </button>
@@ -1706,60 +1706,60 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                     const totalProfit = kumbungPanens.reduce((sum, p) => sum + parseFloat(p.profit || 0), 0);
 
                                     return (
-                                        <div key={kumbung.id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-                                            <div className={`px-4 py-3 flex justify-between items-center ${kumbung.nama.includes('1') ? 'bg-blue-600' : 'bg-green-600'}`}>
+                                        <div key={kumbung.id} className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden border border-outline-variant/15">
+                                            <div className={`px-4 py-3 flex justify-between items-center ${kumbung.nama.includes('1') ? 'bg-blue-600' : 'bg-primary'}`}>
                                                 <h4 className="font-bold text-white flex items-center">
-                                                    <Icon icon="solar:home-2-bold" className="w-5 h-5 mr-2" />
+                                                    <MIcon name="house" className="text-xl mr-2" />
                                                     {kumbung.nama} - Siklus {kumbung.siklus_ke || 1}
                                                 </h4>
-                                                <span className={`px-2 py-1 rounded text-xs font-medium ${kumbung.fase === 'panen' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                                <span className={`px-2 py-1 rounded text-xs font-medium ${kumbung.fase === 'panen' ? 'bg-emerald-100 text-primary' : 'bg-yellow-100 text-yellow-800'}`}>
                                                     {faseLabels[kumbung.fase] || 'Persiapan'}
                                                 </span>
                                             </div>
                                             <div className="overflow-x-auto">
                                                 <table className="w-full text-sm">
-                                                    <thead className="bg-gray-50">
+                                                    <thead className="bg-surface-container-low">
                                                         <tr>
-                                                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Minggu</th>
-                                                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Periode</th>
-                                                            <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Volume</th>
-                                                            <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Harga/kg</th>
-                                                            <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Pendapatan</th>
-                                                            <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Baglog (80%)</th>
-                                                            <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Profit (20%)</th>
-                                                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ket</th>
-                                                            <th className="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                                            <th className="px-3 py-2 text-left text-xs font-medium text-on-tertiary-container uppercase">Minggu</th>
+                                                            <th className="px-3 py-2 text-left text-xs font-medium text-on-tertiary-container uppercase">Periode</th>
+                                                            <th className="px-3 py-2 text-right text-xs font-medium text-on-tertiary-container uppercase">Volume</th>
+                                                            <th className="px-3 py-2 text-right text-xs font-medium text-on-tertiary-container uppercase">Harga/kg</th>
+                                                            <th className="px-3 py-2 text-right text-xs font-medium text-on-tertiary-container uppercase">Pendapatan</th>
+                                                            <th className="px-3 py-2 text-right text-xs font-medium text-on-tertiary-container uppercase">Baglog (80%)</th>
+                                                            <th className="px-3 py-2 text-right text-xs font-medium text-on-tertiary-container uppercase">Profit (20%)</th>
+                                                            <th className="px-3 py-2 text-left text-xs font-medium text-on-tertiary-container uppercase">Ket</th>
+                                                            <th className="px-3 py-2 text-center text-xs font-medium text-on-tertiary-container uppercase">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody className="divide-y divide-gray-200">
                                                         {kumbungPanens.map((item, idx) => {
                                                             const hargaPerKg = parseFloat(item.volume_kg) > 0 ? parseFloat(item.pendapatan_kotor) / parseFloat(item.volume_kg) : 0;
                                                             return (
-                                                                <tr key={item.id} className={`hover:bg-gray-50 ${idx % 2 === 0 ? '' : 'bg-gray-50/50'}`}>
-                                                                    <td className="px-3 py-2 font-medium text-gray-800">{item.minggu_bulan}</td>
-                                                                    <td className="px-3 py-2 text-gray-600 text-xs">{formatDate(item.tanggal_mulai)} - {formatDate(item.tanggal_selesai)}</td>
+                                                                <tr key={item.id} className={`hover:bg-surface-container-low ${idx % 2 === 0 ? '' : 'bg-surface-container-low/50'}`}>
+                                                                    <td className="px-3 py-2 font-medium text-on-surface">{item.minggu_bulan}</td>
+                                                                    <td className="px-3 py-2 text-on-surface-variant text-xs">{formatDate(item.tanggal_mulai)} - {formatDate(item.tanggal_selesai)}</td>
                                                                     <td className="px-3 py-2 text-right font-bold text-blue-600">{formatNumber(item.volume_kg)}</td>
-                                                                    <td className="px-3 py-2 text-right text-gray-600">{formatRupiah(hargaPerKg)}</td>
-                                                                    <td className="px-3 py-2 text-right font-medium text-green-600">{formatRupiah(item.pendapatan_kotor)}</td>
+                                                                    <td className="px-3 py-2 text-right text-on-surface-variant">{formatRupiah(hargaPerKg)}</td>
+                                                                    <td className="px-3 py-2 text-right font-medium text-secondary">{formatRupiah(item.pendapatan_kotor)}</td>
                                                                     <td className="px-3 py-2 text-right text-purple-600">{formatRupiah(item.tabungan_baglog)}</td>
                                                                     <td className="px-3 py-2 text-right font-medium text-amber-600">{formatRupiah(item.profit)}</td>
-                                                                    <td className="px-3 py-2 text-xs text-gray-500">{item.keterangan || '-'}</td>
+                                                                    <td className="px-3 py-2 text-xs text-on-tertiary-container">{item.keterangan || '-'}</td>
                                                                     <td className="px-3 py-2 text-center">
                                                                         <button onClick={() => handleDeletePanen(item.id)} className="text-red-500 hover:text-red-700">
-                                                                            <Icon icon="solar:trash-bin-trash-bold" className="w-4 h-4" />
+                                                                            <MIcon name="delete" className="text-base" />
                                                                         </button>
                                                                     </td>
                                                                 </tr>
                                                             );
                                                         })}
                                                     </tbody>
-                                                    <tfoot className={`${kumbung.nama.includes('1') ? 'bg-blue-50' : 'bg-green-50'} font-bold`}>
+                                                    <tfoot className={`${kumbung.nama.includes('1') ? 'bg-blue-50' : 'bg-emerald-50'} font-bold`}>
                                                         <tr>
-                                                            <td className="px-3 py-2 text-gray-700">TOTAL ({kumbungPanens.length} minggu)</td>
+                                                            <td className="px-3 py-2 text-on-surface-variant">TOTAL ({kumbungPanens.length} minggu)</td>
                                                             <td className="px-3 py-2"></td>
                                                             <td className="px-3 py-2 text-right text-blue-700">{formatNumber(totalVolume)} kg</td>
-                                                            <td className="px-3 py-2 text-right text-gray-600">{formatRupiah(totalVolume > 0 ? totalPendapatan / totalVolume : 0)}</td>
-                                                            <td className="px-3 py-2 text-right text-green-700">{formatRupiah(totalPendapatan)}</td>
+                                                            <td className="px-3 py-2 text-right text-on-surface-variant">{formatRupiah(totalVolume > 0 ? totalPendapatan / totalVolume : 0)}</td>
+                                                            <td className="px-3 py-2 text-right text-secondary">{formatRupiah(totalPendapatan)}</td>
                                                             <td className="px-3 py-2 text-right text-purple-700">{formatRupiah(totalTabungan)}</td>
                                                             <td className="px-3 py-2 text-right text-amber-700">{formatRupiah(totalProfit)}</td>
                                                             <td className="px-3 py-2" colSpan="2"></td>
@@ -1772,8 +1772,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 })}
 
                                 {panens.length === 0 && (
-                                    <div className="bg-white rounded-xl shadow-sm p-8 text-center text-gray-500">
-                                        <Icon icon="solar:leaf-bold" className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-8 text-center text-on-tertiary-container">
+                                        <MIcon name="eco" className="text-4xl mx-auto mb-4 text-slate-300" />
                                         <p className="text-lg">Belum ada data panen</p>
                                         <p className="text-sm">Klik "Tambah Panen" untuk menambah data</p>
                                     </div>
@@ -1785,54 +1785,54 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                         {activeTab === 'rekap' && (
                             <div className="space-y-6">
                                 <div>
-                                    <h2 className="text-lg font-semibold">Rekap Bulanan per Kumbung</h2>
-                                    <p className="text-sm text-gray-500">Perbandingan kontribusi setiap kumbung per bulan</p>
+                                    <h2 className="text-lg font-bold">Rekap Bulanan per Kumbung</h2>
+                                    <p className="text-sm text-on-tertiary-container">Perbandingan kontribusi setiap kumbung per bulan</p>
                                 </div>
 
                                 {/* Rekap Table */}
-                                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden">
                                     <div className="overflow-x-auto">
                                         <table className="min-w-full">
-                                            <thead className="bg-gray-50">
+                                            <thead className="bg-surface-container-low">
                                                 <tr>
-                                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bulan</th>
+                                                    <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Bulan</th>
                                                     {kumbungs.map((k) => (
-                                                        <th key={k.id} className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" colSpan="2">
+                                                        <th key={k.id} className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase" colSpan="2">
                                                             {k.nama.replace('Kumbung Transol ', 'K')}
                                                         </th>
                                                     ))}
-                                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase bg-indigo-50">Total</th>
+                                                    <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase bg-indigo-50">Total</th>
                                                 </tr>
-                                                <tr className="bg-gray-100">
-                                                    <th className="px-4 py-2 text-left text-xs text-gray-400"></th>
+                                                <tr className="bg-surface-container-low">
+                                                    <th className="px-4 py-2 text-left text-xs text-slate-400"></th>
                                                     {kumbungs.map((k) => (
                                                         <>
-                                                            <th key={`${k.id}-vol`} className="px-2 py-2 text-center text-xs text-gray-400">Volume</th>
-                                                            <th key={`${k.id}-pend`} className="px-2 py-2 text-center text-xs text-gray-400">Pendapatan</th>
+                                                            <th key={`${k.id}-vol`} className="px-2 py-2 text-center text-xs text-slate-400">Volume</th>
+                                                            <th key={`${k.id}-pend`} className="px-2 py-2 text-center text-xs text-slate-400">Pendapatan</th>
                                                         </>
                                                     ))}
-                                                    <th className="px-4 py-2 text-right text-xs text-gray-400 bg-indigo-50">Pendapatan</th>
+                                                    <th className="px-4 py-2 text-right text-xs text-slate-400 bg-indigo-50">Pendapatan</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-gray-200">
                                                 {rekapBulanan.length > 0 ? (
                                                     rekapBulanan.map((item, idx) => (
-                                                        <tr key={idx} className="hover:bg-gray-50">
-                                                            <td className="px-4 py-3 font-medium text-gray-800">{item.bulan_label}</td>
+                                                        <tr key={idx} className="hover:bg-surface-container-low">
+                                                            <td className="px-4 py-3 font-medium text-on-surface">{item.bulan_label}</td>
                                                             {item.kumbungs.map((kumb, kIdx) => (
                                                                 <>
                                                                     <td key={`${idx}-${kIdx}-vol`} className="px-2 py-3 text-center">
                                                                         {kumb.volume > 0 ? (
                                                                             <span className="text-blue-600 font-medium">{formatNumber(kumb.volume)} kg</span>
                                                                         ) : (
-                                                                            <span className="text-gray-300">-</span>
+                                                                            <span className="text-slate-300">-</span>
                                                                         )}
                                                                     </td>
                                                                     <td key={`${idx}-${kIdx}-pend`} className="px-2 py-3 text-center">
                                                                         {kumb.pendapatan > 0 ? (
-                                                                            <span className="text-green-600 font-medium">{formatRupiah(kumb.pendapatan)}</span>
+                                                                            <span className="text-secondary font-medium">{formatRupiah(kumb.pendapatan)}</span>
                                                                         ) : (
-                                                                            <span className="text-gray-300">-</span>
+                                                                            <span className="text-slate-300">-</span>
                                                                         )}
                                                                     </td>
                                                                 </>
@@ -1842,15 +1842,15 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                     ))
                                                 ) : (
                                                     <tr>
-                                                        <td colSpan={3 + (kumbungs.length * 2)} className="px-4 py-8 text-center text-gray-500">
-                                                            <Icon icon="solar:document-bold" className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                                        <td colSpan={3 + (kumbungs.length * 2)} className="px-4 py-8 text-center text-on-tertiary-container">
+                                                            <MIcon name="description" className="text-4xl mx-auto mb-2 text-slate-300" />
                                                             <p>Belum ada data rekap</p>
                                                         </td>
                                                     </tr>
                                                 )}
                                                 {/* Total Row */}
                                                 {rekapBulanan.length > 0 && (
-                                                    <tr className="bg-gray-100 font-bold">
+                                                    <tr className="bg-surface-container-low font-bold">
                                                         <td className="px-4 py-3">TOTAL</td>
                                                         {kumbungs.map((k, kIdx) => {
                                                             const totalVol = rekapBulanan.reduce((sum, r) => sum + (r.kumbungs[kIdx]?.volume || 0), 0);
@@ -1858,7 +1858,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                             return (
                                                                 <>
                                                                     <td key={`tot-${k.id}-vol`} className="px-2 py-3 text-center text-blue-700">{formatNumber(totalVol)} kg</td>
-                                                                    <td key={`tot-${k.id}-pend`} className="px-2 py-3 text-center text-green-700">{formatRupiah(totalPend)}</td>
+                                                                    <td key={`tot-${k.id}-pend`} className="px-2 py-3 text-center text-secondary">{formatRupiah(totalPend)}</td>
                                                                 </>
                                                             );
                                                         })}
@@ -1874,18 +1874,18 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
 
                                 {/* Visual Comparison */}
                                 {rekapBulanan.length > 0 && kumbungs.length > 0 && (
-                                    <div className="bg-white rounded-xl shadow-sm p-6">
-                                        <h3 className="font-medium mb-4 text-gray-700">Perbandingan Volume Panen per Bulan</h3>
+                                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
+                                        <h3 className="font-medium mb-4 text-on-surface-variant">Perbandingan Volume Panen per Bulan</h3>
                                         <div className="space-y-3">
                                             {rekapBulanan.map((item, idx) => {
                                                 const maxVol = Math.max(...rekapBulanan.flatMap(r => r.kumbungs.map(k => k.volume)));
                                                 return (
                                                     <div key={idx} className="flex items-center gap-4">
-                                                        <div className="w-20 text-sm text-gray-600 font-medium">{item.bulan_label}</div>
-                                                        <div className="flex-1 flex h-8 rounded-lg overflow-hidden bg-gray-200 gap-0.5">
+                                                        <div className="w-20 text-sm text-on-surface-variant font-medium">{item.bulan_label}</div>
+                                                        <div className="flex-1 flex h-8 rounded-xl overflow-hidden bg-gray-200 gap-0.5">
                                                             {item.kumbungs.map((kumb, kIdx) => {
                                                                 const width = maxVol > 0 ? (kumb.volume / maxVol) * 100 : 0;
-                                                                const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-amber-500'];
+                                                                const colors = ['bg-blue-500', 'bg-secondary', 'bg-purple-500', 'bg-amber-500'];
                                                                 return (
                                                                     <div
                                                                         key={kIdx}
@@ -1898,7 +1898,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                                 );
                                                             })}
                                                         </div>
-                                                        <div className="w-20 text-right text-sm font-bold text-gray-700">
+                                                        <div className="w-20 text-right text-sm font-bold text-on-surface-variant">
                                                             {formatNumber(item.total_volume)} kg
                                                         </div>
                                                     </div>
@@ -1907,11 +1907,11 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                         </div>
                                         <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t">
                                             {kumbungs.map((k, idx) => {
-                                                const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-amber-500'];
+                                                const colors = ['bg-blue-500', 'bg-secondary', 'bg-purple-500', 'bg-amber-500'];
                                                 return (
                                                     <div key={k.id} className="flex items-center gap-2">
                                                         <div className={`w-4 h-4 ${colors[idx % colors.length]} rounded`}></div>
-                                                        <span className="text-sm text-gray-600">{k.nama.replace('Kumbung Transol ', 'Kumbung ')}</span>
+                                                        <span className="text-sm text-on-surface-variant">{k.nama.replace('Kumbung Transol ', 'Kumbung ')}</span>
                                                     </div>
                                                 );
                                             })}
@@ -1924,11 +1924,11 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                         {/* Tab: Monthly Charts */}
                         {activeTab === 'charts' && (
                             <div className="space-y-6">
-                                <h2 className="text-lg font-semibold">Monthly Returns Chart</h2>
+                                <h2 className="text-lg font-bold">Monthly Returns Chart</h2>
 
                                 {/* Smooth Line Chart Visual */}
-                                <div className="bg-gray-50 rounded-xl p-6">
-                                    <h3 className="font-medium mb-4 text-gray-700">Return Bulanan (Share Transolindo + Kumbung)</h3>
+                                <div className="bg-surface-container-low rounded-xl p-6">
+                                    <h3 className="font-medium mb-4 text-on-surface-variant">Return Bulanan (Share Transolindo + Kumbung)</h3>
                                     {chartData.length > 0 ? (
                                         <div className="relative">
                                             {/* SVG Smooth Line Chart */}
@@ -2068,29 +2068,29 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-6 h-0.5 bg-purple-500 rounded"></div>
-                                                    <span className="text-sm text-gray-600">Total</span>
+                                                    <span className="text-sm text-on-surface-variant">Total</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#6366f1" strokeWidth="2" strokeDasharray="4,2" /></svg>
-                                                    <span className="text-sm text-gray-600">Share Transolindo</span>
+                                                    <span className="text-sm text-on-surface-variant">Share Transolindo</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" strokeWidth="2" strokeDasharray="4,2" /></svg>
-                                                    <span className="text-sm text-gray-600">Kumbung</span>
+                                                    <span className="text-sm text-on-surface-variant">Kumbung</span>
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="text-center py-8 text-gray-500">
-                                            <Icon icon="solar:chart-square-bold" className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                        <div className="text-center py-8 text-on-tertiary-container">
+                                            <MIcon name="chart_square" className="text-4xl mx-auto mb-2 text-slate-300" />
                                             <p>Belum ada data return bulanan</p>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Volume Panen Smooth Line Chart */}
-                                <div className="bg-gray-50 rounded-xl p-6">
-                                    <h3 className="font-medium mb-4 text-gray-700">Volume Panen per Minggu (kg)</h3>
+                                <div className="bg-surface-container-low rounded-xl p-6">
+                                    <h3 className="font-medium mb-4 text-on-surface-variant">Volume Panen per Minggu (kg)</h3>
                                     {panens.length > 0 ? (
                                         <div className="relative">
                                             <div className="overflow-x-auto">
@@ -2214,17 +2214,17 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-6 h-0.5 bg-blue-500 rounded"></div>
-                                                    <span className="text-sm text-gray-600">Volume (kg)</span>
+                                                    <span className="text-sm text-on-surface-variant">Volume (kg)</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" strokeWidth="2" strokeDasharray="4,2" /></svg>
-                                                    <span className="text-sm text-gray-600">Pendapatan</span>
+                                                    <span className="text-sm text-on-surface-variant">Pendapatan</span>
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="text-center py-8 text-gray-500">
-                                            <Icon icon="solar:leaf-bold" className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                        <div className="text-center py-8 text-on-tertiary-container">
+                                            <MIcon name="eco" className="text-4xl mx-auto mb-2 text-slate-300" />
                                             <p>Belum ada data panen</p>
                                         </div>
                                     )}
@@ -2234,7 +2234,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div className="bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl p-6 text-white">
                                         <div className="flex items-center gap-3 mb-2">
-                                            <Icon icon="solar:wallet-money-bold" className="w-8 h-8 opacity-80" />
+                                            <MIcon name="wallet_money" className="text-3xl opacity-80" />
                                             <span className="text-purple-200 text-sm">Total Return Diterima</span>
                                         </div>
                                         <p className="text-2xl font-bold">{formatRupiah(summary.totalDiterima)}</p>
@@ -2242,7 +2242,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                     </div>
                                     <div className="bg-gradient-to-br from-green-500 to-green-700 rounded-xl p-6 text-white">
                                         <div className="flex items-center gap-3 mb-2">
-                                            <Icon icon="solar:leaf-bold" className="w-8 h-8 opacity-80" />
+                                            <MIcon name="eco" className="text-3xl opacity-80" />
                                             <span className="text-green-200 text-sm">Total Panen</span>
                                         </div>
                                         <p className="text-2xl font-bold">{formatNumber(summary.totalVolumePanen)} kg</p>
@@ -2250,7 +2250,7 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                     </div>
                                     <div className="bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl p-6 text-white">
                                         <div className="flex items-center gap-3 mb-2">
-                                            <Icon icon="solar:graph-up-bold" className="w-8 h-8 opacity-80" />
+                                            <MIcon name="analytics" className="text-3xl opacity-80" />
                                             <span className="text-amber-200 text-sm">Total Profit Kumbung</span>
                                         </div>
                                         <p className="text-2xl font-bold">{formatRupiah(summary.totalKumbung)}</p>
@@ -2263,19 +2263,19 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                         {/* Tab: Planning & Target */}
                         {activeTab === 'planning' && (
                             <div className="space-y-6">
-                                <h2 className="text-lg font-semibold">Target & Progress</h2>
+                                <h2 className="text-lg font-bold">Target & Progress</h2>
 
                                 {/* Target Progress Cards */}
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     {/* Volume Target */}
-                                    <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6 border border-outline-variant/10">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="font-medium text-gray-700">Volume Target</h3>
-                                            <Icon icon="solar:scale-bold" className="w-6 h-6 text-blue-500" />
+                                            <h3 className="font-medium text-on-surface-variant">Volume Target</h3>
+                                            <MIcon name="scale" className="text-2xl text-blue-500" />
                                         </div>
                                         <div className="mb-3">
                                             <div className="flex justify-between text-sm mb-1">
-                                                <span className="text-gray-500">Progress</span>
+                                                <span className="text-on-tertiary-container">Progress</span>
                                                 <span className="font-bold text-blue-600">
                                                     {((summary.totalPendapatanPanen / 100000000) * 100).toFixed(1)}%
                                                 </span>
@@ -2288,20 +2288,20 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             </div>
                                         </div>
                                         <div className="flex justify-between text-sm">
-                                            <span className="text-gray-600">{formatRupiah(summary.totalPendapatanPanen)}</span>
-                                            <span className="text-gray-400">/ {formatRupiah(100000000)}</span>
+                                            <span className="text-on-surface-variant">{formatRupiah(summary.totalPendapatanPanen)}</span>
+                                            <span className="text-slate-400">/ {formatRupiah(100000000)}</span>
                                         </div>
                                     </div>
 
                                     {/* Savings Target (80%) */}
-                                    <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6 border border-outline-variant/10">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="font-medium text-gray-700">Tabungan Baglog (80%)</h3>
-                                            <Icon icon="solar:safe-2-bold" className="w-6 h-6 text-purple-500" />
+                                            <h3 className="font-medium text-on-surface-variant">Tabungan Baglog (80%)</h3>
+                                            <MIcon name="safe_2" className="text-2xl text-purple-500" />
                                         </div>
                                         <div className="mb-3">
                                             <div className="flex justify-between text-sm mb-1">
-                                                <span className="text-gray-500">Progress</span>
+                                                <span className="text-on-tertiary-container">Progress</span>
                                                 <span className="font-bold text-purple-600">
                                                     {(((summary.totalPendapatanPanen * 0.8) / 80000000) * 100).toFixed(1)}%
                                                 </span>
@@ -2314,20 +2314,20 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             </div>
                                         </div>
                                         <div className="flex justify-between text-sm">
-                                            <span className="text-gray-600">{formatRupiah(summary.totalPendapatanPanen * 0.8)}</span>
-                                            <span className="text-gray-400">/ {formatRupiah(80000000)}</span>
+                                            <span className="text-on-surface-variant">{formatRupiah(summary.totalPendapatanPanen * 0.8)}</span>
+                                            <span className="text-slate-400">/ {formatRupiah(80000000)}</span>
                                         </div>
                                     </div>
 
                                     {/* Profit Target (20%) */}
-                                    <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6 border border-outline-variant/10">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="font-medium text-gray-700">Profit (20%)</h3>
-                                            <Icon icon="solar:money-bag-bold" className="w-6 h-6 text-amber-500" />
+                                            <h3 className="font-medium text-on-surface-variant">Profit (20%)</h3>
+                                            <MIcon name="savings" className="text-2xl text-amber-500" />
                                         </div>
                                         <div className="mb-3">
                                             <div className="flex justify-between text-sm mb-1">
-                                                <span className="text-gray-500">Progress</span>
+                                                <span className="text-on-tertiary-container">Progress</span>
                                                 <span className="font-bold text-amber-600">
                                                     {((summary.totalKumbung / 20000000) * 100).toFixed(1)}%
                                                 </span>
@@ -2340,84 +2340,84 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                             </div>
                                         </div>
                                         <div className="flex justify-between text-sm">
-                                            <span className="text-gray-600">{formatRupiah(summary.totalKumbung)}</span>
-                                            <span className="text-gray-400">/ {formatRupiah(20000000)}</span>
+                                            <span className="text-on-surface-variant">{formatRupiah(summary.totalKumbung)}</span>
+                                            <span className="text-slate-400">/ {formatRupiah(20000000)}</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Investment Overview */}
                                 <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-6">
-                                    <h3 className="font-semibold text-gray-700 mb-4 flex items-center">
-                                        <Icon icon="solar:chart-bold" className="w-5 h-5 mr-2 text-indigo-600" />
+                                    <h3 className="font-bold text-on-surface-variant mb-4 flex items-center">
+                                        <MIcon name="leaderboard" className="text-xl mr-2 text-indigo-600" />
                                         Investment Overview
                                     </h3>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        <div className="bg-white rounded-lg p-4">
-                                            <p className="text-xs text-gray-500 mb-1">Total Investasi</p>
+                                        <div className="bg-surface-container-lowest rounded-xl p-4">
+                                            <p className="text-xs text-on-tertiary-container mb-1">Total Investasi</p>
                                             <p className="text-lg font-bold text-indigo-600">{formatRupiah(summary.totalModal)}</p>
                                         </div>
-                                        <div className="bg-white rounded-lg p-4">
-                                            <p className="text-xs text-gray-500 mb-1">Return Bulanan Expected</p>
-                                            <p className="text-lg font-bold text-green-600">{formatRupiah(summary.totalReturnBulanan)}</p>
+                                        <div className="bg-surface-container-lowest rounded-xl p-4">
+                                            <p className="text-xs text-on-tertiary-container mb-1">Return Bulanan Expected</p>
+                                            <p className="text-lg font-bold text-secondary">{formatRupiah(summary.totalReturnBulanan)}</p>
                                         </div>
-                                        <div className="bg-white rounded-lg p-4">
-                                            <p className="text-xs text-gray-500 mb-1">Return Tahunan Expected</p>
+                                        <div className="bg-surface-container-lowest rounded-xl p-4">
+                                            <p className="text-xs text-on-tertiary-container mb-1">Return Tahunan Expected</p>
                                             <p className="text-lg font-bold text-purple-600">{formatRupiah(summary.totalReturnBulanan * 12)}</p>
                                         </div>
-                                        <div className="bg-white rounded-lg p-4">
-                                            <p className="text-xs text-gray-500 mb-1">ROI Rata-rata</p>
+                                        <div className="bg-surface-container-lowest rounded-xl p-4">
+                                            <p className="text-xs text-on-tertiary-container mb-1">ROI Rata-rata</p>
                                             <p className="text-lg font-bold text-amber-600">{parseFloat(summary.averageROI || 0).toFixed(2)}%</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Milestone Timeline */}
-                                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                                    <h3 className="font-semibold text-gray-700 mb-4 flex items-center">
-                                        <Icon icon="solar:flag-bold" className="w-5 h-5 mr-2 text-green-600" />
+                                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6 border border-outline-variant/10">
+                                    <h3 className="font-bold text-on-surface-variant mb-4 flex items-center">
+                                        <MIcon name="flag" className="text-xl mr-2 text-secondary" />
                                         Milestone Timeline
                                     </h3>
                                     <div className="space-y-4">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                                <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-green-600" />
+                                            <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                                                <MIcon name="check_circle" className="text-2xl text-secondary" />
                                             </div>
                                             <div className="flex-1">
-                                                <p className="font-medium text-gray-800">Investasi Jamur Kering</p>
-                                                <p className="text-sm text-gray-500">28 Des 2024 - Active</p>
+                                                <p className="font-medium text-on-surface">Investasi Jamur Kering</p>
+                                                <p className="text-sm text-on-tertiary-container">28 Des 2024 - Active</p>
                                             </div>
-                                            <span className="text-green-600 text-sm font-medium">Completed</span>
+                                            <span className="text-secondary text-sm font-medium">Completed</span>
                                         </div>
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                                <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-green-600" />
+                                            <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                                                <MIcon name="check_circle" className="text-2xl text-secondary" />
                                             </div>
                                             <div className="flex-1">
-                                                <p className="font-medium text-gray-800">Kumbung Transol 1 - Start Panen</p>
-                                                <p className="text-sm text-gray-500">Sep 2025 - Active</p>
+                                                <p className="font-medium text-on-surface">Kumbung Transol 1 - Start Panen</p>
+                                                <p className="text-sm text-on-tertiary-container">Sep 2025 - Active</p>
                                             </div>
-                                            <span className="text-green-600 text-sm font-medium">Completed</span>
+                                            <span className="text-secondary text-sm font-medium">Completed</span>
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                                <Icon icon="solar:hourglass-bold" className="w-6 h-6 text-blue-600" />
+                                                <MIcon name="hourglass" className="text-2xl text-blue-600" />
                                             </div>
                                             <div className="flex-1">
-                                                <p className="font-medium text-gray-800">Kumbung Transol 2 - Starting</p>
-                                                <p className="text-sm text-gray-500">Nov 2025</p>
+                                                <p className="font-medium text-on-surface">Kumbung Transol 2 - Starting</p>
+                                                <p className="text-sm text-on-tertiary-container">Nov 2025</p>
                                             </div>
                                             <span className="text-blue-600 text-sm font-medium">In Progress</span>
                                         </div>
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                                                <Icon icon="solar:target-bold" className="w-6 h-6 text-gray-400" />
+                                            <div className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center">
+                                                <MIcon name="target" className="text-2xl text-slate-400" />
                                             </div>
                                             <div className="flex-1">
-                                                <p className="font-medium text-gray-800">Target Rp 100 Juta Panen</p>
-                                                <p className="text-sm text-gray-500">Est. Q1 2026</p>
+                                                <p className="font-medium text-on-surface">Target Rp 100 Juta Panen</p>
+                                                <p className="text-sm text-on-tertiary-container">Est. Q1 2026</p>
                                             </div>
-                                            <span className="text-gray-500 text-sm font-medium">{((summary.totalPendapatanPanen / 100000000) * 100).toFixed(0)}%</span>
+                                            <span className="text-on-tertiary-container text-sm font-medium">{((summary.totalPendapatanPanen / 100000000) * 100).toFixed(0)}%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -2427,28 +2427,28 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                         {/* Tab: Simulator */}
                         {activeTab === 'simulator' && (
                             <div className="space-y-6">
-                                <h2 className="text-lg font-semibold">Annual Investment Simulator</h2>
+                                <h2 className="text-lg font-bold">Annual Investment Simulator</h2>
 
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     {/* Input Panel */}
-                                    <div className="bg-gray-50 rounded-xl p-6">
+                                    <div className="bg-surface-container-low rounded-xl p-6">
                                         <h3 className="font-medium mb-4 flex items-center">
-                                            <Icon icon="solar:settings-bold" className="w-5 h-5 mr-2 text-indigo-600" />
+                                            <MIcon name="settings" className="text-xl mr-2 text-indigo-600" />
                                             Pengaturan Simulasi
                                         </h3>
                                         <div className="space-y-6">
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-2">Target Tahunan</label>
+                                                <label className="block text-sm font-medium text-on-surface-variant mb-2">Target Tahunan</label>
                                                 <input
                                                     type="number"
                                                     value={simTarget}
                                                     onChange={(e) => setSimTarget(parseFloat(e.target.value) || 0)}
-                                                    className="w-full px-3 py-2 border rounded-lg"
+                                                    className="w-full px-3 py-2 border rounded-xl"
                                                 />
-                                                <p className="text-sm text-gray-500 mt-1">{formatRupiah(simTarget)}</p>
+                                                <p className="text-sm text-on-tertiary-container mt-1">{formatRupiah(simTarget)}</p>
                                             </div>
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                <label className="block text-sm font-medium text-on-surface-variant mb-2">
                                                     Investasi: <span className="text-indigo-600">{formatRupiah(simInvestment)}</span>
                                                 </label>
                                                 <input
@@ -2462,8 +2462,8 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                    ROI: <span className="text-green-600">{simROI.toFixed(2)}%</span>
+                                                <label className="block text-sm font-medium text-on-surface-variant mb-2">
+                                                    ROI: <span className="text-secondary">{simROI.toFixed(2)}%</span>
                                                 </label>
                                                 <input
                                                     type="range"
@@ -2479,16 +2479,16 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                     </div>
 
                                     {/* Results Panel */}
-                                    <div className="bg-gray-50 rounded-xl p-6">
+                                    <div className="bg-surface-container-low rounded-xl p-6">
                                         <h3 className="font-medium mb-4 flex items-center">
-                                            <Icon icon="solar:chart-bold" className="w-5 h-5 mr-2 text-green-600" />
+                                            <MIcon name="leaderboard" className="text-xl mr-2 text-secondary" />
                                             Hasil Simulasi
                                         </h3>
-                                        <div className={`p-4 rounded-lg mb-4 ${simDifference >= 0 ? 'bg-green-100' : 'bg-red-100'}`}>
+                                        <div className={`p-4 rounded-xl mb-4 ${simDifference >= 0 ? 'bg-emerald-100' : 'bg-red-100'}`}>
                                             <p className="text-sm font-medium mb-1">
                                                 {simDifference >= 0 ? 'Target Tercapai!' : 'Target Tidak Tercapai'}
                                             </p>
-                                            <p className={`text-2xl font-bold ${simDifference >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                                            <p className={`text-2xl font-bold ${simDifference >= 0 ? 'text-secondary' : 'text-red-700'}`}>
                                                 {formatRupiah(simAnnualReturn)}
                                             </p>
                                             <p className="text-sm">
@@ -2497,30 +2497,30 @@ export default function Transolindo({ investasis, kumbungs = [], returnBulanans,
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-white p-4 rounded-lg">
-                                                <p className="text-sm text-gray-500">Return Bulanan</p>
+                                            <div className="bg-surface-container-lowest p-4 rounded-xl">
+                                                <p className="text-sm text-on-tertiary-container">Return Bulanan</p>
                                                 <p className="text-xl font-bold text-indigo-600">{formatRupiah(simMonthlyReturn)}</p>
                                             </div>
-                                            <div className="bg-white p-4 rounded-lg">
-                                                <p className="text-sm text-gray-500">Return Tahunan</p>
-                                                <p className="text-xl font-bold text-green-600">{formatRupiah(simAnnualReturn)}</p>
+                                            <div className="bg-surface-container-lowest p-4 rounded-xl">
+                                                <p className="text-sm text-on-tertiary-container">Return Tahunan</p>
+                                                <p className="text-xl font-bold text-secondary">{formatRupiah(simAnnualReturn)}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Yearly Projection */}
-                                <div className="bg-gray-50 rounded-xl p-6">
+                                <div className="bg-surface-container-low rounded-xl p-6">
                                     <h3 className="font-medium mb-4">Proyeksi 3 Tahun</h3>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         {[2025, 2026, 2027].map((year, idx) => {
                                             const growth = 1 + (idx * 0.05);
                                             const yearReturn = simAnnualReturn * growth;
                                             return (
-                                                <div key={year} className="bg-white p-6 rounded-lg border-2 border-indigo-100 hover:border-indigo-300 transition">
-                                                    <p className="text-lg font-bold text-gray-600 mb-2">{year}</p>
+                                                <div key={year} className="bg-surface-container-lowest p-6 rounded-xl border-2 border-indigo-100 hover:border-indigo-300 transition">
+                                                    <p className="text-lg font-bold text-on-surface-variant mb-2">{year}</p>
                                                     <p className="text-2xl font-bold text-indigo-600">{formatRupiah(yearReturn)}</p>
-                                                    <p className="text-sm text-green-600 mt-1">+{idx * 5}% growth</p>
+                                                    <p className="text-sm text-secondary mt-1">+{idx * 5}% growth</p>
                                                 </div>
                                             );
                                         })}

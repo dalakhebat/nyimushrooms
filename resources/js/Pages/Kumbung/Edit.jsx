@@ -1,6 +1,8 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
+import FormAlert from '@/Components/FormAlert';
+import EmptyOption from '@/Components/EmptyOption';
 
 export default function KumbungEdit({ kumbung }) {
     const { data, setData, put, processing, errors } = useForm({
@@ -14,6 +16,8 @@ export default function KumbungEdit({ kumbung }) {
         harga_jual_per_kg: kumbung.harga_jual_per_kg || '15000',
         umur_baglog_bulan: kumbung.umur_baglog_bulan || '5',
     });
+
+    const hasError = (field) => !!errors[field];
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -56,47 +60,49 @@ export default function KumbungEdit({ kumbung }) {
                 <div className="mb-6">
                     <Link
                         href="/kumbung"
-                        className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+                        className="inline-flex items-center text-sm text-on-surface-variant hover:text-on-surface"
                     >
-                        <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
+                        <MIcon name="arrow_back" className="text-base mr-1" />
                         Kembali
                     </Link>
                 </div>
 
                 <form onSubmit={handleSubmit}>
+                    <FormAlert errors={errors} />
+
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* Main Form */}
                         <div className="lg:col-span-2 space-y-6">
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <h2 className="text-lg font-semibold text-gray-800 mb-6">
+                            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
+                                <h2 className="text-lg font-bold text-on-surface mb-6">
                                     Edit Kumbung: {kumbung.nomor}
                                 </h2>
 
                                 <div className="space-y-5">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Nomor Kumbung
                                             </label>
                                             <input
                                                 type="text"
                                                 value={kumbung.nomor}
                                                 readOnly
-                                                className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+                                                className="w-full px-4 py-2 border border-outline-variant/15 rounded-xl bg-surface-container-low text-on-surface-variant cursor-not-allowed"
                                             />
-                                            <p className="mt-1 text-xs text-gray-500">
+                                            <p className="mt-1 text-xs text-on-tertiary-container">
                                                 Nomor tidak dapat diubah
                                             </p>
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Status <span className="text-red-500">*</span>
                                             </label>
                                             <select
                                                 value={data.status}
                                                 onChange={(e) => setData('status', e.target.value)}
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                             >
                                                 <option value="aktif">Aktif</option>
                                                 <option value="nonaktif">Nonaktif</option>
@@ -108,7 +114,7 @@ export default function KumbungEdit({ kumbung }) {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                             Nama Kumbung <span className="text-red-500">*</span>
                                         </label>
                                         <input
@@ -116,7 +122,7 @@ export default function KumbungEdit({ kumbung }) {
                                             value={data.nama}
                                             onChange={(e) => setData('nama', e.target.value)}
                                             placeholder="Contoh: Kumbung Utama"
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                            className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                         />
                                         {errors.nama && (
                                             <p className="mt-1 text-sm text-red-600">{errors.nama}</p>
@@ -125,7 +131,7 @@ export default function KumbungEdit({ kumbung }) {
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Kapasitas Baglog <span className="text-red-500">*</span>
                                             </label>
                                             <input
@@ -133,7 +139,7 @@ export default function KumbungEdit({ kumbung }) {
                                                 value={data.kapasitas_baglog}
                                                 onChange={(e) => setData('kapasitas_baglog', e.target.value)}
                                                 placeholder="Contoh: 40000"
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                             />
                                             {kumbung.baglog_aktif > 0 && (
                                                 <p className="mt-1 text-xs text-amber-600">
@@ -146,14 +152,14 @@ export default function KumbungEdit({ kumbung }) {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Tanggal Mulai
                                             </label>
                                             <input
                                                 type="date"
                                                 value={data.tanggal_mulai}
                                                 onChange={(e) => setData('tanggal_mulai', e.target.value)}
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                             />
                                             {errors.tanggal_mulai && (
                                                 <p className="mt-1 text-sm text-red-600">{errors.tanggal_mulai}</p>
@@ -163,26 +169,26 @@ export default function KumbungEdit({ kumbung }) {
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <h2 className="text-lg font-semibold text-gray-800 mb-6">
-                                    <Icon icon="solar:wallet-bold" className="w-5 h-5 inline mr-2 text-amber-500" />
+                            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
+                                <h2 className="text-lg font-bold text-on-surface mb-6">
+                                    <MIcon name="account_balance_wallet" className="text-xl inline mr-2 text-amber-500" />
                                     Investasi
                                 </h2>
 
                                 <div className="space-y-5">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Biaya Pembangunan
                                             </label>
                                             <div className="relative">
-                                                <span className="absolute left-3 top-2.5 text-gray-500">Rp</span>
+                                                <span className="absolute left-3 top-2.5 text-on-tertiary-container">Rp</span>
                                                 <input
                                                     type="number"
                                                     value={data.biaya_pembangunan}
                                                     onChange={(e) => setData('biaya_pembangunan', e.target.value)}
                                                     placeholder="100000000"
-                                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                    className="w-full pl-10 pr-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                                 />
                                             </div>
                                             {errors.biaya_pembangunan && (
@@ -191,17 +197,17 @@ export default function KumbungEdit({ kumbung }) {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Biaya Baglog
                                             </label>
                                             <div className="relative">
-                                                <span className="absolute left-3 top-2.5 text-gray-500">Rp</span>
+                                                <span className="absolute left-3 top-2.5 text-on-tertiary-container">Rp</span>
                                                 <input
                                                     type="number"
                                                     value={data.biaya_baglog}
                                                     onChange={(e) => setData('biaya_baglog', e.target.value)}
                                                     placeholder="88000000"
-                                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                    className="w-full pl-10 pr-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                                 />
                                             </div>
                                             {errors.biaya_baglog && (
@@ -210,7 +216,7 @@ export default function KumbungEdit({ kumbung }) {
                                         </div>
                                     </div>
 
-                                    <div className="p-4 bg-amber-50 rounded-lg">
+                                    <div className="p-4 bg-amber-50 rounded-xl">
                                         <div className="flex justify-between items-center">
                                             <span className="text-sm font-medium text-amber-800">Total Investasi</span>
                                             <span className="text-lg font-bold text-amber-900">{formatRupiah(totalInvestasi)}</span>
@@ -219,26 +225,26 @@ export default function KumbungEdit({ kumbung }) {
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <h2 className="text-lg font-semibold text-gray-800 mb-6">
-                                    <Icon icon="solar:chart-bold" className="w-5 h-5 inline mr-2 text-green-500" />
+                            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
+                                <h2 className="text-lg font-bold text-on-surface mb-6">
+                                    <MIcon name="leaderboard" className="text-xl inline mr-2 text-green-500" />
                                     Target & Kalkulasi
                                 </h2>
 
                                 <div className="space-y-5">
                                     <div className="grid grid-cols-3 gap-4">
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Harga Jual per Kg
                                             </label>
                                             <div className="relative">
-                                                <span className="absolute left-3 top-2.5 text-gray-500">Rp</span>
+                                                <span className="absolute left-3 top-2.5 text-on-tertiary-container">Rp</span>
                                                 <input
                                                     type="number"
                                                     value={data.harga_jual_per_kg}
                                                     onChange={(e) => setData('harga_jual_per_kg', e.target.value)}
                                                     placeholder="15000"
-                                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                    className="w-full pl-10 pr-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                                 />
                                             </div>
                                             {errors.harga_jual_per_kg && (
@@ -247,7 +253,7 @@ export default function KumbungEdit({ kumbung }) {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Umur Baglog (bulan)
                                             </label>
                                             <input
@@ -257,7 +263,7 @@ export default function KumbungEdit({ kumbung }) {
                                                 placeholder="5"
                                                 min="1"
                                                 max="24"
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                             />
                                             {errors.umur_baglog_bulan && (
                                                 <p className="mt-1 text-sm text-red-600">{errors.umur_baglog_bulan}</p>
@@ -265,7 +271,7 @@ export default function KumbungEdit({ kumbung }) {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                                 Target Panen (kg)
                                             </label>
                                             <input
@@ -273,7 +279,7 @@ export default function KumbungEdit({ kumbung }) {
                                                 value={data.target_panen_kg}
                                                 onChange={(e) => setData('target_panen_kg', e.target.value)}
                                                 placeholder="Optional"
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                             />
                                             {errors.target_panen_kg && (
                                                 <p className="mt-1 text-sm text-red-600">{errors.target_panen_kg}</p>
@@ -286,8 +292,8 @@ export default function KumbungEdit({ kumbung }) {
 
                         {/* Sidebar - Estimasi */}
                         <div className="space-y-6">
-                            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-sm p-6 text-white">
-                                <h3 className="text-lg font-semibold mb-4">Estimasi Profit</h3>
+                            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-clinical-sm p-6 text-white">
+                                <h3 className="text-lg font-bold mb-4">Estimasi Profit</h3>
 
                                 <div className="space-y-3">
                                     <div className="flex justify-between text-sm">
@@ -319,15 +325,15 @@ export default function KumbungEdit({ kumbung }) {
                             </div>
 
                             {/* Current Stats */}
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <h3 className="text-sm font-medium text-gray-700 mb-3">Status Saat Ini</h3>
+                            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
+                                <h3 className="text-sm font-medium text-on-surface-variant mb-3">Status Saat Ini</h3>
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-gray-500">Baglog Aktif</span>
+                                        <span className="text-on-tertiary-container">Baglog Aktif</span>
                                         <span className="font-medium">{kumbung.baglog_aktif || 0}</span>
                                     </div>
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-gray-500">Kapasitas Tersedia</span>
+                                        <span className="text-on-tertiary-container">Kapasitas Tersedia</span>
                                         <span className="font-medium">{kumbung.kapasitas_tersedia || 0}</span>
                                     </div>
                                 </div>
@@ -337,13 +343,13 @@ export default function KumbungEdit({ kumbung }) {
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="w-full px-4 py-3 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                                    className="w-full px-4 py-3 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary transition-colors disabled:opacity-50"
                                 >
                                     {processing ? 'Menyimpan...' : 'Update Kumbung'}
                                 </button>
                                 <Link
                                     href="/kumbung"
-                                    className="w-full px-4 py-3 text-sm font-medium text-center text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                    className="w-full px-4 py-3 text-sm font-medium text-center text-on-surface-variant bg-surface-container-low rounded-xl hover:bg-gray-200 transition-colors"
                                 >
                                     Batal
                                 </Link>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 
 export default function CustomerIndex({ customers, filters }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -24,34 +24,34 @@ export default function CustomerIndex({ customers, filters }) {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-800">Daftar Customer</h2>
-                    <p className="text-sm text-gray-600">Kelola data pembeli baglog & jamur</p>
+                    <h2 className="text-xl font-bold text-on-surface">Daftar Customer</h2>
+                    <p className="text-sm text-on-surface-variant">Kelola data pembeli baglog & jamur</p>
                 </div>
                 <Link
                     href="/customer/create"
-                    className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                    className="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary"
                 >
-                    <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
+                    <MIcon name="add_circle" className="text-xl mr-1" />
                     Tambah Customer
                 </Link>
             </div>
 
             {/* Search */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4 mb-6">
                 <form onSubmit={handleSearch} className="flex gap-3">
                     <div className="relative flex-1">
-                        <Icon icon="solar:magnifer-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <MIcon name="search" className="text-xl absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                         <input
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Cari nama customer..."
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="w-full pl-10 pr-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                         />
                     </div>
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                        className="px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-xl hover:bg-gray-200"
                     >
                         Cari
                     </button>
@@ -59,24 +59,24 @@ export default function CustomerIndex({ customers, filters }) {
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-surface-container-low">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">
                                     Customer
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">
                                     Kontak
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">
                                     Alamat
                                 </th>
-                                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                                <th className="px-6 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">
                                     Transaksi
                                 </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                                <th className="px-6 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">
                                     Aksi
                                 </th>
                             </tr>
@@ -84,44 +84,44 @@ export default function CustomerIndex({ customers, filters }) {
                         <tbody className="divide-y divide-gray-200">
                             {customers.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
-                                        <Icon icon="solar:users-group-two-rounded-bold" className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                                    <td colSpan="5" className="px-6 py-12 text-center text-on-tertiary-container">
+                                        <MIcon name="groups" className="text-4xl mx-auto mb-3 text-slate-300" />
                                         <p>Belum ada data customer</p>
                                     </td>
                                 </tr>
                             ) : (
                                 customers.data.map((customer) => (
-                                    <tr key={customer.id} className="hover:bg-gray-50">
+                                    <tr key={customer.id} className="hover:bg-surface-container-low">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                <div className="bg-purple-100 p-2 rounded-lg mr-3">
-                                                    <Icon icon="solar:users-group-two-rounded-bold" className="w-5 h-5 text-purple-600" />
+                                                <div className="bg-purple-100 p-2 rounded-xl mr-3">
+                                                    <MIcon name="groups" className="text-xl text-purple-600" />
                                                 </div>
-                                                <span className="font-medium text-gray-900">{customer.nama}</span>
+                                                <span className="font-medium text-on-surface">{customer.nama}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             {customer.no_hp ? (
-                                                <div className="flex items-center text-sm text-gray-600">
-                                                    <Icon icon="solar:phone-bold" className="w-4 h-4 mr-1" />
+                                                <div className="flex items-center text-sm text-on-surface-variant">
+                                                    <MIcon name="phone" className="text-base mr-1" />
                                                     {customer.no_hp}
                                                 </div>
                                             ) : (
-                                                <span className="text-gray-400">-</span>
+                                                <span className="text-slate-400">-</span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4">
                                             {customer.alamat ? (
-                                                <div className="flex items-start text-sm text-gray-600 max-w-xs">
-                                                    <Icon icon="solar:map-point-bold" className="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" />
+                                                <div className="flex items-start text-sm text-on-surface-variant max-w-xs">
+                                                    <MIcon name="location_on" className="text-base mr-1 mt-0.5 flex-shrink-0" />
                                                     <span className="truncate">{customer.alamat}</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-gray-400">-</span>
+                                                <span className="text-slate-400">-</span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4 text-center">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container-low text-on-surface">
                                                 {customer.total_transaksi || 0} transaksi
                                             </span>
                                         </td>
@@ -129,15 +129,15 @@ export default function CustomerIndex({ customers, filters }) {
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
                                                     href={`/customer/${customer.id}/edit`}
-                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl"
                                                 >
-                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                    <MIcon name="edit" className="text-xl" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(customer.id)}
-                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-xl"
                                                 >
-                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                    <MIcon name="delete" className="text-xl" />
                                                 </button>
                                             </div>
                                         </td>
@@ -150,7 +150,7 @@ export default function CustomerIndex({ customers, filters }) {
 
                 {/* Pagination */}
                 {customers.links && customers.links.length > 3 && (
-                    <div className="px-6 py-3 border-t border-gray-200 flex justify-center">
+                    <div className="px-6 py-3 border-t border-outline-variant/15 flex justify-center">
                         <div className="flex space-x-1">
                             {customers.links.map((link, index) => (
                                 <Link
@@ -158,10 +158,10 @@ export default function CustomerIndex({ customers, filters }) {
                                     href={link.url || '#'}
                                     className={`px-3 py-1 text-sm rounded ${
                                         link.active
-                                            ? 'bg-green-600 text-white'
+                                            ? 'bg-primary text-white'
                                             : link.url
-                                            ? 'text-gray-700 hover:bg-gray-100'
-                                            : 'text-gray-400 cursor-not-allowed'
+                                            ? 'text-on-surface-variant hover:bg-surface-container-low'
+                                            : 'text-slate-400 cursor-not-allowed'
                                     }`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />

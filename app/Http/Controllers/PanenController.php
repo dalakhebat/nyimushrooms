@@ -121,6 +121,25 @@ class PanenController extends Controller
             'catatan' => 'nullable|string|max:500',
         ]);
 
+        // Validasi: kumbung harus punya baglog aktif (status masuk_kumbung)
+        $baglogAktif = Baglog::where('kumbung_id', $validated['kumbung_id'])
+            ->where('status', 'masuk_kumbung')
+            ->sum('jumlah');
+        if ($baglogAktif <= 0) {
+            return back()->withErrors(['kumbung_id' => 'Kumbung ini belum memiliki baglog aktif. Masukkan baglog ke kumbung terlebih dahulu.']);
+        }
+
+        // Validasi: berat panen tidak boleh melebihi estimasi maksimal
+        // Berdasarkan data real: peak ~1,025 kg/minggu dari 40,000 baglog = ~0.026 kg/baglog/minggu
+        // Batas wajar per input: 0.05 kg/baglog (buffer 2x dari peak, untuk input mingguan)
+        $maxPanenKg = $baglogAktif * 0.05;
+        $maxPanenKg = max($maxPanenKg, 50); // Minimum 50 kg
+        if ($validated['berat_kg'] > $maxPanenKg) {
+            return back()->withErrors([
+                'berat_kg' => "Berat panen melebihi batas wajar. Maksimal: " . number_format($maxPanenKg, 0, ',', '.') . " kg (berdasarkan {$baglogAktif} baglog aktif)"
+            ]);
+        }
+
         // Validasi: layak_jual + reject harus sama dengan total
         $totalSortir = $validated['berat_layak_jual'] + $validated['berat_reject'];
         if (abs($totalSortir - $validated['berat_kg']) > 0.01) {

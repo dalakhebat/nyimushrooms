@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 
 export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks, periode }) {
     const [attendance, setAttendance] = useState(() => {
@@ -54,7 +54,7 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
     const getStatusStyle = (status) => {
         switch (status) {
             case 'hadir':
-                return 'bg-green-500 text-white';
+                return 'bg-secondary text-white';
             case 'izin':
                 return 'bg-blue-500 text-white';
             case 'sakit':
@@ -62,7 +62,7 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
             case 'alpha':
                 return 'bg-red-500 text-white';
             default:
-                return 'bg-gray-200 text-gray-600';
+                return 'bg-gray-200 text-on-surface-variant';
         }
     };
 
@@ -154,21 +154,21 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
             <div className="mb-6">
                 <Link
                     href="/penggajian"
-                    className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+                    className="inline-flex items-center text-sm text-on-surface-variant hover:text-on-surface"
                 >
-                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
+                    <MIcon name="arrow_back" className="text-base mr-1" />
                     Kembali ke Penggajian
                 </Link>
             </div>
 
             {/* Period Selector */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4 mb-6">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <select
                             value={bulan}
                             onChange={handleBulanChange}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                         >
                             {getMonthOptions().map(opt => (
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -177,7 +177,7 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
                         <select
                             value={minggu}
                             onChange={handleMingguChange}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                         >
                             {weeks.map(w => (
                                 <option key={w.week} value={w.week}>{w.label}</option>
@@ -185,23 +185,23 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
                         </select>
                     </div>
                     <div className="flex items-center gap-3">
-                        <div className="bg-green-50 px-4 py-2 rounded-lg">
-                            <p className="text-sm text-green-700 font-medium">
+                        <div className="bg-emerald-50 px-4 py-2 rounded-xl">
+                            <p className="text-sm text-secondary font-medium">
                                 Periode: {periode.start} - {periode.end}
                             </p>
                         </div>
                         <a
                             href={`/absensi/mingguan/export/pdf?bulan=${bulan}&minggu=${minggu}`}
-                            className="inline-flex items-center px-3 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700"
+                            className="inline-flex items-center px-3 py-2 bg-red-600 text-white text-sm font-medium rounded-xl hover:bg-red-700"
                         >
-                            <Icon icon="solar:document-download-bold" className="w-4 h-4 mr-1" />
+                            <MIcon name="document_download" className="text-base mr-1" />
                             PDF
                         </a>
                         <a
                             href={`/absensi/mingguan/export/excel?bulan=${bulan}&minggu=${minggu}`}
-                            className="inline-flex items-center px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                            className="inline-flex items-center px-3 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary"
                         >
-                            <Icon icon="solar:file-text-bold" className="w-4 h-4 mr-1" />
+                            <MIcon name="file_text" className="text-base mr-1" />
                             Excel
                         </a>
                     </div>
@@ -209,23 +209,23 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
             </div>
 
             {/* Filter & Search */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4 mb-6">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <div className="relative">
-                            <Icon icon="solar:magnifer-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <MIcon name="search" className="text-base absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                             <input
                                 type="text"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Cari nama..."
-                                className="pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm w-48"
+                                className="pl-9 pr-3 py-2 border border-outline-variant/30 rounded-xl text-sm w-48"
                             />
                         </div>
                         <select
                             value={filterBagian}
                             onChange={(e) => setFilterBagian(e.target.value)}
-                            className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            className="px-3 py-2 border border-outline-variant/30 rounded-xl text-sm"
                         >
                             <option value="">Semua Bagian</option>
                             {bagianList.map(b => (
@@ -235,7 +235,7 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
                     </div>
                     <div className="flex items-center gap-4 text-sm">
                         <span className="inline-flex items-center gap-1">
-                            <span className="w-4 h-4 rounded bg-green-500"></span> H: {summary.hadir}
+                            <span className="w-4 h-4 rounded bg-secondary"></span> H: {summary.hadir}
                         </span>
                         <span className="inline-flex items-center gap-1">
                             <span className="w-4 h-4 rounded bg-blue-500"></span> I: {summary.izin}
@@ -251,18 +251,18 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
             </div>
 
             {/* Grid Table */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden mb-6">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-surface-container-low">
                             <tr>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase sticky left-0 bg-gray-50 z-10 min-w-[180px]">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase sticky left-0 bg-surface-container-low z-10 min-w-[180px]">
                                     Karyawan
                                 </th>
                                 {days.map(day => (
-                                    <th key={day.date} className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase w-14">
+                                    <th key={day.date} className="px-2 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase w-14">
                                         <div>{day.day}</div>
-                                        <div className="text-lg font-bold text-gray-700">{day.dayNum}</div>
+                                        <div className="text-lg font-bold text-on-surface-variant">{day.dayNum}</div>
                                     </th>
                                 ))}
                             </tr>
@@ -270,22 +270,22 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
                         <tbody className="divide-y divide-gray-200">
                             {filteredKaryawans.length === 0 ? (
                                 <tr>
-                                    <td colSpan={days.length + 1} className="px-4 py-12 text-center text-gray-500">
+                                    <td colSpan={days.length + 1} className="px-4 py-12 text-center text-on-tertiary-container">
                                         Tidak ada karyawan ditemukan
                                     </td>
                                 </tr>
                             ) : (
                                 filteredKaryawans.map((karyawan, index) => (
-                                    <tr key={karyawan.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                    <tr key={karyawan.id} className={index % 2 === 0 ? 'bg-surface-container-lowest' : 'bg-surface-container-low'}>
                                         <td className="px-4 py-2 sticky left-0 bg-inherit z-10">
-                                            <div className="text-sm font-medium text-gray-900">{karyawan.nama}</div>
-                                            <div className="text-xs text-gray-500">{karyawan.bagian}</div>
+                                            <div className="text-sm font-medium text-on-surface">{karyawan.nama}</div>
+                                            <div className="text-xs text-on-tertiary-container">{karyawan.bagian}</div>
                                         </td>
                                         {days.map(day => (
                                             <td key={day.date} className="px-2 py-2 text-center">
                                                 <button
                                                     onClick={() => toggleStatus(karyawan.id, day.date)}
-                                                    className={`w-10 h-10 rounded-lg font-bold text-sm transition-colors ${getStatusStyle(attendance[karyawan.id]?.[day.date] || 'hadir')}`}
+                                                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-colors ${getStatusStyle(attendance[karyawan.id]?.[day.date] || 'hadir')}`}
                                                 >
                                                     {getStatusLabel(attendance[karyawan.id]?.[day.date] || 'hadir')}
                                                 </button>
@@ -300,25 +300,25 @@ export default function AbsensiMingguan({ karyawans, days, bulan, minggu, weeks,
             </div>
 
             {/* Save Button */}
-            <div className="bg-white rounded-xl shadow-sm p-4 sticky bottom-4">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4 sticky bottom-4">
                 <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-on-surface-variant">
                         <span className="font-medium">{filteredKaryawans.length}</span> karyawan ditampilkan
                         {search || filterBagian ? ` (dari ${karyawans.length} total)` : ''}
                     </div>
                     <button
                         onClick={handleSave}
                         disabled={saving}
-                        className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:bg-gray-400"
+                        className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-primary disabled:bg-gray-400"
                     >
-                        <Icon icon="solar:check-circle-bold" className="w-5 h-5 mr-2" />
+                        <MIcon name="check_circle" className="text-xl mr-2" />
                         {saving ? 'Menyimpan...' : 'Simpan Absensi'}
                     </button>
                 </div>
             </div>
 
             {/* Legend */}
-            <div className="mt-4 text-center text-sm text-gray-500">
+            <div className="mt-4 text-center text-sm text-on-tertiary-container">
                 Klik kotak untuk mengubah status: H (Hadir) → I (Izin) → S (Sakit) → A (Alpha) → H
             </div>
         </AdminLayout>

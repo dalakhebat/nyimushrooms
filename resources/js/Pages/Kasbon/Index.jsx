@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 
 export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -69,49 +69,49 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-blue-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:dollar-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-blue-500 p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="account_balance" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Total Kasbon</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary.totalKasbon}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Total Kasbon</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary.totalKasbon}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-yellow-500 p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="schedule" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Belum Lunas</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary.totalBelumLunas}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Belum Lunas</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary.totalBelumLunas}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-red-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:banknote-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-red-500 p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="payments" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Total Sisa</p>
-                            <p className="text-lg font-semibold text-gray-900">{formatCurrency(summary.totalNominalBelumLunas)}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Total Sisa</p>
+                            <p className="text-lg font-headline font-bold text-on-surface">{formatCurrency(summary.totalNominalBelumLunas)}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Filters & Actions */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4 mb-6">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex flex-wrap items-center gap-3">
                         <select
                             value={filters.status || ''}
                             onChange={(e) => handleFilter('status', e.target.value)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                         >
                             <option value="">Semua Status</option>
                             <option value="belum_lunas">Belum Lunas</option>
@@ -120,7 +120,7 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                         <select
                             value={filters.karyawan_id || ''}
                             onChange={(e) => handleFilter('karyawan_id', e.target.value)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                         >
                             <option value="">Semua Karyawan</option>
                             {karyawans.map((k) => (
@@ -133,58 +133,58 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                 placeholder="Cari karyawan..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-green-500"
+                                className="px-4 py-2 border border-outline-variant/30 rounded-l-lg focus:ring-2 focus:ring-secondary"
                             />
                             <button
                                 type="submit"
-                                className="px-4 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg hover:bg-gray-200"
+                                className="px-4 py-2 bg-surface-container-low border border-l-0 border-outline-variant/30 rounded-r-lg hover:bg-gray-200"
                             >
-                                <Icon icon="solar:magnifer-bold" className="w-5 h-5 text-gray-500" />
+                                <MIcon name="search" className="text-xl text-on-tertiary-container" />
                             </button>
                         </form>
                     </div>
                     <Link
                         href="/kasbon/create"
-                        className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                        className="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary"
                     >
-                        <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
+                        <MIcon name="add_circle" className="text-xl mr-1" />
                         Tambah Kasbon
                     </Link>
                 </div>
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl shadow-sm">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-surface-container-low">
                             <tr>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Karyawan</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Jumlah</th>
-                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Sisa</th>
-                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Keterangan</th>
-                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Karyawan</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Tanggal</th>
+                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Jumlah</th>
+                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Sisa</th>
+                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Status</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Keterangan</th>
+                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {kasbons.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan="7" className="px-4 py-12 text-center text-gray-500">
+                                    <td colSpan="7" className="px-4 py-12 text-center text-on-tertiary-container">
                                         Belum ada data kasbon
                                     </td>
                                 </tr>
                             ) : (
                                 kasbons.data.map((item) => (
-                                    <tr key={item.id} className="hover:bg-gray-50">
+                                    <tr key={item.id} className="hover:bg-surface-container-low">
                                         <td className="px-4 py-4">
-                                            <p className="text-sm font-medium text-gray-900">{item.karyawan?.nama}</p>
+                                            <p className="text-sm font-medium text-on-surface">{item.karyawan?.nama}</p>
                                         </td>
-                                        <td className="px-4 py-4 text-sm text-gray-700">
+                                        <td className="px-4 py-4 text-sm text-on-surface-variant">
                                             {formatDate(item.tanggal)}
                                         </td>
-                                        <td className="px-4 py-4 text-right text-sm font-medium text-gray-900">
+                                        <td className="px-4 py-4 text-right text-sm font-medium text-on-surface">
                                             {formatCurrency(item.jumlah)}
                                         </td>
                                         <td className="px-4 py-4 text-right text-sm font-medium text-red-600">
@@ -192,18 +192,18 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                         </td>
                                         <td className="px-4 py-4 text-center">
                                             {item.status === 'lunas' ? (
-                                                <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
-                                                    <Icon icon="solar:check-circle-bold" className="w-3 h-3 mr-1" />
+                                                <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-emerald-100 text-secondary">
+                                                    <MIcon name="check_circle" className="text-base mr-1" />
                                                     Lunas
                                                 </span>
                                             ) : (
                                                 <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-700">
-                                                    <Icon icon="solar:clock-circle-bold" className="w-3 h-3 mr-1" />
+                                                    <MIcon name="schedule" className="text-base mr-1" />
                                                     Belum Lunas
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="px-4 py-4 text-sm text-gray-500">
+                                        <td className="px-4 py-4 text-sm text-on-tertiary-container">
                                             {item.keterangan || '-'}
                                         </td>
                                         <td className="px-4 py-4 text-right">
@@ -211,29 +211,29 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                                 {item.status === 'belum_lunas' && (
                                                     <button
                                                         onClick={() => openBayarModal(item)}
-                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                                                        className="p-2 text-secondary hover:bg-emerald-50 rounded-xl"
                                                         title="Bayar"
                                                     >
-                                                        <Icon icon="solar:banknote-bold" className="w-5 h-5" />
+                                                        <MIcon name="payments" className="text-xl" />
                                                     </button>
                                                 )}
                                                 <Link
                                                     href={`/kasbon/${item.id}`}
-                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl"
                                                 >
-                                                    <Icon icon="solar:eye-bold" className="w-5 h-5" />
+                                                    <MIcon name="visibility" className="text-xl" />
                                                 </Link>
                                                 <Link
                                                     href={`/kasbon/${item.id}/edit`}
-                                                    className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg"
+                                                    className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-xl"
                                                 >
-                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                    <MIcon name="edit" className="text-xl" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(item.id)}
-                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-xl"
                                                 >
-                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                    <MIcon name="delete" className="text-xl" />
                                                 </button>
                                             </div>
                                         </td>
@@ -246,7 +246,7 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
 
                 {/* Pagination */}
                 {kasbons.links && kasbons.links.length > 3 && (
-                    <div className="px-4 py-3 border-t border-gray-200 flex justify-center">
+                    <div className="px-4 py-3 border-t border-outline-variant/15 flex justify-center">
                         <div className="flex space-x-1">
                             {kasbons.links.map((link, index) => (
                                 <Link
@@ -254,10 +254,10 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                     href={link.url || '#'}
                                     className={`px-3 py-1 text-sm rounded ${
                                         link.active
-                                            ? 'bg-green-600 text-white'
+                                            ? 'bg-primary text-white'
                                             : link.url
-                                            ? 'text-gray-700 hover:bg-gray-100'
-                                            : 'text-gray-400 cursor-not-allowed'
+                                            ? 'text-on-surface-variant hover:bg-surface-container-low'
+                                            : 'text-slate-400 cursor-not-allowed'
                                     }`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />
@@ -270,17 +270,17 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
             {/* Modal Bayar */}
             {showBayarModal && selectedKasbon && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-md">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Bayar Kasbon</h3>
-                        <p className="text-sm text-gray-600 mb-2">
+                    <div className="bg-surface-container-lowest rounded-xl p-6 w-full max-w-md">
+                        <h3 className="text-lg font-bold text-on-surface mb-4">Bayar Kasbon</h3>
+                        <p className="text-sm text-on-surface-variant mb-2">
                             Karyawan: <span className="font-medium">{selectedKasbon.karyawan?.nama}</span>
                         </p>
-                        <p className="text-sm text-gray-600 mb-4">
+                        <p className="text-sm text-on-surface-variant mb-4">
                             Sisa: <span className="font-medium text-red-600">{formatCurrency(selectedKasbon.sisa)}</span>
                         </p>
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                     Jumlah Bayar
                                 </label>
                                 <input
@@ -288,22 +288,22 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                     value={bayarForm.jumlah}
                                     onChange={(e) => setBayarForm({ ...bayarForm, jumlah: parseFloat(e.target.value) || 0 })}
                                     max={selectedKasbon.sisa}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                    className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                     Tanggal Bayar
                                 </label>
                                 <input
                                     type="date"
                                     value={bayarForm.tanggal}
                                     onChange={(e) => setBayarForm({ ...bayarForm, tanggal: e.target.value })}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                    className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                     Keterangan (Opsional)
                                 </label>
                                 <input
@@ -311,20 +311,20 @@ export default function KasbonIndex({ kasbons, karyawans, filters, summary }) {
                                     value={bayarForm.keterangan}
                                     onChange={(e) => setBayarForm({ ...bayarForm, keterangan: e.target.value })}
                                     placeholder="Contoh: Bayar tunai"
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                    className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                                 />
                             </div>
                         </div>
                         <div className="flex justify-end space-x-3 mt-6">
                             <button
                                 onClick={() => setShowBayarModal(false)}
-                                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                                className="px-4 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-xl"
                             >
                                 Batal
                             </button>
                             <button
                                 onClick={handleBayar}
-                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                                className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary"
                             >
                                 Bayar
                             </button>

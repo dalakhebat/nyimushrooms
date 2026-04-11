@@ -1,6 +1,8 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
+import FormAlert from '@/Components/FormAlert';
+import EmptyOption from '@/Components/EmptyOption';
 
 export default function PembelianBahanBakuEdit({ pembelian, suppliers, bahanBakus }) {
     const { data, setData, put, processing, errors } = useForm({
@@ -28,88 +30,99 @@ export default function PembelianBahanBakuEdit({ pembelian, suppliers, bahanBaku
 
             <div className="max-w-2xl">
                 <div className="mb-6">
-                    <Link href="/pembelian-bahan-baku" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900">
-                        <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
+                    <Link href="/pembelian-bahan-baku" className="inline-flex items-center text-sm text-on-surface-variant hover:text-on-surface">
+                        <MIcon name="arrow_back" className="text-base mr-1" />
                         Kembali
                     </Link>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-6">Edit Pembelian: {pembelian.kode_transaksi}</h2>
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
+                    <h2 className="text-lg font-bold text-on-surface mb-6">Edit Pembelian: {pembelian.kode_transaksi}</h2>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
+                    <FormAlert errors={errors} />
+
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Bahan Baku</label>
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">Bahan Baku</label>
                             <input
                                 type="text"
                                 value={`${pembelian.bahan_baku?.nama} (${pembelian.bahan_baku?.satuan})`}
                                 readOnly
-                                className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+                                className="w-full px-4 py-2 border border-outline-variant/15 rounded-xl bg-surface-container-low text-on-surface-variant cursor-not-allowed"
                             />
-                            <p className="mt-1 text-xs text-gray-500">Bahan baku tidak dapat diubah</p>
+                            <p className="mt-1 text-xs text-on-tertiary-container">Bahan baku tidak dapat diubah</p>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Jumlah</label>
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">Jumlah</label>
                             <input
                                 type="text"
                                 value={`${pembelian.jumlah} ${pembelian.bahan_baku?.satuan}`}
                                 readOnly
-                                className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+                                className="w-full px-4 py-2 border border-outline-variant/15 rounded-xl bg-surface-container-low text-on-surface-variant cursor-not-allowed"
                             />
-                            <p className="mt-1 text-xs text-gray-500">Jumlah tidak dapat diubah karena sudah mempengaruhi stok</p>
+                            <p className="mt-1 text-xs text-on-tertiary-container">Jumlah tidak dapat diubah karena sudah mempengaruhi stok</p>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Supplier</label>
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">Supplier</label>
+
+                            {suppliers.length === 0 ? (
+
+                                <EmptyOption label="Supplier" href="/supplier/create" />
+
+                            ) : (
+
                             <select
                                 value={data.supplier_id}
                                 onChange={(e) => setData('supplier_id', e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                             >
                                 <option value="">Pilih Supplier (Opsional)</option>
                                 {suppliers.map((s) => (
                                     <option key={s.id} value={s.id}>{s.nama}</option>
                                 ))}
                             </select>
+
+                            )}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">Tanggal</label>
                             <input
                                 type="date"
                                 value={data.tanggal}
                                 onChange={(e) => setData('tanggal', e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                             />
                             {errors.tanggal && <p className="mt-1 text-sm text-red-600">{errors.tanggal}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Harga Satuan</label>
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">Harga Satuan</label>
                             <input
                                 type="number"
                                 value={data.harga_satuan}
                                 onChange={(e) => setData('harga_satuan', e.target.value)}
                                 min="0"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                             />
                             {errors.harga_satuan && <p className="mt-1 text-sm text-red-600">{errors.harga_satuan}</p>}
                         </div>
 
-                        <div className="bg-gray-50 p-4 rounded-lg">
+                        <div className="bg-surface-container-low p-4 rounded-xl">
                             <div className="flex justify-between items-center">
-                                <span className="text-gray-600">Total Harga:</span>
-                                <span className="text-xl font-bold text-gray-800">{formatRupiah(totalHarga)}</span>
+                                <span className="text-on-surface-variant">Total Harga:</span>
+                                <span className="text-xl font-bold text-on-surface">{formatRupiah(totalHarga)}</span>
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Status Pembayaran</label>
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">Status Pembayaran</label>
                             <select
                                 value={data.status}
                                 onChange={(e) => setData('status', e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                             >
                                 <option value="pending">Pending</option>
                                 <option value="lunas">Lunas</option>
@@ -117,23 +130,23 @@ export default function PembelianBahanBakuEdit({ pembelian, suppliers, bahanBaku
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Catatan</label>
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">Catatan</label>
                             <textarea
                                 value={data.catatan}
                                 onChange={(e) => setData('catatan', e.target.value)}
                                 rows="3"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                             />
                         </div>
 
                         <div className="flex items-center justify-end space-x-3 pt-4">
-                            <Link href="/pembelian-bahan-baku" className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
+                            <Link href="/pembelian-bahan-baku" className="px-4 py-2 text-sm font-medium text-on-surface-variant bg-surface-container-low rounded-xl hover:bg-gray-200">
                                 Batal
                             </Link>
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50"
+                                className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary disabled:opacity-50"
                             >
                                 {processing ? 'Menyimpan...' : 'Update'}
                             </button>

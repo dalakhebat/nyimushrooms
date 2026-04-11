@@ -1,84 +1,84 @@
 import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
-import { Icon } from '@iconify/react';
+
+// Material Symbol helper
+function MIcon({ name, fill, className = '' }) {
+    return (
+        <span
+            className={`material-symbols-outlined ${className}`}
+            style={fill ? { fontVariationSettings: "'FILL' 1" } : undefined}
+        >
+            {name}
+        </span>
+    );
+}
 
 // Navigation berdasarkan workflow sistem
 const navigation = [
-    // === OVERVIEW ===
-    { name: 'Dashboard', href: '/dashboard', icon: 'solar:widget-bold' },
+    { name: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
 
-    // === SECTION: PRODUKSI BAGLOG ===
-    // Workflow: Bahan Baku → Pembelian → Produksi → Baglog
     { type: 'section', name: 'Produksi' },
     {
         name: 'Inventory',
-        icon: 'solar:box-bold',
+        icon: 'inventory_2',
         children: [
-            { name: 'Supplier', href: '/supplier', icon: 'solar:buildings-bold' },
-            { name: 'Bahan Baku', href: '/bahan-baku', icon: 'solar:archive-bold' },
-            { name: 'Pembelian Bahan', href: '/pembelian-bahan-baku', icon: 'solar:cart-large-bold' },
+            { name: 'Supplier', href: '/supplier', icon: 'domain' },
+            { name: 'Bahan Baku', href: '/bahan-baku', icon: 'archive' },
+            { name: 'Pembelian Bahan', href: '/pembelian-bahan-baku', icon: 'shopping_cart' },
         ],
     },
-    { name: 'Produksi Baglog', href: '/produksi-baglog', icon: 'solar:test-tube-bold' },
-    { name: 'Stok Baglog', href: '/baglog', icon: 'solar:layers-bold' },
+    { name: 'Produksi Baglog', href: '/produksi-baglog', icon: 'science' },
+    { name: 'Stok Baglog', href: '/baglog', icon: 'layers' },
 
-    // === SECTION: BUDIDAYA & PANEN ===
-    // Workflow: Kumbung → Monitoring → Panen → Stok Jamur
     { type: 'section', name: 'Budidaya' },
-    { name: 'Kumbung', href: '/kumbung', icon: 'solar:home-2-bold' },
-    { name: 'Monitoring', href: '/monitoring-kumbung', icon: 'solar:temperature-bold' },
-    { name: 'Panen', href: '/panen', icon: 'solar:hand-stars-bold' },
+    { name: 'Kumbung', href: '/kumbung', icon: 'house' },
+    { name: 'Monitoring', href: '/monitoring-kumbung', icon: 'thermostat' },
+    { name: 'Panen', href: '/panen', icon: 'eco' },
 
-    // === SECTION: PENJUALAN ===
-    // Workflow: Customer → Penjualan → Kas Masuk
     { type: 'section', name: 'Sales' },
-    { name: 'Customer', href: '/customer', icon: 'solar:users-group-two-rounded-bold' },
-    { name: 'Penjualan', href: '/penjualan', icon: 'solar:bag-bold' },
+    { name: 'Customer', href: '/customer', icon: 'groups' },
+    { name: 'Penjualan', href: '/penjualan', icon: 'storefront' },
 
-    // === SECTION: SDM & PENGGAJIAN ===
-    // Workflow: Karyawan → Absensi → Penggajian
     { type: 'section', name: 'SDM' },
-    { name: 'Karyawan', href: '/karyawan', icon: 'solar:user-rounded-bold' },
+    { name: 'Karyawan', href: '/karyawan', icon: 'person' },
     {
         name: 'Absensi',
-        icon: 'solar:clock-circle-bold',
+        icon: 'schedule',
         children: [
-            { name: 'Absensi Harian', href: '/absensi', icon: 'solar:calendar-mark-bold' },
-            { name: 'Absensi Mingguan', href: '/absensi/mingguan', icon: 'solar:calendar-bold' },
-            { name: 'QR Code', href: '/qr-absensi', icon: 'solar:qr-code-bold' },
-            { name: 'Rekap Absensi', href: '/absensi/rekap', icon: 'solar:clipboard-list-bold' },
+            { name: 'Absensi Harian', href: '/absensi', icon: 'event_available' },
+            { name: 'Absensi Mingguan', href: '/absensi/mingguan', icon: 'date_range' },
+            { name: 'QR Code', href: '/qr-absensi', icon: 'qr_code_scanner' },
+            { name: 'Rekap Absensi', href: '/absensi/rekap', icon: 'summarize' },
         ],
     },
     {
         name: 'Penggajian',
-        icon: 'solar:wallet-bold',
+        icon: 'account_balance_wallet',
         children: [
-            { name: 'Proses Gaji', href: '/penggajian/create', icon: 'solar:card-bold' },
-            { name: 'Riwayat Gaji', href: '/penggajian', icon: 'solar:document-text-bold' },
-            { name: 'Pengaturan Upah', href: '/pengaturan-gaji', icon: 'solar:tuning-2-bold' },
+            { name: 'Proses Gaji', href: '/penggajian/create', icon: 'credit_card' },
+            { name: 'Riwayat Gaji', href: '/penggajian', icon: 'receipt_long' },
+            { name: 'Pengaturan Upah', href: '/pengaturan-gaji', icon: 'tune' },
         ],
     },
-    { name: 'Kasbon', href: '/kasbon', icon: 'solar:banknote-bold' },
-    { name: 'KPI Karyawan', href: '/kpi', icon: 'solar:chart-bold' },
+    { name: 'Kasbon', href: '/kasbon', icon: 'payments' },
+    { name: 'KPI Karyawan', href: '/kpi', icon: 'leaderboard' },
 
-    // === SECTION: KEUANGAN ===
     { type: 'section', name: 'Keuangan' },
-    { name: 'Kas', href: '/kas', icon: 'solar:dollar-bold' },
-    { name: 'Laporan', href: '/laporan', icon: 'solar:graph-up-bold' },
+    { name: 'Kas', href: '/kas', icon: 'account_balance' },
+    { name: 'Laporan', href: '/laporan', icon: 'analytics' },
     {
         name: 'Perencanaan',
-        icon: 'solar:calculator-bold',
+        icon: 'calculate',
         children: [
-            { name: 'Simulasi Kredit', href: '/keuangan/simulasi-kredit', icon: 'solar:chart-2-bold' },
-            { name: 'Target Operasional', href: '/keuangan/target-operasional', icon: 'solar:target-bold' },
-            { name: 'Rekap Pembayaran', href: '/keuangan/rekap-pembayaran', icon: 'solar:clipboard-check-bold' },
-            { name: 'Transolindo', href: '/keuangan/transolindo', icon: 'solar:diamond-bold' },
+            { name: 'Simulasi Kredit', href: '/keuangan/simulasi-kredit', icon: 'show_chart' },
+            { name: 'Target Operasional', href: '/keuangan/target-operasional', icon: 'target' },
+            { name: 'Rekap Pembayaran', href: '/keuangan/rekap-pembayaran', icon: 'checklist' },
+            { name: 'Transolindo', href: '/keuangan/transolindo', icon: 'diamond' },
         ],
     },
 
-    // === SECTION: SISTEM ===
     { type: 'section', name: 'Sistem' },
-    { name: 'Notifikasi', href: '/notifikasi', icon: 'solar:bell-bold' },
+    { name: 'Notifikasi', href: '/notifikasi', icon: 'notifications' },
 ];
 
 export default function AdminLayout({ children, title }) {
@@ -98,31 +98,37 @@ export default function AdminLayout({ children, title }) {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-surface-container-low">
             {/* Mobile sidebar overlay */}
             {sidebarOpen && (
                 <div
-                    className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"
+                    className="fixed inset-0 z-40 bg-primary/20 backdrop-blur-sm lg:hidden"
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
 
             {/* Mobile sidebar */}
-            <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-green-800 transform transition-transform duration-300 ease-in-out lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                <div className="flex items-center justify-between h-16 px-4 bg-green-900">
-                    <div className="flex flex-col">
-                        <span className="text-lg font-bold text-white leading-tight">Defila Solusi Bersama</span>
-                        <span className="text-[10px] text-green-300 leading-tight">Managed By Transendensi Solusi Indonesia</span>
+            <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-50 flex flex-col transform transition-transform duration-300 ease-in-out lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                <div className="flex items-center justify-between px-4 py-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl primary-gradient flex items-center justify-center text-white">
+                            <MIcon name="biotech" />
+                        </div>
+                        <div>
+                            <p className="font-extrabold text-primary text-sm font-headline">Defila Solusi</p>
+                            <p className="text-[10px] text-on-tertiary-container">Mushroom Factory</p>
+                        </div>
                     </div>
-                    <button onClick={() => setSidebarOpen(false)} className="text-white">
-                        <Icon icon="solar:close-circle-bold" className="w-6 h-6" />
+                    <button onClick={() => setSidebarOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                        <MIcon name="close" />
                     </button>
                 </div>
-                <nav className="mt-4 px-2 space-y-1 overflow-y-auto max-h-[calc(100vh-4rem)]">
+
+                <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
                     {navigation.map((item, index) => (
                         item.type === 'section' ? (
-                            <div key={item.name} className={`px-3 pt-4 pb-2 ${index > 0 ? 'mt-2 border-t border-green-700' : ''}`}>
-                                <span className="text-xs font-semibold text-green-400 uppercase tracking-wider">
+                            <div key={item.name} className={`px-4 pt-6 pb-2 ${index > 0 ? 'mt-1' : ''}`}>
+                                <span className="text-[10px] font-bold text-on-tertiary-container uppercase tracking-[0.15em]">
                                     {item.name}
                                 </span>
                             </div>
@@ -130,31 +136,31 @@ export default function AdminLayout({ children, title }) {
                             <div key={item.name}>
                                 <button
                                     onClick={() => toggleDropdown(item.name)}
-                                    className={`w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                    className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                                         isChildActive(item.children) || openDropdown === item.name
-                                            ? 'bg-green-900 text-white'
-                                            : 'text-green-100 hover:bg-green-700'
+                                            ? 'bg-white text-secondary shadow-clinical-sm'
+                                            : 'text-slate-500 hover:bg-blue-50/50'
                                     }`}
                                 >
-                                    <div className="flex items-center">
-                                        <Icon icon={item.icon} className="w-5 h-5 mr-3" />
-                                        {item.name}
+                                    <div className="flex items-center gap-3">
+                                        <MIcon name={item.icon} className="text-xl" />
+                                        <span className="font-headline">{item.name}</span>
                                     </div>
-                                    <Icon icon="solar:alt-arrow-down-bold" className={`w-4 h-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                                    <MIcon name="expand_more" className={`text-lg transition-transform duration-200 ${openDropdown === item.name ? 'rotate-180' : ''}`} />
                                 </button>
                                 {(openDropdown === item.name || isChildActive(item.children)) && (
-                                    <div className="mt-1 ml-4 space-y-1">
+                                    <div className="mt-1 ml-4 space-y-0.5">
                                         {item.children.map((child) => (
                                             <Link
                                                 key={child.name}
                                                 href={child.href}
-                                                className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
+                                                className={`flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl transition-all duration-200 ${
                                                     currentPath === child.href
-                                                        ? 'bg-green-700 text-white'
-                                                        : 'text-green-200 hover:bg-green-700 hover:text-white'
+                                                        ? 'bg-white text-secondary font-semibold shadow-clinical-sm'
+                                                        : 'text-slate-400 hover:bg-blue-50/50 hover:text-slate-600'
                                                 }`}
                                             >
-                                                <Icon icon={child.icon} className="w-4 h-4 mr-2" />
+                                                <MIcon name={child.icon} className="text-lg" />
                                                 {child.name}
                                             </Link>
                                         ))}
@@ -165,14 +171,14 @@ export default function AdminLayout({ children, title }) {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:translate-x-1 ${
                                     currentPath.startsWith(item.href)
-                                        ? 'bg-green-900 text-white'
-                                        : 'text-green-100 hover:bg-green-700'
+                                        ? 'bg-white text-secondary shadow-clinical-sm'
+                                        : 'text-slate-500 hover:bg-blue-50/50'
                                 }`}
                             >
-                                <Icon icon={item.icon} className="w-5 h-5 mr-3" />
-                                {item.name}
+                                <MIcon name={item.icon} className="text-xl" fill={currentPath.startsWith(item.href)} />
+                                <span className="font-headline">{item.name}</span>
                             </Link>
                         )
                     ))}
@@ -180,126 +186,142 @@ export default function AdminLayout({ children, title }) {
             </div>
 
             {/* Desktop sidebar */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-                <div className="flex flex-col flex-grow bg-green-800 overflow-y-auto">
-                    <div className="flex items-center h-16 px-4 bg-green-900">
-                        <Icon icon="solar:leaf-bold" className="w-8 h-8 text-white mr-3" />
-                        <div className="flex flex-col">
-                            <span className="text-lg font-bold text-white leading-tight">Defila Solusi Bersama</span>
-                            <span className="text-[10px] text-green-300 leading-tight">Managed By Transendensi Solusi Indonesia</span>
-                        </div>
+            <aside className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 bg-slate-50 border-r border-slate-200/20 z-40">
+                {/* Logo */}
+                <div className="flex items-center gap-3 px-5 py-6">
+                    <div className="w-10 h-10 rounded-xl primary-gradient flex items-center justify-center text-white shadow-clinical">
+                        <MIcon name="biotech" />
                     </div>
-                    <nav className="mt-4 flex-1 px-2 space-y-1 overflow-y-auto">
-                        {navigation.map((item, index) => (
-                            item.type === 'section' ? (
-                                <div key={item.name} className={`px-3 pt-4 pb-2 ${index > 0 ? 'mt-2 border-t border-green-700' : ''}`}>
-                                    <span className="text-xs font-semibold text-green-400 uppercase tracking-wider">
-                                        {item.name}
-                                    </span>
-                                </div>
-                            ) : item.children ? (
-                                <div key={item.name}>
-                                    <button
-                                        onClick={() => toggleDropdown(item.name)}
-                                        className={`w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                                            isChildActive(item.children) || openDropdown === item.name
-                                                ? 'bg-green-900 text-white'
-                                                : 'text-green-100 hover:bg-green-700'
-                                        }`}
-                                    >
-                                        <div className="flex items-center">
-                                            <Icon icon={item.icon} className="w-5 h-5 mr-3" />
-                                            {item.name}
-                                        </div>
-                                        <Icon icon="solar:alt-arrow-down-bold" className={`w-4 h-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
-                                    </button>
-                                    {(openDropdown === item.name || isChildActive(item.children)) && (
-                                        <div className="mt-1 ml-4 space-y-1">
-                                            {item.children.map((child) => (
-                                                <Link
-                                                    key={child.name}
-                                                    href={child.href}
-                                                    className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
-                                                        currentPath === child.href
-                                                            ? 'bg-green-700 text-white'
-                                                            : 'text-green-200 hover:bg-green-700 hover:text-white'
-                                                    }`}
-                                                >
-                                                    <Icon icon={child.icon} className="w-4 h-4 mr-2" />
-                                                    {child.name}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                                        currentPath.startsWith(item.href)
-                                            ? 'bg-green-900 text-white'
-                                            : 'text-green-100 hover:bg-green-700'
+                    <div>
+                        <p className="font-extrabold text-primary text-sm font-headline tracking-tight">Defila Solusi</p>
+                        <p className="text-[10px] text-on-tertiary-container">Mushroom Factory</p>
+                    </div>
+                </div>
+
+                {/* Nav */}
+                <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+                    {navigation.map((item, index) => (
+                        item.type === 'section' ? (
+                            <div key={item.name} className={`px-4 pt-6 pb-2 ${index > 0 ? 'mt-1' : ''}`}>
+                                <span className="text-[10px] font-bold text-on-tertiary-container uppercase tracking-[0.15em]">
+                                    {item.name}
+                                </span>
+                            </div>
+                        ) : item.children ? (
+                            <div key={item.name}>
+                                <button
+                                    onClick={() => toggleDropdown(item.name)}
+                                    className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                                        isChildActive(item.children) || openDropdown === item.name
+                                            ? 'bg-white text-secondary shadow-clinical-sm'
+                                            : 'text-slate-500 hover:bg-blue-50/50'
                                     }`}
                                 >
-                                    <Icon icon={item.icon} className="w-5 h-5 mr-3" />
-                                    {item.name}
-                                </Link>
-                            )
-                        ))}
-                    </nav>
-                </div>
-            </div>
-
-            {/* Main content */}
-            <div className="lg:pl-64">
-                {/* Top header */}
-                <header className="sticky top-0 z-30 bg-white shadow">
-                    <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center">
-                            <button
-                                onClick={() => setSidebarOpen(true)}
-                                className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                    <div className="flex items-center gap-3">
+                                        <MIcon name={item.icon} className="text-xl" />
+                                        <span className="font-headline">{item.name}</span>
+                                    </div>
+                                    <MIcon name="expand_more" className={`text-lg transition-transform duration-200 ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                                </button>
+                                {(openDropdown === item.name || isChildActive(item.children)) && (
+                                    <div className="mt-1 ml-4 space-y-0.5">
+                                        {item.children.map((child) => (
+                                            <Link
+                                                key={child.name}
+                                                href={child.href}
+                                                className={`flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl transition-all duration-200 hover:translate-x-1 ${
+                                                    currentPath === child.href
+                                                        ? 'bg-white text-secondary font-semibold shadow-clinical-sm'
+                                                        : 'text-slate-400 hover:bg-blue-50/50 hover:text-slate-600'
+                                                }`}
+                                            >
+                                                <MIcon name={child.icon} className="text-lg" />
+                                                {child.name}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:translate-x-1 ${
+                                    currentPath.startsWith(item.href)
+                                        ? 'bg-white text-secondary shadow-clinical-sm'
+                                        : 'text-slate-500 hover:bg-blue-50/50'
+                                }`}
                             >
-                                <Icon icon="solar:hamburger-menu-bold" className="w-6 h-6" />
-                            </button>
-                            <h1 className="ml-2 lg:ml-0 text-xl font-semibold text-gray-800">
-                                {title || 'Dashboard'}
-                            </h1>
+                                <MIcon name={item.icon} className="text-xl" fill={currentPath.startsWith(item.href)} />
+                                <span className="font-headline">{item.name}</span>
+                            </Link>
+                        )
+                    ))}
+                </nav>
+
+                {/* Bottom actions */}
+                <div className="p-4 border-t border-slate-200/20 space-y-1">
+                    <Link href="/panen/create" className="block w-full primary-gradient text-white font-headline text-sm font-bold py-3 rounded-xl shadow-clinical text-center hover:opacity-90 active:scale-[0.98] transition-all">
+                        Input Panen Baru
+                    </Link>
+                </div>
+            </aside>
+
+            {/* Top Nav Bar */}
+            <header className="lg:ml-64 sticky top-0 z-30 bg-white/70 backdrop-blur-xl shadow-clinical">
+                <div className="flex justify-between items-center w-full px-6 h-16">
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setSidebarOpen(true)}
+                            className="lg:hidden p-2 text-slate-500 hover:bg-blue-50/50 rounded-xl transition-all"
+                        >
+                            <MIcon name="menu" />
+                        </button>
+                        <div>
+                            <h1 className="text-lg font-headline font-extrabold text-on-surface tracking-tight">{title || 'Dashboard'}</h1>
                         </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Link href="/notifikasi" className="p-2 text-slate-500 hover:bg-blue-50/50 rounded-full transition-all active:scale-95 duration-200">
+                            <MIcon name="notifications" />
+                        </Link>
+                        <button className="p-2 text-slate-500 hover:bg-blue-50/50 rounded-full transition-all active:scale-95 duration-200">
+                            <MIcon name="settings" />
+                        </button>
 
                         {/* User menu */}
-                        <div className="relative">
+                        <div className="relative ml-2">
                             <button
                                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                className="flex items-center space-x-2 text-gray-700 hover:text-gray-900"
+                                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                             >
-                                <Icon icon="solar:user-circle-bold" className="w-8 h-8" />
-                                <span className="hidden sm:block font-medium">{auth.user.name}</span>
-                                <Icon icon="solar:alt-arrow-down-bold" className="w-4 h-4" />
+                                <div className="w-8 h-8 rounded-full primary-gradient flex items-center justify-center text-white text-xs font-bold">
+                                    {auth.user.name?.charAt(0)}
+                                </div>
                             </button>
 
                             {userMenuOpen && (
                                 <>
-                                    <div
-                                        className="fixed inset-0 z-10"
-                                        onClick={() => setUserMenuOpen(false)}
-                                    />
-                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-20">
+                                    <div className="fixed inset-0 z-10" onClick={() => setUserMenuOpen(false)} />
+                                    <div className="absolute right-0 mt-3 w-56 bg-surface-container-lowest rounded-xl shadow-clinical-lg py-2 z-20 border border-outline-variant/15">
+                                        <div className="px-4 py-3 border-b border-outline-variant/15">
+                                            <p className="font-bold text-sm text-on-surface font-headline">{auth.user.name}</p>
+                                            <p className="text-[11px] text-on-tertiary-container">{auth.user.email}</p>
+                                        </div>
                                         <Link
                                             href="/profile"
-                                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            className="flex items-center gap-3 px-4 py-3 text-sm text-slate-600 hover:bg-blue-50/50 transition-colors"
                                         >
-                                            <Icon icon="solar:user-circle-bold" className="w-5 h-5 mr-2" />
+                                            <MIcon name="person" className="text-lg" />
                                             Profile
                                         </Link>
                                         <Link
                                             href="/logout"
                                             method="post"
                                             as="button"
-                                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            className="flex items-center gap-3 w-full px-4 py-3 text-sm text-slate-600 hover:bg-blue-50/50 transition-colors"
                                         >
-                                            <Icon icon="solar:logout-2-bold" className="w-5 h-5 mr-2" />
+                                            <MIcon name="logout" className="text-lg" />
                                             Logout
                                         </Link>
                                     </div>
@@ -307,13 +329,13 @@ export default function AdminLayout({ children, title }) {
                             )}
                         </div>
                     </div>
-                </header>
+                </div>
+            </header>
 
-                {/* Page content */}
-                <main className="p-4 sm:p-6 lg:p-8">
-                    {children}
-                </main>
-            </div>
+            {/* Main content canvas */}
+            <main className="lg:ml-64 p-6 lg:p-8">
+                {children}
+            </main>
         </div>
     );
 }

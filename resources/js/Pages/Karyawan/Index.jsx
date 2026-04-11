@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 import { formatRupiah } from '@/Utils/format';
 
 export default function KaryawanIndex({ karyawans, filters, summary }) {
@@ -61,7 +61,7 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
             bulanan: 'bg-purple-100 text-purple-700',
             borongan: 'bg-orange-100 text-orange-700',
         };
-        return classes[tipe] || 'bg-gray-100 text-gray-700';
+        return classes[tipe] || 'bg-surface-container-low text-on-surface-variant';
     };
 
     return (
@@ -70,50 +70,50 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-green-500 p-3 rounded-lg">
-                            <Icon icon="solar:users-group-rounded-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-secondary p-3 rounded-xl">
+                            <MIcon name="groups" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Karyawan Aktif</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary.totalAktif}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Karyawan Aktif</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary.totalAktif}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-gray-400 p-3 rounded-lg">
-                            <Icon icon="solar:users-group-rounded-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-gray-400 p-3 rounded-xl">
+                            <MIcon name="groups" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Karyawan Nonaktif</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary.totalNonaktif}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Karyawan Nonaktif</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary.totalNonaktif}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm">
-                <div className="p-6 border-b border-gray-200">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm">
+                <div className="p-6 border-b border-outline-variant/15">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
-                            <Icon icon="solar:users-group-rounded-bold" className="w-6 h-6 text-orange-600 mr-2" />
-                            <h2 className="text-lg font-semibold text-gray-800">Data Karyawan</h2>
+                            <MIcon name="groups" className="text-2xl text-orange-600 mr-2" />
+                            <h2 className="text-lg font-headline font-bold text-on-surface">Data Karyawan</h2>
                         </div>
                         <div className="flex items-center space-x-2">
                             <button
                                 onClick={() => setFilterOpen(!filterOpen)}
-                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-on-surface-variant bg-surface-container-low rounded-xl hover:bg-gray-200 transition-colors"
                             >
-                                <Icon icon="solar:filter-bold" className="w-5 h-5 mr-1" />
+                                <MIcon name="filter_list" className="text-xl mr-1" />
                                 Filter
                             </button>
                             <Link
                                 href="/karyawan/create"
-                                className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                                className="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary transition-colors"
                             >
-                                <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
+                                <MIcon name="add_circle" className="text-xl mr-1" />
                                 Tambah Karyawan
                             </Link>
                         </div>
@@ -121,31 +121,31 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
 
                     {/* Filter Form */}
                     {filterOpen && (
-                        <form onSubmit={handleFilter} className="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <form onSubmit={handleFilter} className="mt-4 p-4 bg-surface-container-low rounded-xl">
                             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                         Cari Nama
                                     </label>
                                     <div className="relative">
-                                        <Icon icon="solar:magnifer-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                        <MIcon name="search" className="text-base absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                                         <input
                                             type="text"
                                             value={filterData.search}
                                             onChange={(e) => setFilterData({ ...filterData, search: e.target.value })}
                                             placeholder="Nama karyawan..."
-                                            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                            className="w-full pl-9 pr-3 py-2 border border-outline-variant/30 rounded-xl text-sm"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                         Bagian
                                     </label>
                                     <select
                                         value={filterData.bagian}
                                         onChange={(e) => setFilterData({ ...filterData, bagian: e.target.value })}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                        className="w-full px-3 py-2 border border-outline-variant/30 rounded-xl text-sm"
                                     >
                                         <option value="">Semua Bagian</option>
                                         <option value="KANTOR">Kantor</option>
@@ -162,7 +162,7 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                         Urutkan
                                     </label>
                                     <select
@@ -171,7 +171,7 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                             const [sortBy, sortDir] = e.target.value.split('-');
                                             setFilterData({ ...filterData, sort_by: sortBy, sort_dir: sortDir });
                                         }}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                        className="w-full px-3 py-2 border border-outline-variant/30 rounded-xl text-sm"
                                     >
                                         <option value="nama-asc">Nama (A-Z)</option>
                                         <option value="nama-desc">Nama (Z-A)</option>
@@ -180,13 +180,13 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                         Status
                                     </label>
                                     <select
                                         value={filterData.status}
                                         onChange={(e) => setFilterData({ ...filterData, status: e.target.value })}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                        className="w-full px-3 py-2 border border-outline-variant/30 rounded-xl text-sm"
                                     >
                                         <option value="">Semua Status</option>
                                         <option value="aktif">Aktif</option>
@@ -194,13 +194,13 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                         Tipe Gaji
                                     </label>
                                     <select
                                         value={filterData.tipe_gaji}
                                         onChange={(e) => setFilterData({ ...filterData, tipe_gaji: e.target.value })}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                        className="w-full px-3 py-2 border border-outline-variant/30 rounded-xl text-sm"
                                     >
                                         <option value="">Semua Tipe</option>
                                         <option value="mingguan">Mingguan</option>
@@ -211,14 +211,14 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                 <div className="flex items-end space-x-2">
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                                        className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary"
                                     >
                                         Terapkan
                                     </button>
                                     <button
                                         type="button"
                                         onClick={handleReset}
-                                        className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300"
+                                        className="px-4 py-2 bg-gray-200 text-on-surface-variant text-sm font-medium rounded-xl hover:bg-gray-300"
                                     >
                                         Reset
                                     </button>
@@ -230,27 +230,27 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
 
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-surface-container-low">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Nama
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Bagian
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     No. HP
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Tipe Gaji
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Nominal
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Status
                                 </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase tracking-wider">
                                     Aksi
                                 </th>
                             </tr>
@@ -258,27 +258,27 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                         <tbody className="divide-y divide-gray-200">
                             {karyawans.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan="7" className="px-6 py-12 text-center text-on-tertiary-container">
                                         Belum ada data karyawan
                                     </td>
                                 </tr>
                             ) : (
                                 karyawans.data.map((karyawan) => (
-                                    <tr key={karyawan.id} className="hover:bg-gray-50">
+                                    <tr key={karyawan.id} className="hover:bg-surface-container-low">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div>
-                                                <p className="text-sm font-medium text-gray-900">{karyawan.nama}</p>
-                                                <p className="text-xs text-gray-500">
+                                                <p className="text-sm font-medium text-on-surface">{karyawan.nama}</p>
+                                                <p className="text-xs text-on-tertiary-container">
                                                     Masuk: {karyawan.tanggal_masuk_formatted}
                                                 </p>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
+                                            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-surface-container-low text-on-surface-variant">
                                                 {karyawan.bagian || '-'}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">
                                             {karyawan.no_hp || '-'}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -286,14 +286,14 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                                 {getTipeGajiLabel(karyawan.tipe_gaji)}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-on-surface">
                                             {formatRupiah(karyawan.nominal_gaji)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                                                 karyawan.status === 'aktif'
-                                                    ? 'bg-green-100 text-green-700'
-                                                    : 'bg-gray-100 text-gray-700'
+                                                    ? 'bg-emerald-100 text-secondary'
+                                                    : 'bg-surface-container-low text-on-surface-variant'
                                             }`}>
                                                 {karyawan.status === 'aktif' ? 'Aktif' : 'Nonaktif'}
                                             </span>
@@ -302,16 +302,16 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
                                                     href={'/karyawan/' + karyawan.id + '/edit'}
-                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
                                                 >
-                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                    <MIcon name="edit" className="text-xl" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(karyawan.id)}
                                                     disabled={deleting === karyawan.id}
-                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors disabled:opacity-50"
                                                 >
-                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                    <MIcon name="delete" className="text-xl" />
                                                 </button>
                                             </div>
                                         </td>
@@ -324,9 +324,9 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
 
                 {/* Pagination */}
                 {karyawans.last_page > 1 && (
-                    <div className="px-6 py-4 border-t border-gray-200">
+                    <div className="px-6 py-4 border-t border-outline-variant/15">
                         <div className="flex items-center justify-between">
-                            <p className="text-sm text-gray-700">
+                            <p className="text-sm text-on-surface-variant">
                                 Menampilkan {karyawans.from} - {karyawans.to} dari {karyawans.total} data
                             </p>
                             <div className="flex space-x-2">
@@ -336,10 +336,10 @@ export default function KaryawanIndex({ karyawans, filters, summary }) {
                                         href={link.url || '#'}
                                         className={`px-3 py-1 text-sm rounded ${
                                             link.active
-                                                ? 'bg-green-600 text-white'
+                                                ? 'bg-primary text-white'
                                                 : link.url
-                                                ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                : 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                                                ? 'bg-surface-container-low text-on-surface-variant hover:bg-gray-200'
+                                                : 'bg-surface-container-low text-slate-400 cursor-not-allowed'
                                         }`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />

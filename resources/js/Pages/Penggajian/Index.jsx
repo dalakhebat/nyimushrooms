@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 
 export default function PenggajianIndex({ penggajians, filters, summary }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -113,7 +113,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
 
     const getStatusBadge = (status) => {
         if (status === 'dibayar') {
-            return { class: 'bg-green-100 text-green-700', label: 'Dibayar', icon: 'solar:check-circle-bold' };
+            return { class: 'bg-emerald-100 text-secondary', label: 'Dibayar', icon: 'solar:check-circle-bold' };
         }
         return { class: 'bg-yellow-100 text-yellow-700', label: 'Pending', icon: 'solar:clock-circle-bold' };
     };
@@ -124,49 +124,49 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:clock-circle-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-yellow-500 p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="schedule" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Pending</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary.totalPending}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Pending</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary.totalPending}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-green-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:check-circle-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-secondary p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="check_circle" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Dibayar</p>
-                            <p className="text-2xl font-semibold text-gray-900">{summary.totalDibayar}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Dibayar</p>
+                            <p className="text-2xl font-bold text-on-surface">{summary.totalDibayar}</p>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
                     <div className="flex items-center">
-                        <div className="bg-red-500 p-3 rounded-lg flex-shrink-0">
-                            <Icon icon="solar:banknote-bold" className="w-6 h-6 text-white" />
+                        <div className="bg-red-500 p-3 rounded-xl flex-shrink-0">
+                            <MIcon name="payments" className="text-2xl text-white" />
                         </div>
                         <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-500">Total Belum Dibayar</p>
-                            <p className="text-lg font-semibold text-gray-900">{formatCurrency(summary.totalNominalPending)}</p>
+                            <p className="text-sm font-medium text-on-tertiary-container">Total Belum Dibayar</p>
+                            <p className="text-lg font-headline font-bold text-on-surface">{formatCurrency(summary.totalNominalPending)}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Filters & Actions */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4 mb-6">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex flex-wrap items-center gap-3">
                         <select
                             value={filters.status || ''}
                             onChange={(e) => handleFilter('status', e.target.value)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                         >
                             <option value="">Semua Status</option>
                             <option value="pending">Pending</option>
@@ -175,7 +175,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                         <select
                             value={filters.bulan || ''}
                             onChange={(e) => handleFilter('bulan', e.target.value)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                         >
                             <option value="">Semua Bulan</option>
                             {getMonthOptions().map((opt) => (
@@ -190,13 +190,13 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                 placeholder="Cari karyawan..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-green-500"
+                                className="px-4 py-2 border border-outline-variant/30 rounded-l-lg focus:ring-2 focus:ring-secondary"
                             />
                             <button
                                 type="submit"
-                                className="px-4 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg hover:bg-gray-200"
+                                className="px-4 py-2 bg-surface-container-low border border-l-0 border-outline-variant/30 rounded-r-lg hover:bg-gray-200"
                             >
-                                <Icon icon="solar:magnifer-bold" className="w-5 h-5 text-gray-500" />
+                                <MIcon name="search" className="text-xl text-on-tertiary-container" />
                             </button>
                         </form>
                     </div>
@@ -204,24 +204,24 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                         {selectedIds.length > 0 && (
                             <button
                                 onClick={() => setShowBayarModal(true)}
-                                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"
+                                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700"
                             >
-                                <Icon icon="solar:banknote-bold" className="w-5 h-5 mr-1" />
+                                <MIcon name="payments" className="text-xl mr-1" />
                                 Bayar ({selectedIds.length})
                             </button>
                         )}
                         <button
                             onClick={() => setShowDeleteAllModal(true)}
-                            className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700"
+                            className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-xl hover:bg-red-700"
                         >
-                            <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5 mr-1" />
+                            <MIcon name="delete" className="text-xl mr-1" />
                             Hapus Semua
                         </button>
                         <Link
                             href="/penggajian/create"
-                            className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                            className="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary"
                         >
-                            <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
+                            <MIcon name="add_circle" className="text-xl mr-1" />
                             Proses Gaji
                         </Link>
                     </div>
@@ -229,31 +229,31 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl shadow-sm">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-surface-container-low">
                             <tr>
                                 <th className="px-4 py-3 text-left">
                                     <input
                                         type="checkbox"
                                         onChange={handleSelectAll}
                                         checked={selectedIds.length > 0 && selectedIds.length === penggajians.data.filter(p => p.status === 'pending').length}
-                                        className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                                        className="rounded border-outline-variant/30 text-secondary focus:ring-secondary"
                                     />
                                 </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Karyawan</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Periode</th>
-                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Hadir</th>
-                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total Gaji</th>
-                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Karyawan</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Periode</th>
+                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Hadir</th>
+                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Total Gaji</th>
+                                <th className="px-4 py-3 text-center text-xs font-medium text-on-tertiary-container uppercase">Status</th>
+                                <th className="px-4 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {penggajians.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan="7" className="px-4 py-12 text-center text-gray-500">
+                                    <td colSpan="7" className="px-4 py-12 text-center text-on-tertiary-container">
                                         Belum ada data penggajian
                                     </td>
                                 </tr>
@@ -261,30 +261,30 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                 penggajians.data.map((item) => {
                                     const statusIconName = getStatusBadge(item.status).icon;
                                     return (
-                                        <tr key={item.id} className="hover:bg-gray-50">
+                                        <tr key={item.id} className="hover:bg-surface-container-low">
                                             <td className="px-4 py-4">
                                                 {item.status === 'pending' && (
                                                     <input
                                                         type="checkbox"
                                                         checked={selectedIds.includes(item.id)}
                                                         onChange={() => handleSelect(item.id)}
-                                                        className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                                                        className="rounded border-outline-variant/30 text-secondary focus:ring-secondary"
                                                     />
                                                 )}
                                             </td>
                                             <td className="px-4 py-4">
-                                                <p className="text-sm font-medium text-gray-900">{item.karyawan?.nama}</p>
-                                                <p className="text-xs text-gray-500 capitalize">{item.karyawan?.tipe_gaji}</p>
+                                                <p className="text-sm font-medium text-on-surface">{item.karyawan?.nama}</p>
+                                                <p className="text-xs text-on-tertiary-container capitalize">{item.karyawan?.tipe_gaji}</p>
                                             </td>
-                                            <td className="px-4 py-4 text-sm text-gray-700">
+                                            <td className="px-4 py-4 text-sm text-on-surface-variant">
                                                 {item.periode_formatted}
                                             </td>
                                             <td className="px-4 py-4 text-center">
-                                                <span className="inline-flex items-center justify-center w-8 h-8 text-sm font-medium bg-green-100 text-green-700 rounded-full">
+                                                <span className="inline-flex items-center justify-center w-8 h-8 text-sm font-medium bg-emerald-100 text-secondary rounded-full">
                                                     {item.jumlah_hadir}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-4 text-right text-sm font-semibold text-gray-900">
+                                            <td className="px-4 py-4 text-right text-sm font-bold text-on-surface">
                                                 {formatCurrency(item.total)}
                                             </td>
                                             <td className="px-4 py-4 text-center">
@@ -297,21 +297,21 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                                 <div className="flex items-center justify-end space-x-2">
                                                     <Link
                                                         href={`/penggajian/${item.id}`}
-                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl"
                                                     >
-                                                        <Icon icon="solar:eye-bold" className="w-5 h-5" />
+                                                        <MIcon name="visibility" className="text-xl" />
                                                     </Link>
                                                     <a
                                                         href={`/penggajian/${item.id}/slip-pdf`}
-                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                                                        className="p-2 text-secondary hover:bg-emerald-50 rounded-xl"
                                                     >
-                                                        <Icon icon="solar:document-download-bold" className="w-5 h-5" />
+                                                        <MIcon name="document_download" className="text-xl" />
                                                     </a>
                                                     <button
                                                         onClick={() => handleDelete(item.id)}
-                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-xl"
                                                     >
-                                                        <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                        <MIcon name="delete" className="text-xl" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -325,7 +325,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
 
                 {/* Pagination */}
                 {penggajians.links && penggajians.links.length > 3 && (
-                    <div className="px-4 py-3 border-t border-gray-200 flex justify-center">
+                    <div className="px-4 py-3 border-t border-outline-variant/15 flex justify-center">
                         <div className="flex space-x-1">
                             {penggajians.links.map((link, index) => (
                                 <Link
@@ -333,10 +333,10 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                     href={link.url || '#'}
                                     className={`px-3 py-1 text-sm rounded ${
                                         link.active
-                                            ? 'bg-green-600 text-white'
+                                            ? 'bg-primary text-white'
                                             : link.url
-                                            ? 'text-gray-700 hover:bg-gray-100'
-                                            : 'text-gray-400 cursor-not-allowed'
+                                            ? 'text-on-surface-variant hover:bg-surface-container-low'
+                                            : 'text-slate-400 cursor-not-allowed'
                                     }`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />
@@ -349,32 +349,32 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
             {/* Modal Bayar Bulk */}
             {showBayarModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-md">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Bayar Gaji</h3>
-                        <p className="text-sm text-gray-600 mb-4">
+                    <div className="bg-surface-container-lowest rounded-xl p-6 w-full max-w-md">
+                        <h3 className="text-lg font-bold text-on-surface mb-4">Bayar Gaji</h3>
+                        <p className="text-sm text-on-surface-variant mb-4">
                             Anda akan membayar {selectedIds.length} gaji karyawan.
                         </p>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                 Tanggal Bayar
                             </label>
                             <input
                                 type="date"
                                 value={tanggalBayar}
                                 onChange={(e) => setTanggalBayar(e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary"
                             />
                         </div>
                         <div className="flex justify-end space-x-3">
                             <button
                                 onClick={() => setShowBayarModal(false)}
-                                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                                className="px-4 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-xl"
                             >
                                 Batal
                             </button>
                             <button
                                 onClick={handleBayarBulk}
-                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                                className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary"
                             >
                                 Bayar Sekarang
                             </button>
@@ -386,20 +386,20 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
             {/* Modal Hapus Semua */}
             {showDeleteAllModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-md">
+                    <div className="bg-surface-container-lowest rounded-xl p-6 w-full max-w-md">
                         <div className="flex items-center mb-4">
                             <div className="bg-red-100 p-3 rounded-full mr-3">
-                                <Icon icon="solar:danger-triangle-bold" className="w-6 h-6 text-red-600" />
+                                <MIcon name="warning" className="text-2xl text-red-600" />
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-800">Hapus Semua Data Penggajian</h3>
+                            <h3 className="text-lg font-headline font-bold text-on-surface">Hapus Semua Data Penggajian</h3>
                         </div>
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
                             <p className="text-sm text-red-700 font-medium">
                                 Peringatan: Tindakan ini akan menghapus SEMUA data penggajian dan tidak dapat dibatalkan!
                             </p>
                         </div>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                 Masukkan kode konfirmasi untuk melanjutkan:
                             </label>
                             <input
@@ -410,7 +410,7 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                     setDeleteError('');
                                 }}
                                 placeholder="Masukkan kode..."
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-red-500"
                             />
                             {deleteError && (
                                 <p className="mt-2 text-sm text-red-600">{deleteError}</p>
@@ -423,13 +423,13 @@ export default function PenggajianIndex({ penggajians, filters, summary }) {
                                     setDeleteConfirmCode('');
                                     setDeleteError('');
                                 }}
-                                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                                className="px-4 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-xl"
                             >
                                 Batal
                             </button>
                             <button
                                 onClick={handleDeleteAll}
-                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                                className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700"
                             >
                                 Hapus Semua
                             </button>

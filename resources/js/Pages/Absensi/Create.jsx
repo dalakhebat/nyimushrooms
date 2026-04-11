@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
+import FormAlert from '@/Components/FormAlert';
+import EmptyOption from '@/Components/EmptyOption';
 
 export default function AbsensiCreate({ karyawans, tanggal, today }) {
     const [selectedDate, setSelectedDate] = useState(tanggal);
@@ -58,7 +60,7 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
     };
 
     const statusOptions = [
-        { value: 'hadir', label: 'Hadir', class: 'bg-green-500 hover:bg-green-600', textClass: 'text-white' },
+        { value: 'hadir', label: 'Hadir', class: 'bg-secondary hover:bg-primary', textClass: 'text-white' },
         { value: 'izin', label: 'Izin', class: 'bg-blue-500 hover:bg-blue-600', textClass: 'text-white' },
         { value: 'sakit', label: 'Sakit', class: 'bg-yellow-400 hover:bg-yellow-500', textClass: 'text-yellow-900' },
         { value: 'alpha', label: 'Alpha', class: 'bg-red-500 hover:bg-red-600', textClass: 'text-white' },
@@ -71,19 +73,21 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
             <div className="mb-6">
                 <Link
                     href="/absensi"
-                    className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+                    className="inline-flex items-center text-sm text-on-surface-variant hover:text-on-surface"
                 >
-                    <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
+                    <MIcon name="arrow_back" className="text-base mr-1" />
                     Kembali
                 </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
+                    <FormAlert errors={errors} />
+
                 {/* Date Selector */}
-                <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6 mb-6">
                     <div className="flex items-center justify-between flex-wrap gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                 Tanggal Absensi
                             </label>
                             <input
@@ -91,19 +95,19 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
                                 value={selectedDate}
                                 onChange={handleDateChange}
                                 max={today}
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                className="px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                             />
-                            <p className="mt-1 text-sm text-gray-500">{formatTanggal(selectedDate)}</p>
+                            <p className="mt-1 text-sm text-on-tertiary-container">{formatTanggal(selectedDate)}</p>
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-700 mb-2">Set Semua:</p>
+                            <p className="text-sm font-medium text-on-surface-variant mb-2">Set Semua:</p>
                             <div className="flex space-x-3">
                                 {statusOptions.map((opt) => (
                                     <button
                                         key={opt.value}
                                         type="button"
                                         onClick={() => setAllStatus(opt.value)}
-                                        className={`px-4 py-2 text-sm font-medium rounded-lg ${opt.class} ${opt.textClass}`}
+                                        className={`px-4 py-2 text-sm font-medium rounded-xl ${opt.class} ${opt.textClass}`}
                                     >
                                         {opt.label}
                                     </button>
@@ -114,33 +118,33 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
                 </div>
 
                 {/* Attendance List */}
-                <div className="bg-white rounded-xl shadow-sm">
-                    <div className="p-6 border-b border-gray-200">
-                        <h2 className="text-lg font-semibold text-gray-800">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm">
+                    <div className="p-6 border-b border-outline-variant/15">
+                        <h2 className="text-lg font-headline font-bold text-on-surface">
                             Daftar Karyawan ({karyawans.length} orang)
                         </h2>
                     </div>
 
                     <div className="divide-y divide-gray-200">
                         {karyawans.length === 0 ? (
-                            <div className="px-6 py-12 text-center text-gray-500">
+                            <div className="px-6 py-12 text-center text-on-tertiary-container">
                                 Tidak ada karyawan aktif
                             </div>
                         ) : (
                             karyawans.map((karyawan, index) => (
-                                <div key={karyawan.id} className="p-5 hover:bg-gray-50">
+                                <div key={karyawan.id} className="p-5 hover:bg-surface-container-low">
                                     <div className="flex items-center justify-between flex-wrap gap-4">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                                                <Icon icon="solar:user-rounded-bold" className="w-6 h-6 text-orange-600" />
+                                                <MIcon name="person" className="text-2xl text-orange-600" />
                                             </div>
                                             <div>
-                                                <p className="font-medium text-gray-900">{karyawan.nama}</p>
-                                                <p className="text-sm text-gray-500">{karyawan.no_hp || '-'}</p>
+                                                <p className="font-medium text-on-surface">{karyawan.nama}</p>
+                                                <p className="text-sm text-on-tertiary-container">{karyawan.no_hp || '-'}</p>
                                             </div>
                                             {karyawan.absensi_status && (
-                                                <span className="inline-flex items-center px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full">
-                                                    <Icon icon="solar:check-circle-bold" className="w-4 h-4 mr-1" />
+                                                <span className="inline-flex items-center px-3 py-1 text-xs bg-emerald-100 text-secondary rounded-full">
+                                                    <MIcon name="check_circle" className="text-base mr-1" />
                                                     Sudah absen
                                                 </span>
                                             )}
@@ -152,10 +156,10 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
                                                         key={opt.value}
                                                         type="button"
                                                         onClick={() => handleStatusChange(index, opt.value)}
-                                                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                                        className={`px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
                                                             absensiData[index].status === opt.value
                                                                 ? opt.class + ' ' + opt.textClass
-                                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                                                : 'bg-surface-container-low text-on-surface-variant hover:bg-gray-200'
                                                         }`}
                                                     >
                                                         {opt.label}
@@ -167,7 +171,7 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
                                                 value={absensiData[index].catatan}
                                                 onChange={(e) => handleCatatanChange(index, e.target.value)}
                                                 placeholder="Catatan..."
-                                                className="w-40 sm:w-52 px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                                className="w-40 sm:w-52 px-4 py-2 text-sm border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                                             />
                                         </div>
                                     </div>
@@ -177,18 +181,18 @@ export default function AbsensiCreate({ karyawans, tanggal, today }) {
                     </div>
 
                     {karyawans.length > 0 && (
-                        <div className="p-6 border-t border-gray-200 bg-gray-50">
+                        <div className="p-6 border-t border-outline-variant/15 bg-surface-container-low">
                             <div className="flex items-center justify-end space-x-3">
                                 <Link
                                     href="/absensi"
-                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                    className="px-4 py-2 text-sm font-medium text-on-surface-variant bg-surface-container-lowest border border-outline-variant/30 rounded-xl hover:bg-surface-container-low transition-colors"
                                 >
                                     Batal
                                 </Link>
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="px-6 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                                    className="px-6 py-2 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary transition-colors disabled:opacity-50"
                                 >
                                     {processing ? 'Menyimpan...' : 'Simpan Absensi'}
                                 </button>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
 
 export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, kumbungs, filters }) {
     const [deleting, setDeleting] = useState(null);
@@ -33,33 +33,33 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
 
             {/* Today's Status */}
             <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Status Hari Ini</h3>
+                <h3 className="text-lg font-bold text-on-surface mb-3">Status Hari Ini</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {todayMonitoring.map((item) => (
-                        <div key={item.kumbung.id} className="bg-white rounded-xl shadow-sm p-4">
+                        <div key={item.kumbung.id} className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-4">
                             <div className="flex items-center justify-between mb-3">
-                                <h4 className="font-medium text-gray-800">{item.kumbung.nama}</h4>
-                                <span className="text-xs text-gray-500">{item.kumbung.nomor}</span>
+                                <h4 className="font-medium text-on-surface">{item.kumbung.nama}</h4>
+                                <span className="text-xs text-on-tertiary-container">{item.kumbung.nomor}</span>
                             </div>
                             {item.monitoring ? (
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-sm text-gray-500 flex items-center">
-                                            <Icon icon="solar:sun-bold" className="w-4 h-4 mr-1" /> Suhu
+                                        <span className="text-sm text-on-tertiary-container flex items-center">
+                                            <MIcon name="light_mode" className="text-base mr-1" /> Suhu
                                         </span>
                                         <span className={`text-sm font-medium ${
-                                            getSuhuStatus(item.monitoring.suhu).color === 'green' ? 'text-green-600' :
+                                            getSuhuStatus(item.monitoring.suhu).color === 'green' ? 'text-secondary' :
                                             getSuhuStatus(item.monitoring.suhu).color === 'yellow' ? 'text-yellow-600' : 'text-red-600'
                                         }`}>
                                             {item.monitoring.suhu}°C
                                         </span>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-sm text-gray-500 flex items-center">
-                                            <Icon icon="solar:cloud-bold" className="w-4 h-4 mr-1" /> Kelembaban
+                                        <span className="text-sm text-on-tertiary-container flex items-center">
+                                            <MIcon name="cloud" className="text-base mr-1" /> Kelembaban
                                         </span>
                                         <span className={`text-sm font-medium ${
-                                            getKelembabanStatus(item.monitoring.kelembaban).color === 'green' ? 'text-green-600' :
+                                            getKelembabanStatus(item.monitoring.kelembaban).color === 'green' ? 'text-secondary' :
                                             getKelembabanStatus(item.monitoring.kelembaban).color === 'yellow' ? 'text-yellow-600' : 'text-red-600'
                                         }`}>
                                             {item.monitoring.kelembaban}%
@@ -75,22 +75,22 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
                                     </div>
                                 </div>
                             ) : (
-                                <p className="text-sm text-gray-400">Belum ada data hari ini</p>
+                                <p className="text-sm text-slate-400">Belum ada data hari ini</p>
                             )}
                         </div>
                     ))}
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm">
-                <div className="p-6 border-b border-gray-200">
+            <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm">
+                <div className="p-6 border-b border-outline-variant/15">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-semibold text-gray-800">Riwayat Monitoring</h2>
+                        <h2 className="text-lg font-headline font-bold text-on-surface">Riwayat Monitoring</h2>
                         <Link
                             href="/monitoring-kumbung/create"
-                            className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                            className="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary"
                         >
-                            <Icon icon="solar:add-circle-bold" className="w-5 h-5 mr-1" />
+                            <MIcon name="add_circle" className="text-xl mr-1" />
                             Input Monitoring
                         </Link>
                     </div>
@@ -98,36 +98,36 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
 
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-surface-container-low">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Waktu</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kumbung</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Suhu</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kelembaban</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kondisi</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Perawatan</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Tanggal</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Waktu</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kumbung</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Suhu</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kelembaban</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kondisi</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Perawatan</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {monitorings.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan="8" className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan="8" className="px-6 py-12 text-center text-on-tertiary-container">
                                         Belum ada data monitoring
                                     </td>
                                 </tr>
                             ) : (
                                 monitorings.data.map((item) => (
-                                    <tr key={item.id} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    <tr key={item.id} className="hover:bg-surface-container-low">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">
                                             {new Date(item.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{item.waktu}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.kumbung?.nama}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">{item.waktu}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-on-surface">{item.kumbung?.nama}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             <span className={`${
-                                                getSuhuStatus(item.suhu).color === 'green' ? 'text-green-600' :
+                                                getSuhuStatus(item.suhu).color === 'green' ? 'text-secondary' :
                                                 getSuhuStatus(item.suhu).color === 'yellow' ? 'text-yellow-600' : 'text-red-600'
                                             }`}>
                                                 {item.suhu ? `${item.suhu}°C` : '-'}
@@ -135,7 +135,7 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             <span className={`${
-                                                getKelembabanStatus(item.kelembaban).color === 'green' ? 'text-green-600' :
+                                                getKelembabanStatus(item.kelembaban).color === 'green' ? 'text-secondary' :
                                                 getKelembabanStatus(item.kelembaban).color === 'yellow' ? 'text-yellow-600' : 'text-red-600'
                                             }`}>
                                                 {item.kelembaban ? `${item.kelembaban}%` : '-'}
@@ -143,7 +143,7 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                                item.kondisi_baglog === 'baik' ? 'bg-green-100 text-green-800' :
+                                                item.kondisi_baglog === 'baik' ? 'bg-emerald-100 text-primary' :
                                                 item.kondisi_baglog === 'cukup' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
                                             }`}>
                                                 {item.kondisi_baglog}
@@ -157,11 +157,11 @@ export default function MonitoringKumbungIndex({ monitorings, todayMonitoring, k
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                                             <div className="flex items-center justify-end space-x-2">
-                                                <Link href={`/monitoring-kumbung/${item.id}/edit`} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
-                                                    <Icon icon="solar:pen-bold" className="w-5 h-5" />
+                                                <Link href={`/monitoring-kumbung/${item.id}/edit`} className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl">
+                                                    <MIcon name="edit" className="text-xl" />
                                                 </Link>
-                                                <button onClick={() => handleDelete(item.id)} disabled={deleting === item.id} className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50">
-                                                    <Icon icon="solar:trash-bin-trash-bold" className="w-5 h-5" />
+                                                <button onClick={() => handleDelete(item.id)} disabled={deleting === item.id} className="p-2 text-red-600 hover:bg-red-50 rounded-xl disabled:opacity-50">
+                                                    <MIcon name="delete" className="text-xl" />
                                                 </button>
                                             </div>
                                         </td>

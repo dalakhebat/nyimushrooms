@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Baglog;
 use App\Models\Kumbung;
+use App\Models\Panen;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -100,16 +101,76 @@ class KumbungController extends Controller
         // Get baglog statistics
         $baglogStats = [
             'produksi' => Baglog::where('kumbung_id', $kumbung->id)->where('status', 'produksi')->sum('jumlah'),
-            'inkubasi' => Baglog::where('kumbung_id', $kumbung->id)->where('status', 'inkubasi')->sum('jumlah'),
-            'pembibitan' => Baglog::where('kumbung_id', $kumbung->id)->where('status', 'pembibitan')->sum('jumlah'),
             'masuk_kumbung' => Baglog::where('kumbung_id', $kumbung->id)->where('status', 'masuk_kumbung')->sum('jumlah'),
             'selesai' => Baglog::where('kumbung_id', $kumbung->id)->where('status', 'selesai')->sum('jumlah'),
         ];
 
-        // Get panen history
-        $panenHistory = $kumbung->panens()
+        // Get siklus data (grouped by baglog batch)
+        $siklusList = Baglog::where('kumbung_id', $kumbung->id)
+            ->orderBy('tanggal_tanam', 'asc')
+            ->get()
+            ->map(function ($baglog, $index) {
+                $panens = Panen::where('baglog_id', $baglog->id)
+                    ->orderBy('tanggal', 'asc')
+                    ->get()
+                    ->map(function ($panen) {
+                        return [
+                            'id' => $panen->id,
+                            'tanggal' => $panen->tanggal->format('Y-m-d'),
+                            'tanggal_formatted' => $panen->tanggal->locale('id')->isoFormat('D MMM Y'),
+                            'berat_kg' => $panen->berat_kg,
+                            'berat_layak_jual' => $panen->berat_layak_jual,
+                            'berat_reject' => $panen->berat_reject,
+                        ];
+                    });
+
+                $totalKg = $panens->sum('berat_kg');
+                $hargaPerKg = $baglog->kumbung->harga_jual_per_kg ?? 10200;
+                $biayaBaglog = $baglog->kumbung->biaya_baglog ?? 88000000;
+                $pendapatan = $totalKg * $hargaPerKg;
+                $profit = $pendapatan - $biayaBaglog;
+
+                return [
+                    'siklus' => $index + 1,
+                    'kode_batch' => $baglog->kode_batch,
+                    'jumlah_baglog' => $baglog->jumlah,
+                    'status' => $baglog->status,
+                    'tanggal_tanam' => $baglog->tanggal_tanam?->format('Y-m-d'),
+                    'tanggal_tanam_formatted' => $baglog->tanggal_tanam?->locale('id')->isoFormat('MMM Y'),
+                    'total_kg' => $totalKg,
+                    'total_pendapatan' => $pendapatan,
+                    'biaya_baglog' => $biayaBaglog,
+                    'profit' => $profit,
+                    'minggu_panen' => $panens->count(),
+                    'panens' => $panens,
+                ];
+            });
+
+        // Hitung akumulasi profit semua siklus yang selesai
+        $totalProfitSiklus = $siklusList
+            ->filter(fn($s) => $s['status'] === 'selesai')
+            ->sum('profit');
+
+        // BEP berdasarkan biaya pembangunan saja (Opsi B)
+        $biayaPembangunan = $kumbung->biaya_pembangunan ?? 0;
+        $jumlahSiklusSelesai = $siklusList->where('status', 'selesai')->count();
+        $avgProfitPerSiklus = $jumlahSiklusSelesai > 0
+            ? $totalProfitSiklus / $jumlahSiklusSelesai
+            : 0;
+        $siklusBep = $avgProfitPerSiklus > 0
+            ? ceil($biayaPembangunan / $avgProfitPerSiklus)
+            : null;
+        $bulanBep = $siklusBep ? $siklusBep * ($kumbung->umur_baglog_bulan ?? 4) : null;
+
+        $bepProgress = $biayaPembangunan > 0
+            ? min(($totalProfitSiklus / $biayaPembangunan) * 100, 100)
+            : 0;
+        $sisaBep = max($biayaPembangunan - $totalProfitSiklus, 0);
+
+        // Legacy: panen tanpa baglog_id (untuk backward compat)
+        $panenTanpaBaglog = Panen::where('kumbung_id', $kumbung->id)
+            ->whereNull('baglog_id')
             ->orderBy('tanggal', 'desc')
-            ->limit(10)
             ->get()
             ->map(function ($panen) {
                 return [
@@ -144,12 +205,19 @@ class KumbungController extends Controller
                 'total_panen' => $kumbung->total_panen,
                 'pendapatan_panen' => $kumbung->pendapatan_panen,
                 'roi' => $kumbung->roi,
-                'progress_target' => $kumbung->progress_target,
-                'sisa_target_bep' => $kumbung->sisa_target_bep,
+                // BEP Opsi B: berdasarkan biaya pembangunan
+                'bep_target' => $biayaPembangunan,
+                'bep_progress' => round($bepProgress, 1),
+                'bep_sisa' => $sisaBep,
+                'bep_siklus' => $siklusBep,
+                'bep_bulan' => $bulanBep,
+                'total_profit_akumulasi' => $totalProfitSiklus,
+                'avg_profit_per_siklus' => round($avgProfitPerSiklus),
                 'estimasi_profit' => $kumbung->estimasi_profit,
             ],
             'baglogStats' => $baglogStats,
-            'panenHistory' => $panenHistory,
+            'siklusList' => $siklusList,
+            'panenTanpaBaglog' => $panenTanpaBaglog,
         ]);
     }
 

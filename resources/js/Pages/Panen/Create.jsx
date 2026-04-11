@@ -1,6 +1,8 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Icon } from '@iconify/react';
+import MIcon from '@/Components/MIcon';
+import FormAlert from '@/Components/FormAlert';
+import EmptyOption from '@/Components/EmptyOption';
 
 export default function PanenCreate({ kumbungs, today }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -11,6 +13,8 @@ export default function PanenCreate({ kumbungs, today }) {
         berat_reject: '',
         catatan: '',
     });
+
+    const hasError = (field) => !!errors[field];
 
     // Auto-calculate reject when berat_kg or layak_jual changes
     const handleBeratChange = (value) => {
@@ -42,27 +46,36 @@ export default function PanenCreate({ kumbungs, today }) {
                 <div className="mb-6">
                     <Link
                         href="/panen"
-                        className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+                        className="inline-flex items-center text-sm text-on-surface-variant hover:text-on-surface"
                     >
-                        <Icon icon="solar:arrow-left-bold" className="w-4 h-4 mr-1" />
+                        <MIcon name="arrow_back" className="text-base mr-1" />
                         Kembali
                     </Link>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-6">
+                <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-6">
+                    <h2 className="text-lg font-bold text-on-surface mb-6">
                         Input Data Panen
                     </h2>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
+                    <FormAlert errors={errors} />
+
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                 Kumbung <span className="text-red-500">*</span>
                             </label>
+
+                            {kumbungs.length === 0 ? (
+
+                                <EmptyOption label="Kumbung" href="/kumbung/create" />
+
+                            ) : (
+
                             <select
                                 value={data.kumbung_id}
                                 onChange={(e) => setData('kumbung_id', e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                             >
                                 <option value="">Pilih Kumbung</option>
                                 {kumbungs.map((kumbung) => (
@@ -71,20 +84,22 @@ export default function PanenCreate({ kumbungs, today }) {
                                     </option>
                                 ))}
                             </select>
+
+                            )}
                             {errors.kumbung_id && (
                                 <p className="mt-1 text-sm text-red-600">{errors.kumbung_id}</p>
                             )}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                 Tanggal <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="date"
                                 value={data.tanggal}
                                 onChange={(e) => setData('tanggal', e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                             />
                             {errors.tanggal && (
                                 <p className="mt-1 text-sm text-red-600">{errors.tanggal}</p>
@@ -92,7 +107,7 @@ export default function PanenCreate({ kumbungs, today }) {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                 Berat Total (kg) <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -102,19 +117,19 @@ export default function PanenCreate({ kumbungs, today }) {
                                 value={data.berat_kg}
                                 onChange={(e) => handleBeratChange(e.target.value)}
                                 placeholder="Contoh: 5.5"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                             />
                             {errors.berat_kg && (
                                 <p className="mt-1 text-sm text-red-600">{errors.berat_kg}</p>
                             )}
                         </div>
 
-                        <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-                            <h3 className="text-sm font-medium text-gray-700">Sortir Hasil Panen</h3>
+                        <div className="bg-surface-container-low p-4 rounded-xl space-y-4">
+                            <h3 className="text-sm font-medium text-on-surface-variant">Sortir Hasil Panen</h3>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-green-700 mb-1">
+                                    <label className="block text-sm font-medium text-secondary mb-1">
                                         Layak Jual (kg) <span className="text-red-500">*</span>
                                     </label>
                                     <input
@@ -124,7 +139,7 @@ export default function PanenCreate({ kumbungs, today }) {
                                         value={data.berat_layak_jual}
                                         onChange={(e) => handleLayakJualChange(e.target.value)}
                                         placeholder="0.00"
-                                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-green-50"
+                                        className="w-full px-4 py-2 border border-green-300 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500 bg-emerald-50"
                                     />
                                     {errors.berat_layak_jual && (
                                         <p className="mt-1 text-sm text-red-600">{errors.berat_layak_jual}</p>
@@ -142,7 +157,7 @@ export default function PanenCreate({ kumbungs, today }) {
                                         value={data.berat_reject}
                                         onChange={(e) => setData('berat_reject', e.target.value)}
                                         placeholder="0.00"
-                                        className="w-full px-4 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50"
+                                        className="w-full px-4 py-2 border border-red-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50"
                                     />
                                     {errors.berat_reject && (
                                         <p className="mt-1 text-sm text-red-600">{errors.berat_reject}</p>
@@ -158,7 +173,7 @@ export default function PanenCreate({ kumbungs, today }) {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-on-surface-variant mb-1">
                                 Catatan
                             </label>
                             <textarea
@@ -166,7 +181,7 @@ export default function PanenCreate({ kumbungs, today }) {
                                 onChange={(e) => setData('catatan', e.target.value)}
                                 placeholder="Catatan tambahan (opsional)"
                                 rows="3"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                className="w-full px-4 py-2 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-green-500"
                             />
                             {errors.catatan && (
                                 <p className="mt-1 text-sm text-red-600">{errors.catatan}</p>
@@ -176,14 +191,14 @@ export default function PanenCreate({ kumbungs, today }) {
                         <div className="flex items-center justify-end space-x-3 pt-4">
                             <Link
                                 href="/panen"
-                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                className="px-4 py-2 text-sm font-medium text-on-surface-variant bg-surface-container-low rounded-xl hover:bg-gray-200 transition-colors"
                             >
                                 Batal
                             </Link>
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                                className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary transition-colors disabled:opacity-50"
                             >
                                 {processing ? 'Menyimpan...' : 'Simpan'}
                             </button>
