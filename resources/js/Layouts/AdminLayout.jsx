@@ -31,6 +31,7 @@ const navigation = [
     { name: 'Stok Baglog', href: '/baglog', icon: 'layers' },
 
     { type: 'section', name: 'Budidaya' },
+    { name: 'Peta Kumbung', href: '/peta-kumbung', icon: 'map' },
     { name: 'Kumbung', href: '/kumbung', icon: 'house' },
     { name: 'Monitoring', href: '/monitoring-kumbung', icon: 'thermostat' },
     { name: 'Panen', href: '/panen', icon: 'eco' },

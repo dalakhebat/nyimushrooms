@@ -79,7 +79,7 @@ class PanenController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $kumbungs = Kumbung::where('status', 'aktif')
             ->orderBy('nomor')
@@ -101,11 +101,19 @@ class PanenController extends Controller
                 ];
             });
 
+        // Pre-select kumbung kalau dipanggil dari Peta Kumbung (?kumbung_id=...)
+        // Cuma valid kalau kumbung-nya ada di list aktif
+        $selectedKumbungId = (int) $request->query('kumbung_id');
+        if ($selectedKumbungId && !$kumbungs->firstWhere('id', $selectedKumbungId)) {
+            $selectedKumbungId = null;
+        }
+
         return Inertia::render('Panen/Create', [
             'kumbungs' => $kumbungs,
             'baglogs' => $baglogs,
             'stokTersedia' => StokJamur::getStokTersedia(),
             'today' => Carbon::today()->format('Y-m-d'),
+            'selectedKumbungId' => $selectedKumbungId ?: null,
         ]);
     }
 
@@ -120,6 +128,12 @@ class PanenController extends Controller
             'berat_reject' => 'required|numeric|min:0',
             'catatan' => 'nullable|string|max:500',
         ]);
+
+        // Validasi: kumbung harus aktif (gak boleh panen di kumbung nonaktif)
+        $kumbung = Kumbung::find($validated['kumbung_id']);
+        if ($kumbung && $kumbung->status === 'nonaktif') {
+            return back()->withErrors(['kumbung_id' => 'Kumbung ini sedang nonaktif. Aktifkan dulu di menu Kumbung sebelum input panen.']);
+        }
 
         // Validasi: kumbung harus punya baglog aktif (status masuk_kumbung)
         $baglogAktif = Baglog::where('kumbung_id', $validated['kumbung_id'])

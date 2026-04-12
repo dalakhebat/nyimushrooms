@@ -15,11 +15,11 @@ use Inertia\Inertia;
 class PenjualanController extends Controller
 {
     /**
-     * Get available baglog for sale (status: pembibitan)
+     * Get available baglog for sale (status: produksi / masuk_kumbung)
      */
     private function getStockBaglog()
     {
-        return Baglog::where('status', 'pembibitan')->sum('jumlah');
+        return Baglog::whereIn('status', ['produksi', 'masuk_kumbung'])->sum('jumlah');
     }
 
     /**
@@ -28,7 +28,7 @@ class PenjualanController extends Controller
     private function getAvailableBaglogs()
     {
         return Baglog::with('kumbung')
-            ->where('status', 'pembibitan')
+            ->whereIn('status', ['produksi', 'masuk_kumbung'])
             ->where('jumlah', '>', 0)
             ->get();
     }
@@ -161,7 +161,7 @@ class PenjualanController extends Controller
         }
 
         // Validate baglog status
-        if ($baglog->status !== 'pembibitan') {
+        if (!in_array($baglog->status, ['produksi', 'masuk_kumbung'])) {
             return back()->withErrors(['baglog_id' => 'Baglog ini tidak tersedia untuk dijual (status: ' . $baglog->status . ')']);
         }
 
@@ -254,9 +254,14 @@ class PenjualanController extends Controller
         // Return stock to baglog
         if ($penjualanBaglog->baglog) {
             $baglog = $penjualanBaglog->baglog;
+            // Kalau baglog statusnya 'dijual' (habis karena penjualan ini), restore ke status
+            // sebelumnya berdasarkan kumbung_id
+            $restoredStatus = $baglog->status === 'dijual'
+                ? ($baglog->kumbung_id ? 'masuk_kumbung' : 'produksi')
+                : $baglog->status;
             $baglog->update([
                 'jumlah' => $baglog->jumlah + $penjualanBaglog->jumlah_baglog,
-                'status' => 'pembibitan'
+                'status' => $restoredStatus,
             ]);
         }
 

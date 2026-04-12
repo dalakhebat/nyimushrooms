@@ -27,7 +27,7 @@ class BahanBaku extends Model
 
     public function pembelians(): HasMany
     {
-        return $this->hasMany(Pembelian::class);
+        return $this->hasMany(PembelianBahanBaku::class);
     }
 
     public function stokMovements(): HasMany

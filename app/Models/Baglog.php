@@ -13,6 +13,9 @@ class Baglog extends Model
     protected $fillable = [
         'kumbung_id',
         'kode_batch',
+        'sumber',
+        'supplier_nama',
+        'harga_satuan',
         'jumlah',
         'tanggal_produksi',
         'tanggal_tanam',
@@ -24,6 +27,7 @@ class Baglog extends Model
         'tanggal_produksi' => 'date',
         'tanggal_tanam' => 'date',
         'tanggal_estimasi_selesai' => 'date',
+        'harga_satuan' => 'decimal:2',
     ];
 
     public function kumbung(): BelongsTo

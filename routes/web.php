@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Peta Kumbung (war room style visual map)
+    Route::get('/peta-kumbung', [KumbungController::class, 'peta'])->name('kumbung.peta');
+
     // Kumbung
     Route::get('/kumbung/{kumbung}/profitability', [KumbungController::class, 'calculateProfitability'])->name('kumbung.profitability');
     Route::resource('kumbung', KumbungController::class);
@@ -82,6 +85,7 @@ Route::middleware('auth')->group(function () {
 
     // Baglog
     Route::patch('/baglog/{baglog}/status', [BaglogController::class, 'updateStatus'])->name('baglog.update-status');
+    Route::post('/baglog/{baglog}/distribute', [BaglogController::class, 'distribute'])->name('baglog.distribute');
     Route::get('/baglog/{baglog}/allowed-statuses', [BaglogController::class, 'getAllowedNextStatuses'])->name('baglog.allowed-statuses');
     Route::resource('baglog', BaglogController::class)->except(['show']);
 

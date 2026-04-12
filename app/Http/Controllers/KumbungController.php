@@ -295,6 +295,89 @@ class KumbungController extends Controller
     }
 
     /**
+     * Peta Kumbung — visual map view (CoC war room style)
+     */
+    public function peta()
+    {
+        $kumbungs = Kumbung::with([
+            'baglogs' => fn($q) => $q->where('status', 'masuk_kumbung'),
+            'panens' => fn($q) => $q->orderBy('tanggal', 'desc')->limit(1),
+        ])->orderBy('nomor')->get()->map(function ($kumbung) {
+            $baglogAktif = $kumbung->baglogs->sum('jumlah');
+            $usagePercent = $kumbung->kapasitas_baglog > 0
+                ? round(($baglogAktif / $kumbung->kapasitas_baglog) * 100)
+                : 0;
+
+            $latestPanen = $kumbung->panens->first();
+            $daysSincePanen = $latestPanen
+                ? (int) now()->diffInDays($latestPanen->tanggal, false) * -1
+                : null;
+
+            $latestBaglog = $kumbung->baglogs->sortByDesc('tanggal_tanam')->first();
+            $umurBaglog = $latestBaglog && $latestBaglog->tanggal_tanam
+                ? (int) $latestBaglog->tanggal_tanam->diffInDays(now())
+                : null;
+
+            $estimasiSelesai = $latestBaglog?->tanggal_estimasi_selesai;
+            $daysUntilHarvest = $estimasiSelesai
+                ? (int) now()->diffInDays($estimasiSelesai, false)
+                : null;
+
+            // Status logic
+            $status = 'kosong';
+            if ($kumbung->status === 'nonaktif') {
+                $status = 'nonaktif';
+            } elseif ($baglogAktif === 0) {
+                $status = 'kosong';
+            } elseif ($daysSincePanen !== null && $daysSincePanen <= 14 && $daysSincePanen >= 0) {
+                $status = 'panen_aktif';
+            } elseif ($daysUntilHarvest !== null && $daysUntilHarvest <= 7 && $daysUntilHarvest >= -30) {
+                $status = 'siap_panen';
+            } elseif ($umurBaglog !== null && $umurBaglog > 180) {
+                $status = 'lewat';
+            } elseif ($umurBaglog !== null && $umurBaglog < 30) {
+                $status = 'baru';
+            } else {
+                $status = 'growing';
+            }
+
+            return [
+                'id' => $kumbung->id,
+                'nomor' => $kumbung->nomor,
+                'nama' => $kumbung->nama,
+                'kapasitas_baglog' => $kumbung->kapasitas_baglog,
+                'baglog_aktif' => $baglogAktif,
+                'usage_percent' => $usagePercent,
+                'status_kumbung' => $kumbung->status,
+                'status' => $status,
+                'umur_baglog' => $umurBaglog,
+                'days_until_harvest' => $daysUntilHarvest,
+                'days_since_panen' => $daysSincePanen,
+                'last_panen_date' => $latestPanen?->tanggal?->format('Y-m-d'),
+                'last_panen_kg' => $latestPanen?->berat_layak_jual,
+            ];
+        });
+
+        $stats = [
+            'total' => $kumbungs->count(),
+            'kosong' => $kumbungs->where('status', 'kosong')->count(),
+            'baru' => $kumbungs->where('status', 'baru')->count(),
+            'growing' => $kumbungs->where('status', 'growing')->count(),
+            'siap_panen' => $kumbungs->where('status', 'siap_panen')->count(),
+            'panen_aktif' => $kumbungs->where('status', 'panen_aktif')->count(),
+            'lewat' => $kumbungs->where('status', 'lewat')->count(),
+            'nonaktif' => $kumbungs->where('status', 'nonaktif')->count(),
+            'total_kapasitas' => $kumbungs->sum('kapasitas_baglog'),
+            'total_baglog_aktif' => $kumbungs->sum('baglog_aktif'),
+        ];
+
+        return Inertia::render('Kumbung/Peta', [
+            'kumbungs' => $kumbungs,
+            'stats' => $stats,
+        ]);
+    }
+
+    /**
      * Calculate profitability for a kumbung
      */
     public function calculateProfitability(Kumbung $kumbung)

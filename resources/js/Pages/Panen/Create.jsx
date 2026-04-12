@@ -4,15 +4,19 @@ import MIcon from '@/Components/MIcon';
 import FormAlert from '@/Components/FormAlert';
 import EmptyOption from '@/Components/EmptyOption';
 
-export default function PanenCreate({ kumbungs, today }) {
+export default function PanenCreate({ kumbungs, today, selectedKumbungId }) {
     const { data, setData, post, processing, errors } = useForm({
-        kumbung_id: '',
+        kumbung_id: selectedKumbungId ? String(selectedKumbungId) : '',
         tanggal: today,
         berat_kg: '',
         berat_layak_jual: '',
         berat_reject: '',
         catatan: '',
     });
+
+    const preselectedKumbung = selectedKumbungId
+        ? kumbungs.find((k) => k.id === selectedKumbungId)
+        : null;
 
     const hasError = (field) => !!errors[field];
 
@@ -60,6 +64,17 @@ export default function PanenCreate({ kumbungs, today }) {
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                     <FormAlert errors={errors} />
+
+                    {preselectedKumbung && (
+                        <div className="flex items-start gap-3 rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-sm">
+                            <MIcon name="info" className="text-base text-emerald-600 mt-0.5" />
+                            <div className="text-emerald-800">
+                                Form ini di-prefill dari <strong>Peta Kumbung</strong> untuk{' '}
+                                <strong>{preselectedKumbung.nomor} — {preselectedKumbung.nama}</strong>.
+                                Kamu bisa ubah pilihannya di bawah kalau perlu.
+                            </div>
+                        </div>
+                    )}
 
                         <div>
                             <label className="block text-sm font-medium text-on-surface-variant mb-1">

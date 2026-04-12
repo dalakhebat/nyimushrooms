@@ -194,6 +194,7 @@ class ProduksiBaglogController extends Controller
         Baglog::create([
             'kumbung_id' => null,
             'kode_batch' => $kodeBatch,
+            'sumber' => 'produksi_sendiri',
             'jumlah' => $produksi->jumlah_baglog,
             'tanggal_produksi' => $produksi->tanggal,
             'status' => 'produksi',
