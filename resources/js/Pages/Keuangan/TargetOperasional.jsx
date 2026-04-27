@@ -218,9 +218,9 @@ export default function TargetOperasional({ konfigurasi, totalGaji, karyawans, s
     }, [karyawans]);
 
     const tabs = [
-        { id: 'alokasi', name: 'Alokasi Dana', icon: 'solar:pie-chart-bold' },
-        { id: 'overhead', name: 'Biaya Overhead', icon: 'solar:wallet-bold' },
-        { id: 'target', name: 'Kalkulator Target', icon: 'solar:target-bold' },
+        { id: 'alokasi', name: 'Alokasi Dana', icon: 'analytics' },
+        { id: 'overhead', name: 'Biaya Overhead', icon: 'account_balance_wallet' },
+        { id: 'target', name: 'Kalkulator Target', icon: 'target' },
     ];
 
     return (
@@ -310,7 +310,7 @@ export default function TargetOperasional({ konfigurasi, totalGaji, karyawans, s
                                                 : 'border-transparent text-on-tertiary-container hover:text-on-surface-variant'
                                         }`}
                                     >
-                                        <Icon icon={tab.icon} className="w-5 h-5 mr-2" />
+                                        <MIcon name={tab.icon} className="text-xl mr-2" />
                                         {tab.name}
                                     </button>
                                 ))}
@@ -331,17 +331,17 @@ export default function TargetOperasional({ konfigurasi, totalGaji, karyawans, s
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {[
-                                            { key: 'alokasi_pembangunan_kumbung', label: 'Pembangunan Kumbung Baru', icon: 'solar:home-add-bold' },
-                                            { key: 'alokasi_pembangunan_inkubasi', label: 'Pembangunan Inkubasi', icon: 'solar:temperature-bold' },
-                                            { key: 'alokasi_pembelian_bahan_baku', label: 'Pembelian Bahan Baku', icon: 'solar:box-bold' },
-                                            { key: 'alokasi_renovasi_kumbung', label: 'Renovasi Kumbung Eksisting', icon: 'solar:hammer-bold' },
-                                            { key: 'alokasi_pembelian_mesin', label: 'Pembelian Mesin Produksi', icon: 'solar:settings-bold' },
-                                            { key: 'alokasi_pembelian_lahan', label: 'Pembelian Lahan', icon: 'solar:map-bold' },
-                                            { key: 'alokasi_dana_cadangan', label: 'Dana Cadangan', icon: 'solar:safe-circle-bold' },
+                                            { key: 'alokasi_pembangunan_kumbung', label: 'Pembangunan Kumbung Baru', icon: 'house' },
+                                            { key: 'alokasi_pembangunan_inkubasi', label: 'Pembangunan Inkubasi', icon: 'thermostat' },
+                                            { key: 'alokasi_pembelian_bahan_baku', label: 'Pembelian Bahan Baku', icon: 'archive' },
+                                            { key: 'alokasi_renovasi_kumbung', label: 'Renovasi Kumbung Eksisting', icon: 'settings' },
+                                            { key: 'alokasi_pembelian_mesin', label: 'Pembelian Mesin Produksi', icon: 'settings' },
+                                            { key: 'alokasi_pembelian_lahan', label: 'Pembelian Lahan', icon: 'location_on' },
+                                            { key: 'alokasi_dana_cadangan', label: 'Dana Cadangan', icon: 'savings' },
                                         ].map((item) => (
                                             <div key={item.key} className="flex items-center bg-surface-container-low rounded-xl p-4">
                                                 <div className="p-2 bg-surface-container-lowest rounded-xl mr-3">
-                                                    <Icon icon={item.icon} className="w-5 h-5 text-on-surface-variant" />
+                                                    <MIcon name={item.icon} className="text-xl text-on-surface-variant" />
                                                 </div>
                                                 <div className="flex-1">
                                                     <label className="block text-sm font-medium text-on-surface-variant">{item.label}</label>
@@ -415,16 +415,16 @@ export default function TargetOperasional({ konfigurasi, totalGaji, karyawans, s
 
                                         {/* Manual Inputs */}
                                         {[
-                                            { key: 'overhead_sewa', label: 'Sewa Kantor/Lahan', icon: 'solar:home-bold' },
-                                            { key: 'overhead_listrik', label: 'Listrik', icon: 'solar:bolt-bold' },
-                                            { key: 'overhead_air', label: 'Air', icon: 'solar:water-bold' },
-                                            { key: 'overhead_telepon', label: 'Telepon/Internet', icon: 'solar:phone-bold' },
-                                            { key: 'overhead_cicilan_kendaraan', label: 'Cicilan Kendaraan Ops', icon: 'solar:bus-bold' },
-                                            { key: 'overhead_lainnya', label: 'Lain-lain', icon: 'solar:widget-bold' },
+                                            { key: 'overhead_sewa', label: 'Sewa Kantor/Lahan', icon: 'house' },
+                                            { key: 'overhead_listrik', label: 'Listrik', icon: 'zap' },
+                                            { key: 'overhead_air', label: 'Air', icon: 'water_drop' },
+                                            { key: 'overhead_telepon', label: 'Telepon/Internet', icon: 'phone' },
+                                            { key: 'overhead_cicilan_kendaraan', label: 'Cicilan Kendaraan Ops', icon: 'truck' },
+                                            { key: 'overhead_lainnya', label: 'Lain-lain', icon: 'diamond' },
                                         ].map((item) => (
                                             <div key={item.key} className="flex items-center bg-surface-container-low rounded-xl p-4">
                                                 <div className="p-2 bg-surface-container-lowest rounded-xl mr-3">
-                                                    <Icon icon={item.icon} className="w-5 h-5 text-on-surface-variant" />
+                                                    <MIcon name={item.icon} className="text-xl text-on-surface-variant" />
                                                 </div>
                                                 <div className="flex-1">
                                                     <label className="block text-sm font-medium text-on-surface-variant">{item.label}</label>
@@ -574,9 +574,9 @@ export default function TargetOperasional({ konfigurasi, totalGaji, karyawans, s
                                 <MIcon name="groups" className="text-xl mr-3 text-purple-600" />
                                 <span className="font-bold text-on-surface">Jobdesk Karyawan ({karyawans.length} orang)</span>
                             </div>
-                            <Icon
-                                icon="solar:alt-arrow-down-bold"
-                                className={`w-5 h-5 text-on-tertiary-container transition-transform ${showJobdesk ? 'rotate-180' : ''}`}
+                            <MIcon
+                                name="expand_more"
+                                className={`text-xl text-on-tertiary-container transition-transform ${showJobdesk ? 'rotate-180' : ''}`}
                             />
                         </button>
 
