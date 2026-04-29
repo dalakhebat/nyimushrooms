@@ -9,9 +9,10 @@ import {
     ChartBarIcon,
     ArrowTrendingUpIcon,
     ArrowTrendingDownIcon,
+    WalletIcon,
 } from '@heroicons/react/24/outline';
 
-export default function LaporanIndex({ laporanPanen, laporanPenjualan, laporanKeuangan, summary, tipe, filters }) {
+export default function LaporanIndex({ laporanPanen, laporanPenjualan, laporanKeuangan, laporanKas, summary, tipe, filters }) {
     const [activeTab, setActiveTab] = useState(tipe || 'panen');
 
     const months = [
@@ -174,6 +175,17 @@ export default function LaporanIndex({ laporanPanen, laporanPenjualan, laporanKe
                         >
                             <BanknotesIcon className="w-5 h-5 inline-block mr-2" />
                             Laporan Keuangan
+                        </button>
+                        <button
+                            onClick={() => handleTabChange('kas')}
+                            className={`px-6 py-4 text-sm font-medium border-b-2 ${
+                                activeTab === 'kas'
+                                    ? 'border-green-500 text-secondary'
+                                    : 'border-transparent text-on-tertiary-container hover:text-on-surface-variant hover:border-outline-variant/30'
+                            }`}
+                        >
+                            <WalletIcon className="w-5 h-5 inline-block mr-2" />
+                            Laporan Kas
                         </button>
                     </nav>
                 </div>
@@ -407,6 +419,131 @@ export default function LaporanIndex({ laporanPanen, laporanPenjualan, laporanKe
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            )}
+
+            {/* Laporan Kas */}
+            {activeTab === 'kas' && laporanKas && (
+                <div className="space-y-6">
+                    {/* Summary Saldo */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm p-5">
+                            <p className="text-xs uppercase tracking-wider text-on-tertiary-container">Saldo Awal</p>
+                            <p className="text-2xl font-bold text-on-surface mt-1">{formatCurrency(laporanKas.saldoAwal)}</p>
+                        </div>
+                        <div className="bg-emerald-50 rounded-xl shadow-clinical-sm p-5">
+                            <p className="text-xs uppercase tracking-wider text-primary">Total Masuk</p>
+                            <p className="text-2xl font-bold text-secondary mt-1">+{formatCurrency(laporanKas.totalMasuk)}</p>
+                            <p className="text-xs text-on-tertiary-container mt-1">{laporanKas.transaksiMasuk?.length || 0} transaksi</p>
+                        </div>
+                        <div className="bg-red-50 rounded-xl shadow-clinical-sm p-5">
+                            <p className="text-xs uppercase tracking-wider text-red-800">Total Keluar</p>
+                            <p className="text-2xl font-bold text-red-600 mt-1">-{formatCurrency(laporanKas.totalKeluar)}</p>
+                            <p className="text-xs text-on-tertiary-container mt-1">{laporanKas.transaksiKeluar?.length || 0} transaksi</p>
+                        </div>
+                        <div className="bg-blue-50 rounded-xl shadow-clinical-sm p-5">
+                            <p className="text-xs uppercase tracking-wider text-blue-800">Saldo Akhir</p>
+                            <p className="text-2xl font-bold text-blue-600 mt-1">{formatCurrency(laporanKas.saldoAkhir)}</p>
+                            <p className="text-xs text-on-tertiary-container mt-1">Per akhir periode</p>
+                        </div>
+                    </div>
+
+                    {/* Transaksi Masuk */}
+                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden">
+                        <div className="p-6 border-b border-outline-variant/15 bg-emerald-50">
+                            <div className="flex items-center">
+                                <ArrowTrendingUpIcon className="w-6 h-6 text-secondary mr-2" />
+                                <h3 className="text-lg font-bold text-primary">Transaksi Masuk</h3>
+                            </div>
+                        </div>
+                        <table className="w-full">
+                            <thead className="bg-surface-container-low">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Tanggal</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kode</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Keterangan</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kategori</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {laporanKas.transaksiMasuk?.length === 0 ? (
+                                    <tr><td colSpan="5" className="px-6 py-8 text-center text-on-tertiary-container">Tidak ada transaksi masuk</td></tr>
+                                ) : (
+                                    laporanKas.transaksiMasuk?.map((tx) => (
+                                        <tr key={tx.id} className="hover:bg-surface-container-low">
+                                            <td className="px-6 py-3 text-sm">{new Date(tx.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                                            <td className="px-6 py-3 text-xs font-mono text-on-tertiary-container">{tx.kode_transaksi}</td>
+                                            <td className="px-6 py-3 text-sm">{tx.keterangan}</td>
+                                            <td className="px-6 py-3 text-sm capitalize">{tx.kategori}</td>
+                                            <td className="px-6 py-3 text-sm text-right font-bold text-secondary">+{formatCurrency(tx.jumlah)}</td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                            {laporanKas.transaksiMasuk?.length > 0 && (
+                                <tfoot className="bg-emerald-50">
+                                    <tr>
+                                        <td colSpan="4" className="px-6 py-3 text-right font-bold text-primary">TOTAL MASUK</td>
+                                        <td className="px-6 py-3 text-right font-bold text-secondary">+{formatCurrency(laporanKas.totalMasuk)}</td>
+                                    </tr>
+                                </tfoot>
+                            )}
+                        </table>
+                    </div>
+
+                    {/* Transaksi Keluar */}
+                    <div className="bg-surface-container-lowest rounded-xl shadow-clinical-sm overflow-hidden">
+                        <div className="p-6 border-b border-outline-variant/15 bg-red-50">
+                            <div className="flex items-center">
+                                <ArrowTrendingDownIcon className="w-6 h-6 text-red-600 mr-2" />
+                                <h3 className="text-lg font-bold text-red-800">Transaksi Keluar</h3>
+                            </div>
+                        </div>
+                        <table className="w-full">
+                            <thead className="bg-surface-container-low">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Tanggal</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kode</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Keterangan</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-on-tertiary-container uppercase">Kategori</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-on-tertiary-container uppercase">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {laporanKas.transaksiKeluar?.length === 0 ? (
+                                    <tr><td colSpan="5" className="px-6 py-8 text-center text-on-tertiary-container">Tidak ada transaksi keluar</td></tr>
+                                ) : (
+                                    laporanKas.transaksiKeluar?.map((tx) => (
+                                        <tr key={tx.id} className="hover:bg-surface-container-low">
+                                            <td className="px-6 py-3 text-sm">{new Date(tx.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                                            <td className="px-6 py-3 text-xs font-mono text-on-tertiary-container">{tx.kode_transaksi}</td>
+                                            <td className="px-6 py-3 text-sm">{tx.keterangan}</td>
+                                            <td className="px-6 py-3 text-sm capitalize">{tx.kategori}</td>
+                                            <td className="px-6 py-3 text-sm text-right font-bold text-red-600">-{formatCurrency(tx.jumlah)}</td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                            {laporanKas.transaksiKeluar?.length > 0 && (
+                                <tfoot className="bg-red-50">
+                                    <tr>
+                                        <td colSpan="4" className="px-6 py-3 text-right font-bold text-red-800">TOTAL KELUAR</td>
+                                        <td className="px-6 py-3 text-right font-bold text-red-600">-{formatCurrency(laporanKas.totalKeluar)}</td>
+                                    </tr>
+                                </tfoot>
+                            )}
+                        </table>
+                    </div>
+
+                    {/* Saldo Akhir Highlight */}
+                    <div className="bg-blue-50 rounded-xl shadow-clinical-sm p-8 border-2 border-blue-200 text-center">
+                        <p className="text-xs uppercase tracking-widest text-blue-700 font-semibold">Saldo Akhir Periode</p>
+                        <p className="text-4xl font-bold text-blue-600 mt-2">{formatCurrency(laporanKas.saldoAkhir)}</p>
+                        <p className="text-sm text-blue-700 mt-3">
+                            = {formatCurrency(laporanKas.saldoAwal)} + {formatCurrency(laporanKas.totalMasuk)} - {formatCurrency(laporanKas.totalKeluar)}
+                        </p>
                     </div>
                 </div>
             )}

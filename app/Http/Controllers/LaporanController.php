@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kas;
 use App\Models\Kumbung;
 use App\Models\Panen;
 use App\Models\PenjualanBaglog;
@@ -33,6 +34,9 @@ class LaporanController extends Controller
         // Laporan Keuangan
         $laporanKeuangan = $this->getLaporanKeuangan($startDate, $endDate);
 
+        // Laporan Kas
+        $laporanKas = $this->getLaporanKas($startDate, $endDate);
+
         // Summary
         $summary = [
             'totalPanen' => Panen::whereBetween('tanggal', [$startDate, $endDate])->sum('berat_kg'),
@@ -45,6 +49,7 @@ class LaporanController extends Controller
             'laporanPanen' => $laporanPanen,
             'laporanPenjualan' => $laporanPenjualan,
             'laporanKeuangan' => $laporanKeuangan,
+            'laporanKas' => $laporanKas,
             'summary' => $summary,
             'tipe' => $tipe,
             'filters' => [
@@ -157,6 +162,57 @@ class LaporanController extends Controller
         ];
     }
 
+    private function getLaporanKas($startDate, $endDate)
+    {
+        // Saldo awal = total saldo sebelum startDate
+        $masukSebelum = Kas::where('tipe', 'masuk')
+            ->whereDate('tanggal', '<', $startDate)
+            ->sum('jumlah');
+        $keluarSebelum = Kas::where('tipe', 'keluar')
+            ->whereDate('tanggal', '<', $startDate)
+            ->sum('jumlah');
+        $saldoAwal = (float) ($masukSebelum - $keluarSebelum);
+
+        // Transaksi periode
+        $transaksi = Kas::whereBetween('tanggal', [$startDate, $endDate])
+            ->orderBy('tanggal')
+            ->orderBy('created_at')
+            ->get();
+
+        $masuk = $transaksi->where('tipe', 'masuk');
+        $keluar = $transaksi->where('tipe', 'keluar');
+
+        $totalMasuk = (float) $masuk->sum('jumlah');
+        $totalKeluar = (float) $keluar->sum('jumlah');
+        $saldoAkhir = $saldoAwal + $totalMasuk - $totalKeluar;
+
+        // Per kategori
+        $perKategoriMasuk = $masuk->groupBy('kategori')->map(fn($g) => [
+            'kategori' => $g->first()->kategori,
+            'total' => (float) $g->sum('jumlah'),
+            'count' => $g->count(),
+        ])->values();
+
+        $perKategoriKeluar = $keluar->groupBy('kategori')->map(fn($g) => [
+            'kategori' => $g->first()->kategori,
+            'total' => (float) $g->sum('jumlah'),
+            'count' => $g->count(),
+        ])->values();
+
+        return [
+            'saldoAwal' => $saldoAwal,
+            'saldoAkhir' => (float) $saldoAkhir,
+            'totalMasuk' => $totalMasuk,
+            'totalKeluar' => $totalKeluar,
+            'transaksiMasuk' => $masuk->values(),
+            'transaksiKeluar' => $keluar->values(),
+            'transaksiSemua' => $transaksi->values(),
+            'perKategoriMasuk' => $perKategoriMasuk,
+            'perKategoriKeluar' => $perKategoriKeluar,
+            'jumlahTransaksi' => $transaksi->count(),
+        ];
+    }
+
     public function exportPdf(Request $request)
     {
         $bulan = $request->get('bulan', Carbon::now()->month);
@@ -167,6 +223,21 @@ class LaporanController extends Controller
         $endDate = Carbon::create($tahun, $bulan, 1)->endOfMonth();
 
         $periodLabel = Carbon::create($tahun, $bulan, 1)->locale('id')->isoFormat('MMMM Y');
+
+        // Khusus laporan kas — pakai template terpisah
+        if ($tipe === 'kas') {
+            $data = [
+                'periode' => $periodLabel,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'kas' => $this->getLaporanKas($startDate, $endDate),
+                'cetakPada' => Carbon::now()->locale('id')->isoFormat('D MMMM Y HH:mm'),
+            ];
+            $pdf = Pdf::loadView('pdf.laporan-kas', $data);
+            $pdf->setPaper('A4', 'portrait');
+            $filename = 'laporan-kas-' . $tahun . '-' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '.pdf';
+            return $pdf->download($filename);
+        }
 
         $data = [
             'periode' => $periodLabel,

@@ -54,7 +54,7 @@ class KasController extends Controller
             ->get()
             ->groupBy('kategori');
 
-        $kategoris = ['operasional', 'gaji', 'pembelian', 'penjualan', 'kasbon', 'lainnya'];
+        $kategoris = ['operasional', 'gaji', 'pembelian', 'penjualan', 'kasbon', 'pinjaman', 'lainnya'];
 
         return Inertia::render('Kas/Index', [
             'transactions' => $transactions,
@@ -68,7 +68,7 @@ class KasController extends Controller
 
     public function create()
     {
-        $kategoris = ['operasional', 'gaji', 'pembelian', 'penjualan', 'kasbon', 'lainnya'];
+        $kategoris = ['operasional', 'gaji', 'pembelian', 'penjualan', 'kasbon', 'pinjaman', 'lainnya'];
 
         return Inertia::render('Kas/Create', [
             'kategoris' => $kategoris,
@@ -95,7 +95,7 @@ class KasController extends Controller
 
     public function edit(Kas $ka)
     {
-        $kategoris = ['operasional', 'gaji', 'pembelian', 'penjualan', 'kasbon', 'lainnya'];
+        $kategoris = ['operasional', 'gaji', 'pembelian', 'penjualan', 'kasbon', 'pinjaman', 'lainnya'];
 
         return Inertia::render('Kas/Edit', [
             'transaksi' => $ka,

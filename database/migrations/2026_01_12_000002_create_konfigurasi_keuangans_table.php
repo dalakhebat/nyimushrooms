@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('konfigurasi_keuangans', function (Blueprint $table) {
             $table->id();
 
-            // Kredit Investasi (28M)
-            $table->decimal('kredit_investasi_limit', 20, 2)->default(28000000000);
+            // Kredit Investasi (5 Miliar - ACC)
+            $table->decimal('kredit_investasi_limit', 20, 2)->default(5000000000);
             $table->integer('kredit_investasi_tenor')->default(120); // bulan
             $table->decimal('kredit_investasi_bunga', 5, 2)->default(6); // persen
 

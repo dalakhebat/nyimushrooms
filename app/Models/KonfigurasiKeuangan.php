@@ -14,6 +14,10 @@ class KonfigurasiKeuangan extends Model
         'kredit_investasi_limit',
         'kredit_investasi_tenor',
         'kredit_investasi_bunga',
+        'kredit_investasi_bank',
+        'kredit_investasi_tanggal_cair',
+        'kredit_investasi_mulai_cicilan',
+        'kredit_investasi_tipe_bunga',
 
         // Kredit Modal Kerja
         'kredit_modal_kerja_limit',
@@ -48,6 +52,8 @@ class KonfigurasiKeuangan extends Model
     protected $casts = [
         'kredit_investasi_limit' => 'decimal:2',
         'kredit_investasi_bunga' => 'decimal:2',
+        'kredit_investasi_tanggal_cair' => 'date',
+        'kredit_investasi_mulai_cicilan' => 'date',
         'kredit_modal_kerja_limit' => 'decimal:2',
         'kredit_modal_kerja_bunga' => 'decimal:2',
         'alokasi_pembangunan_kumbung' => 'decimal:2',

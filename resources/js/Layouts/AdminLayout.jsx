@@ -16,6 +16,7 @@ function MIcon({ name, fill, className = '' }) {
 // Navigation berdasarkan workflow sistem
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
+    { name: 'Dashboard Eksekutif', href: '/dashboard-eksekutif', icon: 'leaderboard' },
 
     { type: 'section', name: 'Produksi' },
     {

@@ -4,6 +4,7 @@ use App\Http\Controllers\BaglogController;
 use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardEksekutifController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KasbonController;
 use App\Http\Controllers\KasController;
@@ -40,6 +41,8 @@ Route::get('/absensi-publik', [QrAbsensiController::class, 'scanPublic'])->name(
 Route::post('/absensi-publik', [QrAbsensiController::class, 'processScanPublic'])->name('absensi.publik.process');
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard-eksekutif', [DashboardEksekutifController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard.eksekutif');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
