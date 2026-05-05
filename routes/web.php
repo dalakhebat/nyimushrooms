@@ -15,7 +15,9 @@ use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PanenController;
 use App\Http\Controllers\PembelianBahanBakuController;
 use App\Http\Controllers\PenggajianController;
+use App\Http\Controllers\PengajuanPengeluaranController;
 use App\Http\Controllers\PengaturanGajiController;
+use App\Http\Controllers\PublicPengajuanController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProduksiBaglogController;
 use App\Http\Controllers\LaporanController;
@@ -39,6 +41,12 @@ Route::get('/', function () {
 // Public route untuk absensi karyawan (tanpa login)
 Route::get('/absensi-publik', [QrAbsensiController::class, 'scanPublic'])->name('absensi.publik');
 Route::post('/absensi-publik', [QrAbsensiController::class, 'processScanPublic'])->name('absensi.publik.process');
+
+// Public route untuk Pengajuan Pengeluaran (tanpa login)
+Route::get('/ajukan', [PublicPengajuanController::class, 'showForm'])->name('public.pengajuan.form');
+Route::post('/ajukan', [PublicPengajuanController::class, 'submit'])->name('public.pengajuan.submit');
+Route::get('/ajukan/{nomor}/sukses', [PublicPengajuanController::class, 'sukses'])->name('public.pengajuan.sukses');
+Route::get('/ajukan/{nomor}/pdf', [PublicPengajuanController::class, 'pdf'])->name('public.pengajuan.pdf');
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/dashboard-eksekutif', [DashboardEksekutifController::class, 'index'])
@@ -149,6 +157,13 @@ Route::middleware('auth')->group(function () {
     // Kas / Keuangan
     Route::get('/kas/report', [KasController::class, 'report'])->name('kas.report');
     Route::resource('kas', KasController::class)->except(['show']);
+
+    // Pengajuan Pengeluaran (BNI Giro)
+    Route::get('/pengajuan/{pengajuan}/pdf', [PengajuanPengeluaranController::class, 'exportPdf'])->name('pengajuan.pdf');
+    Route::post('/pengajuan/{pengajuan}/approve', [PengajuanPengeluaranController::class, 'approve'])->name('pengajuan.approve');
+    Route::post('/pengajuan/{pengajuan}/reject', [PengajuanPengeluaranController::class, 'reject'])->name('pengajuan.reject');
+    Route::post('/pengajuan/{pengajuan}/cairkan', [PengajuanPengeluaranController::class, 'cairkan'])->name('pengajuan.cairkan');
+    Route::resource('pengajuan', PengajuanPengeluaranController::class)->except(['edit', 'update']);
 
     // Notifikasi
     Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');

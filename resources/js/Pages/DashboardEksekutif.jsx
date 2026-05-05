@@ -10,9 +10,10 @@ import {
 } from 'lucide-react';
 import {
     LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid,
-    Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend,
+    Tooltip, PieChart, Pie, Cell, Legend,
     BarChart, Bar,
 } from 'recharts';
+import SafeChartContainer from '@/Components/SafeChartContainer';
 
 // Monsy-inspired soft pastel palette
 const PALETTE = {
@@ -452,7 +453,8 @@ export default function DashboardEksekutif({
                             <span className="text-[10px] text-[#8B8680]">5 tahun</span>
                         </div>
                         <div className="h-44">
-                            <ResponsiveContainer width="100%" height="100%">
+                            {pinjaman.schedule?.length > 0 && (
+                            <SafeChartContainer debounce={50}>
                                 <AreaChart data={pinjaman.schedule} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="gradPokok" x1="0" y1="0" x2="0" y2="1">
@@ -472,7 +474,8 @@ export default function DashboardEksekutif({
                                     <Area type="monotone" dataKey="pokok" stackId="1" stroke="#86C166" strokeWidth={1.5} fill="url(#gradPokok)" name="Pokok" />
                                     <Area type="monotone" dataKey="bunga" stackId="1" stroke="#E87E6E" strokeWidth={1.5} fill="url(#gradBunga)" name="Bunga" />
                                 </AreaChart>
-                            </ResponsiveContainer>
+                            </SafeChartContainer>
+                            )}
                         </div>
                         <div className="flex items-center justify-between text-[11px] mt-2">
                             <span className="flex items-center gap-1.5">
@@ -503,7 +506,8 @@ export default function DashboardEksekutif({
                             </div>
                         </div>
                         <div className="h-72">
-                            <ResponsiveContainer width="100%" height="100%">
+                            {cashFlowHarian?.length > 0 && (
+                            <SafeChartContainer debounce={50}>
                                 <AreaChart data={cashFlowHarian} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="colorMasuk" x1="0" y1="0" x2="0" y2="1">
@@ -527,7 +531,8 @@ export default function DashboardEksekutif({
                                     <Area type="monotone" dataKey="masuk" stroke="#86C166" strokeWidth={2} fill="url(#colorMasuk)" name="Masuk" />
                                     <Area type="monotone" dataKey="keluar" stroke="#E87E6E" strokeWidth={2} fill="url(#colorKeluar)" name="Keluar" />
                                 </AreaChart>
-                            </ResponsiveContainer>
+                            </SafeChartContainer>
+                            )}
                         </div>
                     </div>
 
@@ -546,7 +551,7 @@ export default function DashboardEksekutif({
                         ) : (
                             <>
                                 <div className="h-44 relative">
-                                    <ResponsiveContainer width="100%" height="100%">
+                                    <SafeChartContainer debounce={50}>
                                         <PieChart>
                                             <Pie
                                                 data={pieDataKeluar}
@@ -561,7 +566,7 @@ export default function DashboardEksekutif({
                                             </Pie>
                                             <Tooltip content={<CustomTooltip />} />
                                         </PieChart>
-                                    </ResponsiveContainer>
+                                    </SafeChartContainer>
                                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                         <p className="text-[10px] text-[#8B8680] uppercase tracking-wider">Total</p>
                                         <p className="text-base font-bold text-[#1F1D1B]">{formatRupiahCompact(totalKeluarPie)}</p>

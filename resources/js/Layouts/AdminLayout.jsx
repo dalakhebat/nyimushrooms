@@ -67,6 +67,7 @@ const navigation = [
 
     { type: 'section', name: 'Keuangan' },
     { name: 'Kas', href: '/kas', icon: 'account_balance' },
+    { name: 'Pengajuan', href: '/pengajuan', icon: 'request_quote' },
     { name: 'Laporan', href: '/laporan', icon: 'analytics' },
     {
         name: 'Perencanaan',
