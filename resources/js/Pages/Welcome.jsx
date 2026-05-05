@@ -1,5 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
-import MIcon from '@/Components/MIcon';
+import {
+    MushroomIcon, BaglogIcon, VialIcon, LeafIcon,
+    ShieldIcon, ChartIcon, CompassIcon,
+    MixerIcon, SteamIcon, ClockIcon, BasketIcon, TruckIcon,
+    GreenhouseIcon,
+} from '@/Components/Icons3D';
+import InteractiveGallery from '@/Components/InteractiveGallery';
 
 const PRODUCTS = [
     {
@@ -8,7 +14,7 @@ const PRODUCTS = [
         desc: 'Dipanen pagi hari dari kumbung kami, dikemas higienis untuk pasar tradisional, retail, dan kuliner.',
         weight: '200gr / 500gr / 1kg',
         accent: 'from-emerald-400 to-emerald-600',
-        icon: 'eco',
+        Icon: MushroomIcon,
     },
     {
         title: 'Baglog Siap Tumbuh',
@@ -16,7 +22,7 @@ const PRODUCTS = [
         desc: 'Media tanam steril dengan bibit berkualitas, siap inkubasi untuk reseller & petani jamur.',
         weight: '1.2kg / baglog',
         accent: 'from-teal-400 to-emerald-600',
-        icon: 'layers',
+        Icon: BaglogIcon,
     },
     {
         title: 'Bibit Jamur F0/F1',
@@ -24,110 +30,27 @@ const PRODUCTS = [
         desc: 'Bibit murni hasil isolasi laboratorium kami, untuk produsen baglog skala industri.',
         weight: 'PDA / Botol',
         accent: 'from-lime-400 to-emerald-500',
-        icon: 'science',
+        Icon: VialIcon,
     },
 ];
 
 const PROCESS = [
-    { step: '01', title: 'Pencampuran Media', desc: 'Serbuk gergaji, dedak, kapur, dan gypsum dicampur dengan rasio presisi.', icon: 'inventory_2' },
-    { step: '02', title: 'Sterilisasi', desc: 'Media disterilkan via steam selama 8 jam untuk membunuh kontaminan.', icon: 'science' },
-    { step: '03', title: 'Inokulasi Bibit', desc: 'Bibit murni di-inokulasi di clean room untuk memastikan zero contamination.', icon: 'biotech' },
-    { step: '04', title: 'Inkubasi', desc: '30–40 hari miselium tumbuh sampai baglog ready dipindah ke kumbung.', icon: 'schedule' },
-    { step: '05', title: 'Panen Harian', desc: 'Suhu & kelembaban kumbung dijaga ketat — panen dilakukan setiap pagi.', icon: 'eco' },
-    { step: '06', title: 'Distribusi Fresh', desc: 'Dikirim hari yang sama ke pasar, retail, dan customer langganan.', icon: 'storefront' },
+    { step: '01', title: 'Pencampuran Media', desc: 'Serbuk gergaji, dedak, kapur, dan gypsum dicampur dengan rasio presisi.', Icon: MixerIcon },
+    { step: '02', title: 'Sterilisasi', desc: 'Media disterilkan via steam selama 8 jam untuk membunuh kontaminan.', Icon: SteamIcon },
+    { step: '03', title: 'Inokulasi Bibit', desc: 'Bibit murni di-inokulasi di clean room untuk memastikan zero contamination.', Icon: VialIcon },
+    { step: '04', title: 'Inkubasi', desc: '30–40 hari miselium tumbuh sampai baglog ready dipindah ke kumbung.', Icon: ClockIcon },
+    { step: '05', title: 'Panen Harian', desc: 'Suhu & kelembaban kumbung dijaga ketat — panen dilakukan setiap pagi.', Icon: BasketIcon },
+    { step: '06', title: 'Distribusi Fresh', desc: 'Dikirim hari yang sama ke pasar, retail, dan customer langganan.', Icon: TruckIcon },
 ];
 
 const VALUES = [
-    { title: 'Higienis', desc: 'Standar kebersihan tinggi di setiap tahap produksi.', icon: 'verified' },
-    { title: 'Konsisten', desc: 'Kapasitas produksi stabil dengan tracking digital.', icon: 'trending_up' },
-    { title: 'Lokal', desc: '100% bahan baku & tenaga kerja Indonesia.', icon: 'house' },
-    { title: 'Sustainable', desc: 'Limbah baglog diolah jadi pupuk organik.', icon: 'eco' },
+    { title: 'Higienis', desc: 'Standar kebersihan tinggi di setiap tahap produksi.', Icon: ShieldIcon },
+    { title: 'Konsisten', desc: 'Kapasitas produksi stabil dengan tracking digital.', Icon: ChartIcon },
+    { title: 'Lokal', desc: '100% bahan baku & tenaga kerja Indonesia.', Icon: CompassIcon },
+    { title: 'Sustainable', desc: 'Limbah baglog diolah jadi pupuk organik.', Icon: LeafIcon },
 ];
 
-// Big mushroom 3D-ish illustration
-function Mushroom3D({ className = '' }) {
-    return (
-        <svg viewBox="0 0 200 220" className={className} xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <radialGradient id="cap" cx="35%" cy="30%" r="80%">
-                    <stop offset="0%" stopColor="#86efac" />
-                    <stop offset="50%" stopColor="#22c55e" />
-                    <stop offset="100%" stopColor="#15803d" />
-                </radialGradient>
-                <linearGradient id="stem" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#fef3c7" />
-                    <stop offset="50%" stopColor="#fefce8" />
-                    <stop offset="100%" stopColor="#fde68a" />
-                </linearGradient>
-                <radialGradient id="capShine" cx="35%" cy="25%" r="40%">
-                    <stop offset="0%" stopColor="white" stopOpacity="0.7" />
-                    <stop offset="100%" stopColor="white" stopOpacity="0" />
-                </radialGradient>
-                <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
-                    <feOffset dx="0" dy="6" result="offsetblur" />
-                    <feComponentTransfer>
-                        <feFuncA type="linear" slope="0.3" />
-                    </feComponentTransfer>
-                    <feMerge>
-                        <feMergeNode />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
-
-            {/* Ground shadow */}
-            <ellipse cx="100" cy="205" rx="60" ry="8" fill="rgba(0,0,0,0.18)" />
-
-            {/* Stem */}
-            <path
-                d="M 78 110 L 122 110 L 118 195 Q 118 205 108 205 L 92 205 Q 82 205 82 195 Z"
-                fill="url(#stem)"
-                filter="url(#softShadow)"
-            />
-            {/* Stem highlight */}
-            <path d="M 86 115 L 90 115 L 88 200 L 86 200 Z" fill="white" opacity="0.5" />
-
-            {/* Cap */}
-            <path
-                d="M 22 110 Q 22 30 100 30 Q 178 30 178 110 Q 178 120 165 124 L 35 124 Q 22 120 22 110 Z"
-                fill="url(#cap)"
-                filter="url(#softShadow)"
-            />
-
-            {/* Cap shine */}
-            <path
-                d="M 22 110 Q 22 30 100 30 Q 178 30 178 110 Q 178 120 165 124 L 35 124 Q 22 120 22 110 Z"
-                fill="url(#capShine)"
-            />
-
-            {/* Spots */}
-            <ellipse cx="55" cy="55" rx="8" ry="5" fill="white" opacity="0.55" />
-            <ellipse cx="78" cy="42" rx="6" ry="4" fill="white" opacity="0.55" />
-            <ellipse cx="120" cy="48" rx="7" ry="5" fill="white" opacity="0.55" />
-            <circle cx="148" cy="65" r="5" fill="white" opacity="0.55" />
-            <circle cx="92" cy="80" r="4" fill="white" opacity="0.45" />
-            <circle cx="135" cy="95" r="3.5" fill="white" opacity="0.45" />
-
-            {/* Gills hint at bottom of cap */}
-            <path d="M 35 124 L 165 124" stroke="#15803d" strokeWidth="1.5" opacity="0.4" />
-            {[40, 55, 70, 85, 100, 115, 130, 145, 160].map((x, i) => (
-                <line
-                    key={i}
-                    x1={x}
-                    y1="124"
-                    x2={x}
-                    y2="135"
-                    stroke="#166534"
-                    strokeWidth="1"
-                    opacity="0.35"
-                />
-            ))}
-        </svg>
-    );
-}
-
-// Small floating spore decoration
+// Decorative spore
 function Spore({ className = '', size = 20 }) {
     return (
         <svg viewBox="0 0 40 40" className={className} width={size} height={size}>
@@ -152,8 +75,8 @@ export default function Welcome() {
                 <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-emerald-100/60">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl green-gradient flex items-center justify-center text-white shadow-forest">
-                                <MIcon name="eco" className="text-xl" />
+                            <div className="w-11 h-11">
+                                <LeafIcon className="w-11 h-11" />
                             </div>
                             <div>
                                 <p className="font-extrabold text-emerald-800 text-sm font-headline tracking-tight leading-tight">
@@ -167,17 +90,11 @@ export default function Welcome() {
                             <a href="#tentang" className="hover:text-emerald-700 transition-colors">Tentang</a>
                             <a href="#produk" className="hover:text-emerald-700 transition-colors">Produk</a>
                             <a href="#proses" className="hover:text-emerald-700 transition-colors">Proses</a>
+                            <a href="#galeri" className="hover:text-emerald-700 transition-colors">Galeri</a>
                             <a href="#kontak" className="hover:text-emerald-700 transition-colors">Kontak</a>
                         </nav>
 
                         <div className="flex items-center gap-2">
-                            <Link
-                                href="/ajukan"
-                                className="hidden sm:inline-flex px-4 py-2 text-sm text-emerald-700 font-medium hover:text-emerald-900 transition-colors items-center"
-                            >
-                                <MIcon name="receipt_long" className="text-base mr-1" />
-                                Ajukan
-                            </Link>
                             <Link
                                 href="#kontak"
                                 className="px-4 py-2 green-gradient text-white rounded-xl text-sm font-bold shadow-forest hover:shadow-forest-lg hover:-translate-y-0.5 transition-all"
@@ -190,14 +107,12 @@ export default function Welcome() {
 
                 {/* === HERO === */}
                 <section className="relative pt-12 md:pt-20 pb-20 md:pb-32 overflow-hidden">
-                    {/* Decorative blobs */}
                     <div aria-hidden className="absolute inset-0 -z-10">
                         <div className="absolute top-10 -left-20 w-96 h-96 bg-emerald-300/30 rounded-full blur-3xl" style={{ animation: 'pulseGlow 8s ease-in-out infinite' }} />
                         <div className="absolute -top-20 right-0 w-[28rem] h-[28rem] bg-lime-200/40 rounded-full blur-3xl" />
                         <div className="absolute bottom-0 left-1/3 w-[22rem] h-[22rem] bg-teal-200/30 rounded-full blur-3xl" />
                     </div>
 
-                    {/* Perspective grid floor */}
                     <div aria-hidden className="absolute bottom-0 left-0 right-0 h-[60%] grid-floor opacity-40 -z-10" />
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
@@ -226,9 +141,8 @@ export default function Welcome() {
                                 <div className="mt-9 flex flex-wrap gap-3">
                                     <a
                                         href="#produk"
-                                        className="px-7 py-3.5 green-gradient text-white rounded-2xl font-bold shadow-forest-lg hover:-translate-y-1 hover:shadow-forest-lg transition-all inline-flex items-center text-sm"
+                                        className="px-7 py-3.5 green-gradient text-white rounded-2xl font-bold shadow-forest-lg hover:-translate-y-1 transition-all inline-flex items-center text-sm"
                                     >
-                                        <MIcon name="storefront" className="text-lg mr-2" />
                                         Lihat Produk Kami
                                     </a>
                                     <a
@@ -236,11 +150,9 @@ export default function Welcome() {
                                         className="px-7 py-3.5 bg-white text-emerald-800 border-2 border-emerald-200 rounded-2xl font-bold hover:border-emerald-400 hover:-translate-y-1 transition-all inline-flex items-center text-sm"
                                     >
                                         Cerita Defila
-                                        <MIcon name="arrow_forward" className="text-lg ml-2" />
                                     </a>
                                 </div>
 
-                                {/* Trust strip */}
                                 <div className="mt-10 grid grid-cols-3 gap-4 max-w-md">
                                     {[
                                         { v: '12K+', l: 'Baglog/bulan' },
@@ -257,28 +169,24 @@ export default function Welcome() {
 
                             {/* Right 3D hero */}
                             <div className="relative scene-3d">
-                                {/* Floating spores */}
                                 <Spore className="absolute top-10 left-0 float-slow" size={28} />
                                 <Spore className="absolute top-32 right-8 float-slower" size={20} />
                                 <Spore className="absolute bottom-20 left-10 float-fast" size={36} />
                                 <Spore className="absolute bottom-32 right-0 float-slow" size={24} />
 
-                                {/* Big mushroom card */}
                                 <div className="relative layer-3d" style={{ transform: 'perspective(1200px) rotateY(-12deg) rotateX(6deg)' }}>
                                     <div className="absolute inset-0 green-gradient rounded-[2.5rem] blur-2xl opacity-40 translate-y-6 scale-95" />
                                     <div className="relative bg-gradient-to-br from-white via-emerald-50 to-emerald-100 rounded-[2.5rem] p-8 md:p-12 shadow-forest-lg border border-white">
                                         <div className="float-slow">
-                                            <Mushroom3D className="w-full max-w-sm mx-auto" />
+                                            <MushroomIcon className="w-full max-w-sm mx-auto" />
                                         </div>
 
-                                        {/* Floating mini cards */}
+                                        {/* Floating mini cards with 3D icons */}
                                         <div
-                                            className="absolute -left-6 top-12 bg-white rounded-2xl shadow-forest p-3 px-4 flex items-center gap-2 border border-emerald-100 float-slower"
+                                            className="absolute -left-6 top-12 bg-white rounded-2xl shadow-forest p-3 px-4 flex items-center gap-3 border border-emerald-100 float-slower"
                                             style={{ transform: 'translateZ(60px)' }}
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700">
-                                                <MIcon name="check_circle" className="text-base" />
-                                            </div>
+                                            <BasketIcon className="w-9 h-9" />
                                             <div>
                                                 <p className="text-[10px] text-slate-500">Hari ini</p>
                                                 <p className="text-xs font-bold text-emerald-800">142 kg panen</p>
@@ -286,12 +194,10 @@ export default function Welcome() {
                                         </div>
 
                                         <div
-                                            className="absolute -right-4 bottom-16 bg-white rounded-2xl shadow-forest p-3 px-4 flex items-center gap-2 border border-emerald-100 float-fast"
+                                            className="absolute -right-4 bottom-16 bg-white rounded-2xl shadow-forest p-3 px-4 flex items-center gap-3 border border-emerald-100 float-fast"
                                             style={{ transform: 'translateZ(80px)' }}
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700">
-                                                <MIcon name="thermostat" className="text-base" />
-                                            </div>
+                                            <GreenhouseIcon className="w-9 h-9" />
                                             <div>
                                                 <p className="text-[10px] text-slate-500">Kumbung A1</p>
                                                 <p className="text-xs font-bold text-emerald-800">26°C · 85%</p>
@@ -299,12 +205,10 @@ export default function Welcome() {
                                         </div>
 
                                         <div
-                                            className="absolute -left-2 bottom-6 bg-white rounded-2xl shadow-forest p-3 px-4 flex items-center gap-2 border border-emerald-100 float-slow"
+                                            className="absolute -left-2 bottom-6 bg-white rounded-2xl shadow-forest p-3 px-4 flex items-center gap-3 border border-emerald-100 float-slow"
                                             style={{ transform: 'translateZ(40px)' }}
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-lime-100 flex items-center justify-center text-lime-700">
-                                                <MIcon name="science" className="text-base" />
-                                            </div>
+                                            <VialIcon className="w-9 h-9" />
                                             <div>
                                                 <p className="text-[10px] text-slate-500">Inkubasi</p>
                                                 <p className="text-xs font-bold text-emerald-800">2,340 baglog</p>
@@ -321,28 +225,21 @@ export default function Welcome() {
                 <section id="tentang" className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/40">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6">
                         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                            {/* 3D illustration card */}
                             <div className="scene-3d">
-                                <div
-                                    className="relative tilt-card"
-                                    style={{ transformOrigin: 'center' }}
-                                >
+                                <div className="relative tilt-card">
                                     <div className="absolute -inset-4 green-gradient rounded-[3rem] blur-2xl opacity-30" />
 
                                     <div className="relative aspect-square rounded-[2.5rem] overflow-hidden shadow-forest-lg border-4 border-white">
-                                        {/* Layered stack effect */}
                                         <div className="absolute inset-0 green-gradient" />
 
-                                        {/* Pattern overlay */}
                                         <div className="absolute inset-0 opacity-20" style={{
                                             backgroundImage: 'radial-gradient(circle at 20% 30%, white 2px, transparent 3px), radial-gradient(circle at 70% 60%, white 1px, transparent 2px), radial-gradient(circle at 40% 80%, white 2px, transparent 3px)',
                                             backgroundSize: '60px 60px, 40px 40px, 80px 80px',
                                         }} />
 
-                                        {/* Center content */}
                                         <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-8">
-                                            <div className="float-slow">
-                                                <Mushroom3D className="w-44 h-44 drop-shadow-2xl" />
+                                            <div className="float-slow w-44 h-44">
+                                                <MushroomIcon className="w-full h-full drop-shadow-2xl" />
                                             </div>
                                             <p className="mt-6 text-3xl font-extrabold font-headline tracking-tight">Defila</p>
                                             <p className="text-sm opacity-90 mt-1">Solusi Bersama Indonesia</p>
@@ -351,27 +248,24 @@ export default function Welcome() {
                                             </div>
                                         </div>
 
-                                        {/* Floating depth circles */}
                                         <div className="absolute top-6 right-6 w-20 h-20 bg-white/10 rounded-full backdrop-blur" />
                                         <div className="absolute bottom-10 left-8 w-12 h-12 bg-white/15 rounded-full backdrop-blur" />
                                     </div>
 
-                                    {/* Floating side card */}
-                                    <div className="absolute -right-4 -bottom-4 bg-white rounded-2xl shadow-forest-lg p-5 border border-emerald-100 max-w-[200px]"
+                                    <div className="absolute -right-4 -bottom-4 bg-white rounded-2xl shadow-forest-lg p-4 border border-emerald-100 max-w-[200px] flex items-center gap-3"
                                         style={{ transform: 'translateZ(40px)' }}
                                     >
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <MIcon name="verified" className="text-emerald-600 text-lg" />
+                                        <ShieldIcon className="w-12 h-12 flex-shrink-0" />
+                                        <div>
                                             <p className="text-xs font-bold text-emerald-800">Halal & Higienis</p>
+                                            <p className="text-[10px] text-slate-500 mt-0.5 leading-relaxed">
+                                                Setiap baglog tercatat.
+                                            </p>
                                         </div>
-                                        <p className="text-[11px] text-slate-500 leading-relaxed">
-                                            Setiap baglog tercatat — dari media sampai panen.
-                                        </p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Text */}
                             <div>
                                 <span className="inline-block text-xs font-bold text-emerald-600 uppercase tracking-[0.2em] bg-emerald-100 px-3 py-1 rounded-full">
                                     Tentang Kami
@@ -392,8 +286,8 @@ export default function Welcome() {
                                             key={v.title}
                                             className="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm hover:shadow-forest hover:-translate-y-1 transition-all"
                                         >
-                                            <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 mb-2">
-                                                <MIcon name={v.icon} className="text-lg" />
+                                            <div className="w-14 h-14 mb-2">
+                                                <v.Icon className="w-14 h-14" />
                                             </div>
                                             <p className="font-bold text-sm text-emerald-900">{v.title}</p>
                                             <p className="text-xs text-slate-500 mt-1 leading-relaxed">{v.desc}</p>
@@ -430,12 +324,10 @@ export default function Welcome() {
                                     key={p.title}
                                     className={`group relative tilt-card${i % 2 === 1 ? '-r' : ''}`}
                                 >
-                                    {/* Glow background */}
                                     <div className={`absolute -inset-2 bg-gradient-to-br ${p.accent} rounded-3xl blur-xl opacity-25 group-hover:opacity-50 transition-opacity duration-500`} />
 
                                     <div className="relative bg-white rounded-3xl overflow-hidden shadow-forest border border-emerald-100/60">
-                                        {/* Top accent area with icon */}
-                                        <div className={`relative h-44 bg-gradient-to-br ${p.accent} overflow-hidden`}>
+                                        <div className={`relative h-48 bg-gradient-to-br ${p.accent} overflow-hidden`}>
                                             <div className="absolute inset-0 opacity-20" style={{
                                                 backgroundImage: 'radial-gradient(circle at 30% 20%, white 1.5px, transparent 2.5px)',
                                                 backgroundSize: '40px 40px',
@@ -445,8 +337,8 @@ export default function Welcome() {
                                                 {p.subtitle}
                                             </div>
                                             <div className="absolute inset-0 flex items-center justify-center">
-                                                <div className="w-24 h-24 bg-white/20 backdrop-blur rounded-3xl flex items-center justify-center text-white shadow-lg float-slow">
-                                                    <MIcon name={p.icon} className="text-5xl" />
+                                                <div className="w-32 h-32 float-slow">
+                                                    <p.Icon className="w-full h-full drop-shadow-2xl" />
                                                 </div>
                                             </div>
                                         </div>
@@ -459,7 +351,7 @@ export default function Welcome() {
                                                 <span className="text-xs font-bold text-emerald-700">{p.weight}</span>
                                                 <a href="#kontak" className="text-xs font-bold text-emerald-600 hover:text-emerald-800 inline-flex items-center group/link">
                                                     Tanya stok
-                                                    <MIcon name="arrow_forward" className="text-sm ml-1 group-hover/link:translate-x-1 transition-transform" />
+                                                    <span className="ml-1 group-hover/link:translate-x-1 transition-transform">→</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -486,14 +378,14 @@ export default function Welcome() {
                         </div>
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                            {PROCESS.map((p, i) => (
+                            {PROCESS.map((p) => (
                                 <div
                                     key={p.step}
                                     className="group relative bg-white rounded-3xl p-6 border border-emerald-100/60 hover:border-emerald-300 shadow-sm hover:shadow-forest hover:-translate-y-2 transition-all duration-500"
                                 >
                                     <div className="flex items-start justify-between mb-4">
-                                        <div className="w-14 h-14 rounded-2xl green-gradient flex items-center justify-center text-white shadow-forest group-hover:scale-110 transition-transform">
-                                            <MIcon name={p.icon} className="text-2xl" />
+                                        <div className="w-20 h-20 group-hover:scale-110 transition-transform">
+                                            <p.Icon className="w-20 h-20" />
                                         </div>
                                         <span className="text-4xl font-extrabold font-headline text-emerald-100 group-hover:text-emerald-200 transition-colors">
                                             {p.step}
@@ -508,8 +400,8 @@ export default function Welcome() {
                     </div>
                 </section>
 
-                {/* === GALLERY (placeholder cards) === */}
-                <section className="py-20 md:py-28 bg-emerald-900 text-white relative overflow-hidden">
+                {/* === GALLERY === */}
+                <section id="galeri" className="py-20 md:py-28 bg-emerald-900 text-white relative overflow-hidden">
                     <div aria-hidden className="absolute inset-0 -z-0">
                         <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl" />
                         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl" />
@@ -518,43 +410,17 @@ export default function Welcome() {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
                         <div className="text-center max-w-2xl mx-auto mb-12">
                             <span className="inline-block text-xs font-bold text-emerald-300 uppercase tracking-[0.2em] bg-emerald-800 px-3 py-1 rounded-full">
-                                Fasilitas
+                                Fasilitas & Galeri
                             </span>
                             <h2 className="mt-4 font-headline text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight">
-                                Galeri produksi & kumbung kami.
+                                Lihat lebih dekat dapur kami.
                             </h2>
                             <p className="mt-4 text-emerald-200/80 leading-relaxed text-sm">
-                                Foto fasilitas akan segera kami update. Sementara, ini gambaran modul-modul utama kami.
+                                Klik tab untuk filter, klik gambar untuk lihat detail. Foto fasilitas asli sedang kami siapkan.
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {[
-                                { label: 'Lab Bibit', icon: 'biotech', tone: 'from-emerald-400 to-emerald-600' },
-                                { label: 'Sterilisasi', icon: 'science', tone: 'from-teal-400 to-emerald-600' },
-                                { label: 'Inokulasi', icon: 'inventory_2', tone: 'from-lime-400 to-emerald-500' },
-                                { label: 'Inkubasi', icon: 'layers', tone: 'from-emerald-300 to-teal-600' },
-                                { label: 'Kumbung', icon: 'house', tone: 'from-emerald-500 to-emerald-700' },
-                                { label: 'Panen Pagi', icon: 'eco', tone: 'from-lime-300 to-emerald-500' },
-                                { label: 'Pengemasan', icon: 'inventory_2', tone: 'from-teal-300 to-emerald-600' },
-                                { label: 'Distribusi', icon: 'storefront', tone: 'from-emerald-400 to-teal-600' },
-                            ].map((g) => (
-                                <div
-                                    key={g.label}
-                                    className={`group aspect-square rounded-2xl bg-gradient-to-br ${g.tone} relative overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-500 shadow-xl`}
-                                >
-                                    <div className="absolute inset-0 opacity-25" style={{
-                                        backgroundImage: 'radial-gradient(circle, white 1px, transparent 2px)',
-                                        backgroundSize: '20px 20px',
-                                    }} />
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                                        <MIcon name={g.icon} className="text-4xl mb-2 group-hover:scale-110 transition-transform" />
-                                        <span className="text-sm font-bold">{g.label}</span>
-                                    </div>
-                                    <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-emerald-900/60 to-transparent" />
-                                </div>
-                            ))}
-                        </div>
+                        <InteractiveGallery />
                     </div>
                 </section>
 
@@ -586,8 +452,8 @@ export default function Welcome() {
 
                                         <div className="mt-6 space-y-3">
                                             <a href="mailto:admin@defilasolusi.com" className="flex items-center gap-3 text-sm text-slate-700 hover:text-emerald-700 group">
-                                                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                                                    <MIcon name="mail" className="text-base" />
+                                                <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition-all font-bold text-lg">
+                                                    @
                                                 </div>
                                                 <div>
                                                     <p className="text-[11px] text-slate-500">Email</p>
@@ -595,8 +461,8 @@ export default function Welcome() {
                                                 </div>
                                             </a>
                                             <div className="flex items-center gap-3 text-sm text-slate-700">
-                                                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700">
-                                                    <MIcon name="link" className="text-base" />
+                                                <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
+                                                    .com
                                                 </div>
                                                 <div>
                                                     <p className="text-[11px] text-slate-500">Website</p>
@@ -611,8 +477,8 @@ export default function Welcome() {
                                             className="relative bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl p-8 border-2 border-white shadow-forest"
                                             style={{ transform: 'perspective(1000px) rotateY(-6deg)' }}
                                         >
-                                            <div className="float-slow">
-                                                <Mushroom3D className="w-full max-w-[200px] mx-auto" />
+                                            <div className="float-slow w-full max-w-[200px] mx-auto">
+                                                <MushroomIcon className="w-full" />
                                             </div>
                                             <p className="text-center mt-4 font-headline font-extrabold text-emerald-900">Defila</p>
                                             <p className="text-center text-xs text-emerald-700">Tumbuh Bersama Kami</p>
@@ -631,11 +497,11 @@ export default function Welcome() {
                     </div>
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
-                        <div className="grid md:grid-cols-4 gap-8">
-                            <div className="md:col-span-2">
+                        <div className="grid md:grid-cols-3 gap-8">
+                            <div>
                                 <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 rounded-2xl green-gradient flex items-center justify-center text-white shadow-forest">
-                                        <MIcon name="eco" className="text-2xl" />
+                                    <div className="w-12 h-12">
+                                        <LeafIcon className="w-12 h-12" />
                                     </div>
                                     <div>
                                         <p className="font-extrabold text-white text-base font-headline">Defila Solusi</p>
@@ -653,16 +519,16 @@ export default function Welcome() {
                                     <li><a href="#tentang" className="hover:text-white transition-colors">Tentang Defila</a></li>
                                     <li><a href="#produk" className="hover:text-white transition-colors">Produk</a></li>
                                     <li><a href="#proses" className="hover:text-white transition-colors">Proses Budidaya</a></li>
+                                    <li><a href="#galeri" className="hover:text-white transition-colors">Galeri</a></li>
                                     <li><a href="#kontak" className="hover:text-white transition-colors">Hubungi Kami</a></li>
                                 </ul>
                             </div>
 
                             <div>
-                                <p className="text-xs font-bold text-white uppercase tracking-widest mb-4">Layanan Internal</p>
+                                <p className="text-xs font-bold text-white uppercase tracking-widest mb-4">Akses Internal</p>
                                 <ul className="space-y-2.5 text-sm">
-                                    <li><Link href="/ajukan" className="hover:text-white transition-colors">Form Pengajuan</Link></li>
-                                    <li><Link href="/absensi-publik" className="hover:text-white transition-colors">Absensi QR</Link></li>
                                     <li><Link href="/management" className="hover:text-white transition-colors">Sistem Management</Link></li>
+                                    <li><Link href="/absensi-publik" className="hover:text-white transition-colors">Absensi QR Karyawan</Link></li>
                                 </ul>
                             </div>
                         </div>
