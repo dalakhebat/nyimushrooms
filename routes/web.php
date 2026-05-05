@@ -38,6 +38,9 @@ Route::get('/', function () {
     ]);
 });
 
+// Entry point ke sistem management (alias ke login)
+Route::redirect('/management', '/login')->name('management');
+
 // Public route untuk absensi karyawan (tanpa login)
 Route::get('/absensi-publik', [QrAbsensiController::class, 'scanPublic'])->name('absensi.publik');
 Route::post('/absensi-publik', [QrAbsensiController::class, 'processScanPublic'])->name('absensi.publik.process');

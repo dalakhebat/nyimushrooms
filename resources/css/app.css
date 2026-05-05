@@ -30,11 +30,82 @@
     .primary-gradient {
         background: linear-gradient(135deg, #0058bc 0%, #000f3f 100%);
     }
+    .green-gradient {
+        background: linear-gradient(135deg, #34d399 0%, #059669 50%, #047857 100%);
+    }
+    .green-gradient-soft {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    }
     .shadow-clinical {
         box-shadow: 0 12px 40px rgba(0, 15, 63, 0.06);
+    }
+    .shadow-forest {
+        box-shadow: 0 25px 50px -12px rgba(5, 150, 105, 0.25);
+    }
+    .shadow-forest-lg {
+        box-shadow: 0 35px 70px -15px rgba(5, 150, 105, 0.35), 0 10px 30px -10px rgba(4, 120, 87, 0.2);
     }
     .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         vertical-align: middle;
     }
+
+    /* 3D perspective utilities for landing */
+    .scene-3d {
+        perspective: 1400px;
+        perspective-origin: center;
+    }
+    .layer-3d {
+        transform-style: preserve-3d;
+    }
+    .tilt-card {
+        transform-style: preserve-3d;
+        transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
+        transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .tilt-card:hover {
+        transform: perspective(1000px) rotateY(-2deg) rotateX(1deg) translateZ(20px) scale(1.02);
+    }
+    .tilt-card-r {
+        transform-style: preserve-3d;
+        transform: perspective(1000px) rotateY(8deg) rotateX(4deg);
+        transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .tilt-card-r:hover {
+        transform: perspective(1000px) rotateY(2deg) rotateX(1deg) translateZ(20px) scale(1.02);
+    }
+    .float-slow {
+        animation: floatSlow 6s ease-in-out infinite;
+    }
+    .float-slower {
+        animation: floatSlow 9s ease-in-out infinite;
+    }
+    .float-fast {
+        animation: floatSlow 4s ease-in-out infinite;
+    }
+    .grid-floor {
+        background-image:
+            linear-gradient(rgba(5, 150, 105, 0.12) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(5, 150, 105, 0.12) 1px, transparent 1px);
+        background-size: 60px 60px;
+        transform: perspective(800px) rotateX(60deg);
+        transform-origin: center top;
+        mask-image: linear-gradient(to bottom, black 0%, black 40%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 0%, black 40%, transparent 100%);
+    }
+}
+
+@keyframes floatSlow {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-14px); }
+}
+
+@keyframes floatRotate {
+    0%, 100% { transform: translateY(0px) rotate(-6deg); }
+    50% { transform: translateY(-12px) rotate(-2deg); }
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.08); }
 }
