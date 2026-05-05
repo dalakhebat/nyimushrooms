@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kas;
 use App\Models\KonfigurasiKeuangan;
+use App\Models\MutasiBank;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
@@ -180,6 +181,38 @@ class DashboardEksekutifController extends Controller
             ->limit(10)
             ->get();
 
+        // === Mutasi BNI Giro ===
+        $bniRekening = '2047423575';
+        $latestMutasi = MutasiBank::forRekening($bniRekening)
+            ->orderBy('tanggal', 'desc')
+            ->orderBy('id', 'desc')
+            ->first();
+        $saldoBniGiro = (float) ($latestMutasi?->saldo ?? 0);
+        $saldoUpdated = $latestMutasi?->tanggal?->format('Y-m-d');
+
+        $bniDebitBulan = (float) MutasiBank::forRekening($bniRekening)->debit()
+            ->whereBetween('tanggal', [$start, $end])->sum('nominal');
+        $bniKreditBulan = (float) MutasiBank::forRekening($bniRekening)->kredit()
+            ->whereBetween('tanggal', [$start, $end])->sum('nominal');
+
+        $bniMutasiTerbaru = MutasiBank::forRekening($bniRekening)
+            ->orderBy('tanggal', 'desc')
+            ->orderBy('id', 'desc')
+            ->limit(15)
+            ->get();
+
+        $bniPerKategori = MutasiBank::forRekening($bniRekening)->debit()
+            ->whereBetween('tanggal', [$start, $end])
+            ->selectRaw('kategori, SUM(nominal) as total, COUNT(*) as jumlah')
+            ->groupBy('kategori')
+            ->orderByDesc('total')
+            ->get()
+            ->map(fn($r) => [
+                'kategori' => $r->kategori ?? 'Lainnya',
+                'total' => (float) $r->total,
+                'jumlah' => (int) $r->jumlah,
+            ]);
+
         $tahunOptions = Kas::pluck('tanggal')
             ->map(fn($d) => (int) Carbon::parse($d)->year)
             ->unique()
@@ -234,6 +267,18 @@ class DashboardEksekutifController extends Controller
             'perKategoriKeluar' => $perKategoriKeluar,
             'perKategoriMasuk' => $perKategoriMasuk,
             'transaksiTerbaru' => $transaksiTerbaru,
+            'mutasiBni' => [
+                'rekening' => $bniRekening,
+                'bank' => 'BNI Giro',
+                'pemilik' => 'Defila Solusi Bersama Indonesia PT',
+                'saldo' => $saldoBniGiro,
+                'saldoUpdated' => $saldoUpdated,
+                'debitBulan' => $bniDebitBulan,
+                'kreditBulan' => $bniKreditBulan,
+                'netBulan' => $bniKreditBulan - $bniDebitBulan,
+                'recent' => $bniMutasiTerbaru,
+                'perKategori' => $bniPerKategori,
+            ],
             'serverTime' => now()->toIso8601String(),
         ]);
     }

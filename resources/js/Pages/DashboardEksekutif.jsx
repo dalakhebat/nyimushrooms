@@ -140,6 +140,7 @@ export default function DashboardEksekutif({
     perKategoriKeluar,
     perKategoriMasuk,
     transaksiTerbaru,
+    mutasiBni,
     serverTime,
 }) {
     const [now, setNow] = useState(new Date());
@@ -156,7 +157,8 @@ export default function DashboardEksekutif({
             router.reload({
                 only: [
                     'summary', 'cashFlowHarian', 'perKategoriKeluar',
-                    'perKategoriMasuk', 'transaksiTerbaru', 'pinjaman', 'serverTime',
+                    'perKategoriMasuk', 'transaksiTerbaru', 'pinjaman',
+                    'mutasiBni', 'serverTime',
                 ],
                 onFinish: () => setRefreshing(false),
             });
@@ -734,6 +736,165 @@ export default function DashboardEksekutif({
                         </div>
                     </div>
                 </div>
+
+                {/* === MUTASI BNI GIRO === */}
+                {mutasiBni && (
+                    <div className="mt-4">
+                        <div className="grid grid-cols-12 gap-4">
+                            {/* Header card with saldo */}
+                            <div className="col-span-12 bg-gradient-to-br from-[#0F4A2E] via-[#1A6B43] to-[#22C55E] rounded-3xl p-6 text-white shadow-[0_4px_20px_-4px_rgba(15,74,46,0.3)] relative overflow-hidden">
+                                <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
+                                <div className="absolute -bottom-12 -left-8 w-40 h-40 bg-emerald-300/20 rounded-full blur-3xl" />
+                                <div className="relative grid md:grid-cols-4 gap-6 items-center">
+                                    <div className="md:col-span-1">
+                                        <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-white/15 backdrop-blur rounded-full text-[10px] font-bold tracking-widest border border-white/20">
+                                            <span className="w-1.5 h-1.5 bg-emerald-300 rounded-full animate-pulse" />
+                                            BNI GIRO
+                                        </div>
+                                        <p className="text-[11px] text-emerald-100/90 mt-3">Rekening</p>
+                                        <p className="font-mono text-sm font-bold tracking-wider">{mutasiBni.rekening}</p>
+                                        <p className="text-[10px] text-emerald-100/70 mt-1 leading-tight">{mutasiBni.pemilik}</p>
+                                    </div>
+                                    <div className="md:col-span-1">
+                                        <p className="text-[11px] text-emerald-100/90">Saldo Akhir</p>
+                                        <p className="text-2xl md:text-3xl font-extrabold mt-1">
+                                            Rp {Number(mutasiBni.saldo).toLocaleString('id-ID')}
+                                        </p>
+                                        <p className="text-[10px] text-emerald-100/70 mt-1">
+                                            {mutasiBni.saldoUpdated
+                                                ? `per ${new Date(mutasiBni.saldoUpdated).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`
+                                                : 'belum ada data'}
+                                        </p>
+                                    </div>
+                                    <div className="md:col-span-1">
+                                        <p className="text-[11px] text-emerald-100/90">Kredit (Masuk) Bulan Ini</p>
+                                        <p className="text-xl md:text-2xl font-extrabold mt-1 text-emerald-200">
+                                            +{formatRupiahCompact(mutasiBni.kreditBulan)}
+                                        </p>
+                                    </div>
+                                    <div className="md:col-span-1">
+                                        <p className="text-[11px] text-emerald-100/90">Debit (Keluar) Bulan Ini</p>
+                                        <p className="text-xl md:text-2xl font-extrabold mt-1 text-rose-200">
+                                            -{formatRupiahCompact(mutasiBni.debitBulan)}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Mutasi list */}
+                            <div className="col-span-12 lg:col-span-7 bg-white rounded-3xl p-5 border border-[#EDEAE3] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)]">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 className="text-base font-bold text-[#1F1D1B]">Mutasi BNI Giro Terbaru</h3>
+                                        <p className="text-[12px] text-[#8B8680]">{mutasiBni.recent?.length || 0} transaksi terakhir</p>
+                                    </div>
+                                </div>
+                                <div className="space-y-2 max-h-[460px] overflow-y-auto pr-2">
+                                    {(mutasiBni.recent || []).length === 0 ? (
+                                        <div className="text-center py-8 text-[13px] text-[#8B8680]">
+                                            Belum ada mutasi
+                                        </div>
+                                    ) : (
+                                        mutasiBni.recent.map((tx) => {
+                                            const isKredit = tx.tipe === 'C';
+                                            return (
+                                                <div
+                                                    key={tx.id}
+                                                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-[#FAFAF7] transition-colors border border-transparent hover:border-[#EDEAE3]"
+                                                >
+                                                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-bold text-sm ${
+                                                        isKredit ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-600'
+                                                    }`}>
+                                                        {isKredit ? '↓' : '↑'}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[12px] font-semibold text-[#1F1D1B] line-clamp-2 leading-snug">
+                                                            {tx.deskripsi}
+                                                        </p>
+                                                        <div className="flex items-center gap-2 mt-1 text-[10px] text-[#8B8680]">
+                                                            <span>
+                                                                {new Date(tx.tanggal).toLocaleDateString('id-ID', {
+                                                                    day: 'numeric', month: 'short', year: 'numeric',
+                                                                })}
+                                                            </span>
+                                                            {tx.kategori && (
+                                                                <>
+                                                                    <span>·</span>
+                                                                    <span className="px-1.5 py-0.5 bg-[#F2F0EA] rounded font-medium capitalize">
+                                                                        {tx.kategori}
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                            {tx.journal_no && (
+                                                                <>
+                                                                    <span>·</span>
+                                                                    <span className="font-mono">#{tx.journal_no}</span>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right shrink-0">
+                                                        <p className={`text-[13px] font-bold whitespace-nowrap ${
+                                                            isKredit ? 'text-emerald-600' : 'text-rose-600'
+                                                        }`}>
+                                                            {isKredit ? '+' : '-'}Rp {Number(tx.nominal).toLocaleString('id-ID')}
+                                                        </p>
+                                                        {tx.saldo && (
+                                                            <p className="text-[10px] text-[#8B8680] mt-0.5">
+                                                                Saldo: Rp {Number(tx.saldo).toLocaleString('id-ID')}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Per kategori breakdown */}
+                            <div className="col-span-12 lg:col-span-5 bg-white rounded-3xl p-5 border border-[#EDEAE3] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)]">
+                                <div className="mb-4">
+                                    <h3 className="text-base font-bold text-[#1F1D1B]">Pengeluaran per Kategori</h3>
+                                    <p className="text-[12px] text-[#8B8680]">Bulan ini · BNI Giro</p>
+                                </div>
+                                {(mutasiBni.perKategori || []).length === 0 ? (
+                                    <div className="text-center py-8 text-[13px] text-[#8B8680]">
+                                        Belum ada pengeluaran tercatat
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {mutasiBni.perKategori.map((cat, i) => {
+                                            const max = mutasiBni.perKategori[0]?.total || 1;
+                                            const pct = (cat.total / max) * 100;
+                                            const colors = ['#0F4A2E', '#1A6B43', '#22C55E', '#65A30D', '#84CC16', '#A3E635', '#D9D9D9'];
+                                            const color = colors[i % colors.length];
+                                            return (
+                                                <div key={cat.kategori}>
+                                                    <div className="flex items-center justify-between text-[12px] mb-1">
+                                                        <span className="font-semibold text-[#1F1D1B]">{cat.kategori}</span>
+                                                        <span className="font-bold text-[#1F1D1B]">
+                                                            {formatRupiahCompact(cat.total)}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="flex-1 h-2 bg-[#F2F0EA] rounded-full overflow-hidden">
+                                                            <div
+                                                                className="h-full rounded-full transition-all"
+                                                                style={{ width: `${pct}%`, backgroundColor: color }}
+                                                            />
+                                                        </div>
+                                                        <span className="text-[10px] text-[#8B8680] w-8 text-right">{cat.jumlah}x</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Tabel Schedule Angsuran Lengkap */}
                 <div className="bg-white rounded-3xl p-5 border border-[#EDEAE3] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] mt-4">
