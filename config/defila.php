@@ -17,15 +17,15 @@
 return [
 
     'mengetahui' => [
-        'nama' => 'Sri Retno Hadiningsih',
+        'nama' => 'Edy Junaedi',
         'jabatan' => 'Komisaris',
-        'ttd_path' => 'images/signatures/retno.png',
+        'ttd_path' => 'images/signatures/edy.png',
     ],
 
     'disetujui' => [
-        'nama' => 'Edy Junaedi',
-        'jabatan' => 'Direktur',
-        'ttd_path' => 'images/signatures/edy.png',
+        'nama' => 'Sri Retno Hadiningsih',
+        'jabatan' => 'Direktur Utama',
+        'ttd_path' => 'images/signatures/retno.png',
     ],
 
 ];

@@ -168,7 +168,7 @@ export default function PengajuanShow({ pengajuan, authority }) {
                                         <span className="text-xs text-on-tertiary-container italic">TTD tersimpan</span>
                                     )}
                                 </div>
-                                <p className="text-xs text-center mt-2 font-medium">{authority?.mengetahui?.nama || 'Sri Retno Hadiningsih'}</p>
+                                <p className="text-xs text-center mt-2 font-medium">{authority?.mengetahui?.nama || 'Edy Junaedi'}</p>
                                 <p className="text-[10px] text-center text-on-tertiary-container">{authority?.mengetahui?.jabatan || 'Komisaris'}</p>
                             </div>
                             <div>
@@ -184,8 +184,8 @@ export default function PengajuanShow({ pengajuan, authority }) {
                                         <span className="text-xs text-on-tertiary-container">Belum disetujui</span>
                                     )}
                                 </div>
-                                <p className="text-xs text-center mt-2 font-medium">{authority?.disetujui?.nama || 'Edy Junaedi'}</p>
-                                <p className="text-[10px] text-center text-on-tertiary-container">{authority?.disetujui?.jabatan || 'Direktur'}</p>
+                                <p className="text-xs text-center mt-2 font-medium">{authority?.disetujui?.nama || 'Sri Retno Hadiningsih'}</p>
+                                <p className="text-[10px] text-center text-on-tertiary-container">{authority?.disetujui?.jabatan || 'Direktur Utama'}</p>
                             </div>
                         </div>
                     </div>
