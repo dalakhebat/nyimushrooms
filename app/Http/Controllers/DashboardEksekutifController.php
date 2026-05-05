@@ -271,8 +271,12 @@ class DashboardEksekutifController extends Controller
                 'rekening' => $bniRekening,
                 'bank' => 'BNI Giro',
                 'pemilik' => 'Defila Solusi Bersama Indonesia PT',
-                'saldo' => $saldoBniGiro,
+                'saldoBuku' => $saldoBniGiro,
+                'saldo' => $saldoBniGiro, // back-compat
                 'saldoUpdated' => $saldoUpdated,
+                'saldoEfektif' => (float) (config('defila.bank.bni_giro.saldo_efektif') ?? $saldoBniGiro),
+                'saldoEfektifPer' => config('defila.bank.bni_giro.saldo_efektif_per'),
+                'saldoHold' => max(0, $saldoBniGiro - (float) (config('defila.bank.bni_giro.saldo_efektif') ?? $saldoBniGiro)),
                 'debitBulan' => $bniDebitBulan,
                 'kreditBulan' => $bniKreditBulan,
                 'netBulan' => $bniKreditBulan - $bniDebitBulan,

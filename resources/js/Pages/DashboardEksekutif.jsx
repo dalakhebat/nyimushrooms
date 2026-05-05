@@ -745,38 +745,96 @@ export default function DashboardEksekutif({
                             <div className="col-span-12 bg-gradient-to-br from-[#0F4A2E] via-[#1A6B43] to-[#22C55E] rounded-3xl p-6 text-white shadow-[0_4px_20px_-4px_rgba(15,74,46,0.3)] relative overflow-hidden">
                                 <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
                                 <div className="absolute -bottom-12 -left-8 w-40 h-40 bg-emerald-300/20 rounded-full blur-3xl" />
-                                <div className="relative grid md:grid-cols-4 gap-6 items-center">
-                                    <div className="md:col-span-1">
-                                        <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-white/15 backdrop-blur rounded-full text-[10px] font-bold tracking-widest border border-white/20">
-                                            <span className="w-1.5 h-1.5 bg-emerald-300 rounded-full animate-pulse" />
-                                            BNI GIRO
+                                <div className="relative">
+                                    <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
+                                        <div>
+                                            <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-white/15 backdrop-blur rounded-full text-[10px] font-bold tracking-widest border border-white/20">
+                                                <span className="w-1.5 h-1.5 bg-emerald-300 rounded-full animate-pulse" />
+                                                BNI GIRO
+                                            </div>
+                                            <div className="flex items-center gap-2 mt-2 flex-wrap">
+                                                <p className="font-mono text-sm font-bold tracking-wider">{mutasiBni.rekening}</p>
+                                                <span className="text-emerald-100/50">·</span>
+                                                <p className="text-[11px] text-emerald-100/80">{mutasiBni.pemilik}</p>
+                                            </div>
                                         </div>
-                                        <p className="text-[11px] text-emerald-100/90 mt-3">Rekening</p>
-                                        <p className="font-mono text-sm font-bold tracking-wider">{mutasiBni.rekening}</p>
-                                        <p className="text-[10px] text-emerald-100/70 mt-1 leading-tight">{mutasiBni.pemilik}</p>
+                                        {mutasiBni.saldoEfektifPer && (
+                                            <div className="text-right">
+                                                <p className="text-[10px] text-emerald-100/70">Update Saldo Efektif</p>
+                                                <p className="text-[11px] font-medium text-emerald-100">
+                                                    {new Date(mutasiBni.saldoEfektifPer).toLocaleString('id-ID', {
+                                                        day: 'numeric', month: 'short', year: 'numeric',
+                                                        hour: '2-digit', minute: '2-digit',
+                                                    })}
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="md:col-span-1">
-                                        <p className="text-[11px] text-emerald-100/90">Saldo Akhir</p>
-                                        <p className="text-2xl md:text-3xl font-extrabold mt-1">
-                                            Rp {Number(mutasiBni.saldo).toLocaleString('id-ID')}
-                                        </p>
-                                        <p className="text-[10px] text-emerald-100/70 mt-1">
-                                            {mutasiBni.saldoUpdated
-                                                ? `per ${new Date(mutasiBni.saldoUpdated).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`
-                                                : 'belum ada data'}
-                                        </p>
+
+                                    <div className="grid md:grid-cols-3 gap-4 mb-4">
+                                        {/* Saldo Efektif - PRIMARY */}
+                                        <div className="bg-white/10 backdrop-blur rounded-2xl p-4 border-2 border-emerald-300/40">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <p className="text-[11px] text-emerald-50 font-bold">Saldo Efektif</p>
+                                                <span className="text-[9px] px-1.5 py-0.5 bg-emerald-300 text-emerald-900 rounded font-bold">AKTIF</span>
+                                            </div>
+                                            <p className="text-2xl md:text-3xl font-extrabold text-white">
+                                                Rp {Number(mutasiBni.saldoEfektif).toLocaleString('id-ID')}
+                                            </p>
+                                            <p className="text-[10px] text-emerald-100/80 mt-1">Tersedia untuk transaksi</p>
+                                        </div>
+
+                                        {/* Saldo Buku */}
+                                        <div className="bg-white/5 backdrop-blur rounded-2xl p-4 border border-white/10">
+                                            <p className="text-[11px] text-emerald-100/90">Saldo Buku</p>
+                                            <p className="text-xl md:text-2xl font-extrabold text-emerald-50 mt-1">
+                                                Rp {Number(mutasiBni.saldoBuku).toLocaleString('id-ID')}
+                                            </p>
+                                            <p className="text-[10px] text-emerald-100/60 mt-1">
+                                                {mutasiBni.saldoUpdated
+                                                    ? `Per mutasi ${new Date(mutasiBni.saldoUpdated).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}`
+                                                    : 'Belum ada mutasi'}
+                                            </p>
+                                        </div>
+
+                                        {/* Saldo Hold */}
+                                        <div className={`backdrop-blur rounded-2xl p-4 border ${
+                                            mutasiBni.saldoHold > 0
+                                                ? 'bg-amber-400/15 border-amber-300/40'
+                                                : 'bg-white/5 border-white/10'
+                                        }`}>
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <p className="text-[11px] text-emerald-100/90">Saldo di-Hold</p>
+                                                {mutasiBni.saldoHold > 0 && (
+                                                    <span className="text-[9px] px-1.5 py-0.5 bg-amber-300 text-amber-900 rounded font-bold">PENDING</span>
+                                                )}
+                                            </div>
+                                            <p className={`text-xl md:text-2xl font-extrabold mt-1 ${
+                                                mutasiBni.saldoHold > 0 ? 'text-amber-100' : 'text-emerald-50'
+                                            }`}>
+                                                Rp {Number(mutasiBni.saldoHold).toLocaleString('id-ID')}
+                                            </p>
+                                            <p className="text-[10px] text-emerald-100/60 mt-1">
+                                                {mutasiBni.saldoHold > 0
+                                                    ? 'Transaksi pending / scheduled'
+                                                    : 'Tidak ada hold'}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div className="md:col-span-1">
-                                        <p className="text-[11px] text-emerald-100/90">Kredit (Masuk) Bulan Ini</p>
-                                        <p className="text-xl md:text-2xl font-extrabold mt-1 text-emerald-200">
-                                            +{formatRupiahCompact(mutasiBni.kreditBulan)}
-                                        </p>
-                                    </div>
-                                    <div className="md:col-span-1">
-                                        <p className="text-[11px] text-emerald-100/90">Debit (Keluar) Bulan Ini</p>
-                                        <p className="text-xl md:text-2xl font-extrabold mt-1 text-rose-200">
-                                            -{formatRupiahCompact(mutasiBni.debitBulan)}
-                                        </p>
+
+                                    <div className="grid grid-cols-2 gap-4 pt-3 border-t border-white/10">
+                                        <div>
+                                            <p className="text-[10px] text-emerald-100/80">Kredit (Masuk) Bulan Ini</p>
+                                            <p className="text-base md:text-lg font-bold mt-0.5 text-emerald-200">
+                                                +{formatRupiahCompact(mutasiBni.kreditBulan)}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] text-emerald-100/80">Debit (Keluar) Bulan Ini</p>
+                                            <p className="text-base md:text-lg font-bold mt-0.5 text-rose-200">
+                                                -{formatRupiahCompact(mutasiBni.debitBulan)}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

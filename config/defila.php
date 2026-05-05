@@ -28,4 +28,21 @@ return [
         'ttd_path' => 'images/signatures/retno.png',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Bank Account Summary
+    |--------------------------------------------------------------------------
+    | Saldo efektif (available balance) di-update manual dari BNI iBank
+    | "Informasi Saldo Summary". Selisih dengan saldo buku (computed dari
+    | mutasi terakhir) = saldo hold (transaksi pending/scheduled).
+    | Update saat dapat statement baru.
+    */
+    'bank' => [
+        'bni_giro' => [
+            'rekening' => '2047423575',
+            'saldo_efektif' => 952471540,
+            'saldo_efektif_per' => '2026-05-05 17:56',
+        ],
+    ],
+
 ];
