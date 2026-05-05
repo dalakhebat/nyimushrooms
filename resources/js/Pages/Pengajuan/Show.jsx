@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import MIcon from '@/Components/MIcon';
-import SignaturePad from '@/Components/SignaturePad';
 
 const STATUS_BADGES = {
     diajukan: { label: 'Diajukan', className: 'bg-yellow-100 text-yellow-800', icon: 'schedule' },
@@ -11,10 +10,9 @@ const STATUS_BADGES = {
     ditolak: { label: 'Ditolak', className: 'bg-red-100 text-red-700', icon: 'cancel' },
 };
 
-export default function PengajuanShow({ pengajuan }) {
+export default function PengajuanShow({ pengajuan, authority }) {
     const [showApproveModal, setShowApproveModal] = useState(false);
     const [showRejectModal, setShowRejectModal] = useState(false);
-    const [ttdDisetujui, setTtdDisetujui] = useState('');
     const [catatanTolak, setCatatanTolak] = useState('');
     const [processing, setProcessing] = useState(false);
 
@@ -33,12 +31,8 @@ export default function PengajuanShow({ pengajuan }) {
     const badge = STATUS_BADGES[pengajuan.status];
 
     const handleApprove = () => {
-        if (!ttdDisetujui) {
-            alert('Tanda tangan persetujuan wajib diisi');
-            return;
-        }
         setProcessing(true);
-        router.post(`/pengajuan/${pengajuan.id}/approve`, { ttd_disetujui: ttdDisetujui }, {
+        router.post(`/pengajuan/${pengajuan.id}/approve`, {}, {
             onFinish: () => {
                 setProcessing(false);
                 setShowApproveModal(false);
@@ -168,20 +162,30 @@ export default function PengajuanShow({ pengajuan }) {
                             <div>
                                 <p className="text-xs text-on-tertiary-container uppercase mb-2">Mengetahui</p>
                                 <div className="bg-white border rounded-lg p-2 h-32 flex items-center justify-center">
-                                    <span className="text-xs text-on-tertiary-container italic">(via WA Group)</span>
+                                    {authority?.mengetahui?.ttd_url ? (
+                                        <img src={authority.mengetahui.ttd_url} alt={`TTD ${authority.mengetahui.nama}`} className="max-h-full max-w-full" />
+                                    ) : (
+                                        <span className="text-xs text-on-tertiary-container italic">TTD tersimpan</span>
+                                    )}
                                 </div>
-                                <p className="text-xs text-center mt-2 font-medium">Retno</p>
+                                <p className="text-xs text-center mt-2 font-medium">{authority?.mengetahui?.nama || 'Sri Retno Hadiningsih'}</p>
+                                <p className="text-[10px] text-center text-on-tertiary-container">{authority?.mengetahui?.jabatan || 'Komisaris'}</p>
                             </div>
                             <div>
                                 <p className="text-xs text-on-tertiary-container uppercase mb-2">Disetujui</p>
                                 <div className="bg-white border rounded-lg p-2 h-32 flex items-center justify-center">
-                                    {pengajuan.ttd_disetujui ? (
-                                        <img src={pengajuan.ttd_disetujui} alt="TTD Disetujui" className="max-h-full max-w-full" />
+                                    {pengajuan.status === 'disetujui' || pengajuan.status === 'cair' ? (
+                                        authority?.disetujui?.ttd_url ? (
+                                            <img src={authority.disetujui.ttd_url} alt={`TTD ${authority.disetujui.nama}`} className="max-h-full max-w-full" />
+                                        ) : (
+                                            <span className="text-xs text-on-tertiary-container italic">TTD tersimpan</span>
+                                        )
                                     ) : (
                                         <span className="text-xs text-on-tertiary-container">Belum disetujui</span>
                                     )}
                                 </div>
-                                <p className="text-xs text-center mt-2 font-medium">{pengajuan.approver?.name || '-'}</p>
+                                <p className="text-xs text-center mt-2 font-medium">{authority?.disetujui?.nama || 'Edy Junaedi'}</p>
+                                <p className="text-[10px] text-center text-on-tertiary-container">{authority?.disetujui?.jabatan || 'Direktur'}</p>
                             </div>
                         </div>
                     </div>
@@ -301,17 +305,26 @@ export default function PengajuanShow({ pengajuan }) {
             {/* Approve Modal */}
             {showApproveModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                    <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6">
+                    <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
                         <h3 className="text-lg font-bold text-on-surface mb-2">Setujui Pengajuan</h3>
                         <p className="text-sm text-on-tertiary-container mb-4">
                             {pengajuan.nomor} · {formatRupiah(pengajuan.jumlah)}
                         </p>
-                        <SignaturePad
-                            label="Tanda Tangan Persetujuan *"
-                            value={ttdDisetujui}
-                            onChange={setTtdDisetujui}
-                            height={150}
-                        />
+                        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                            <p className="text-sm text-emerald-900">
+                                Pengajuan akan diapprove dengan tanda tangan tersimpan dari{' '}
+                                <strong>{authority?.disetujui?.nama || 'Edy Junaedi'}</strong> ({authority?.disetujui?.jabatan || 'Direktur'}).
+                            </p>
+                            {authority?.disetujui?.ttd_url && (
+                                <div className="mt-3 bg-white rounded-lg p-2 h-20 flex items-center justify-center border border-emerald-100">
+                                    <img
+                                        src={authority.disetujui.ttd_url}
+                                        alt="TTD Direktur"
+                                        className="max-h-full max-w-full"
+                                    />
+                                </div>
+                            )}
+                        </div>
                         <div className="flex justify-end gap-3 mt-6">
                             <button
                                 onClick={() => setShowApproveModal(false)}

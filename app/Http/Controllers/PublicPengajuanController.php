@@ -78,10 +78,24 @@ class PublicPengajuanController extends Controller
 
         $pdf = Pdf::loadView('pdf.pengajuan-pengeluaran', [
             'pengajuan' => $pengajuan,
-            'namaMengetahui' => 'Retno',
+            'namaMengetahui' => config('defila.mengetahui.nama'),
+            'jabatanMengetahui' => config('defila.mengetahui.jabatan'),
+            'ttdMengetahui' => $this->signatureBase64(config('defila.mengetahui.ttd_path')),
+            'namaDisetujui' => config('defila.disetujui.nama'),
+            'jabatanDisetujui' => config('defila.disetujui.jabatan'),
+            'ttdDisetujui' => $this->signatureBase64(config('defila.disetujui.ttd_path')),
             'cetakPada' => Carbon::now()->locale('id')->isoFormat('D MMM Y HH:mm'),
         ])->setPaper('a4', 'portrait');
 
         return $pdf->stream("Pengajuan-{$pengajuan->nomor}.pdf");
+    }
+
+    private function signatureBase64(?string $relativePath): ?string
+    {
+        if (!$relativePath) return null;
+        $absolute = public_path($relativePath);
+        if (!file_exists($absolute)) return null;
+        $mime = mime_content_type($absolute) ?: 'image/png';
+        return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($absolute));
     }
 }

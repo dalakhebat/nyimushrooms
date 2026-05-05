@@ -111,8 +111,23 @@ class PengajuanPengeluaranController extends Controller
     {
         $pengajuan->load(['pemohon', 'approver', 'kas']);
 
+        $mengetahui = config('defila.mengetahui');
+        $disetujui = config('defila.disetujui');
+
+        // Resolve TTD URL if file exists, else null (frontend renders placeholder)
+        $mengetahui['ttd_url'] = file_exists(public_path($mengetahui['ttd_path']))
+            ? '/' . $mengetahui['ttd_path']
+            : null;
+        $disetujui['ttd_url'] = file_exists(public_path($disetujui['ttd_path']))
+            ? '/' . $disetujui['ttd_path']
+            : null;
+
         return Inertia::render('Pengajuan/Show', [
             'pengajuan' => $pengajuan,
+            'authority' => [
+                'mengetahui' => $mengetahui,
+                'disetujui' => $disetujui,
+            ],
         ]);
     }
 
@@ -122,18 +137,15 @@ class PengajuanPengeluaranController extends Controller
             return back()->with('error', 'Pengajuan ini sudah diproses sebelumnya.');
         }
 
-        $validated = $request->validate([
-            'ttd_disetujui' => 'required|string',
-        ]);
-
+        // TTD Disetujui dipakai dari stored image (config/defila.php → ttd_path).
+        // Operator tinggal konfirmasi approve tanpa perlu draw signature.
         $pengajuan->update([
             'status' => 'disetujui',
-            'ttd_disetujui' => $validated['ttd_disetujui'],
             'disetujui_oleh' => auth()->id(),
             'disetujui_at' => now(),
         ]);
 
-        return back()->with('success', 'Pengajuan berhasil disetujui.');
+        return back()->with('success', 'Pengajuan berhasil disetujui oleh ' . config('defila.disetujui.nama') . '.');
     }
 
     public function reject(Request $request, PengajuanPengeluaran $pengajuan)
@@ -187,12 +199,26 @@ class PengajuanPengeluaranController extends Controller
 
         $pdf = Pdf::loadView('pdf.pengajuan-pengeluaran', [
             'pengajuan' => $pengajuan,
-            'namaMengetahui' => 'Retno',
+            'namaMengetahui' => config('defila.mengetahui.nama'),
+            'jabatanMengetahui' => config('defila.mengetahui.jabatan'),
+            'ttdMengetahui' => $this->signatureBase64(config('defila.mengetahui.ttd_path')),
+            'namaDisetujui' => config('defila.disetujui.nama'),
+            'jabatanDisetujui' => config('defila.disetujui.jabatan'),
+            'ttdDisetujui' => $this->signatureBase64(config('defila.disetujui.ttd_path')),
             'cetakPada' => Carbon::now()->locale('id')->isoFormat('D MMM Y HH:mm'),
         ])->setPaper('a4', 'portrait');
 
         $filename = "Pengajuan-{$pengajuan->nomor}.pdf";
         return $pdf->stream($filename);
+    }
+
+    private function signatureBase64(?string $relativePath): ?string
+    {
+        if (!$relativePath) return null;
+        $absolute = public_path($relativePath);
+        if (!file_exists($absolute)) return null;
+        $mime = mime_content_type($absolute) ?: 'image/png';
+        return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($absolute));
     }
 
     public function destroy(PengajuanPengeluaran $pengajuan)

@@ -290,9 +290,12 @@
             <div class="role">Mengetahui</div>
             <div class="city-date">&nbsp;</div>
             <div class="ttd-area">
-                {{-- Kosong, untuk TTD basah / acc via grup --}}
+                @if (!empty($ttdMengetahui))
+                    <img src="{{ $ttdMengetahui }}" class="ttd-img" alt="TTD {{ $namaMengetahui }}">
+                @endif
             </div>
             <div class="name">{{ $namaMengetahui }}</div>
+            <div class="stamp">{{ $jabatanMengetahui }}</div>
         </div>
 
         {{-- Disetujui --}}
@@ -306,13 +309,12 @@
                 @endif
             </div>
             <div class="ttd-area">
-                @if ($pengajuan->ttd_disetujui)
-                    <img src="{{ $pengajuan->ttd_disetujui }}" class="ttd-img" alt="TTD Disetujui">
+                @if (!empty($ttdDisetujui))
+                    <img src="{{ $ttdDisetujui }}" class="ttd-img" alt="TTD {{ $namaDisetujui }}">
                 @endif
             </div>
-            <div class="name">
-                {{ $pengajuan->approver->name ?? '____________________' }}
-            </div>
+            <div class="name">{{ $namaDisetujui }}</div>
+            <div class="stamp">{{ $jabatanDisetujui }}</div>
         </div>
     </div>
 

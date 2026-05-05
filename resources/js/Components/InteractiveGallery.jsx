@@ -13,22 +13,48 @@ const CATEGORIES = [
     { id: 'distribusi', label: 'Distribusi', icon: TruckIcon },
 ];
 
-// Default placeholder dataset. Nanti tinggal replace `src` dengan path foto asli,
-// atau replace `Illustration` field dengan foto.
+// Gallery dataset. Foto otomatis muncul kalau file ada di public/images/gallery/<kategori>/<filename>.
+// Kalau file belum ada → auto-fallback ke 3D icon (lihat onError di <img>).
+// Lihat public/images/README.md untuk naming convention.
 const DEFAULT_ITEMS = [
-    { id: 1, category: 'lab', label: 'Isolasi Bibit F0', desc: 'Pengambilan miselium murni dari jamur indukan di clean room.', tone: 'from-emerald-400 to-teal-600', Icon: VialIcon },
-    { id: 2, category: 'lab', label: 'Inokulasi PDA', desc: 'Bibit dipindah ke media PDA untuk multiplikasi awal.', tone: 'from-teal-400 to-emerald-700', Icon: VialIcon },
-    { id: 3, category: 'produksi', label: 'Pencampuran Media', desc: 'Serbuk gergaji + dedak + kapur diaduk merata.', tone: 'from-amber-300 to-emerald-600', Icon: MixerIcon },
-    { id: 4, category: 'produksi', label: 'Sterilisasi Steam', desc: 'Drum steam 8 jam untuk membunuh kontaminan.', tone: 'from-slate-400 to-emerald-700', Icon: SteamIcon },
-    { id: 5, category: 'produksi', label: 'Inokulasi Baglog', desc: 'Bibit ditanam di baglog yang sudah dingin.', tone: 'from-emerald-300 to-emerald-700', Icon: BaglogIcon },
-    { id: 6, category: 'produksi', label: 'Inkubasi 30 Hari', desc: 'Miselium tumbuh menutupi seluruh media.', tone: 'from-lime-400 to-emerald-600', Icon: BaglogIcon },
-    { id: 7, category: 'kumbung', label: 'Kumbung A1', desc: 'Suhu & kelembaban dipantau real-time.', tone: 'from-emerald-500 to-teal-700', Icon: GreenhouseIcon },
-    { id: 8, category: 'kumbung', label: 'Monitoring Sensor', desc: 'IoT sensor + dashboard digital tiap kumbung.', tone: 'from-teal-500 to-emerald-800', Icon: GreenhouseIcon },
-    { id: 9, category: 'panen', label: 'Panen Pagi', desc: 'Jamur segar dipetik setiap pagi sebelum kemasan.', tone: 'from-emerald-400 to-emerald-700', Icon: BasketIcon },
-    { id: 10, category: 'panen', label: 'Sortir & Grading', desc: 'Klasifikasi jamur berdasarkan ukuran & kualitas.', tone: 'from-lime-300 to-emerald-600', Icon: MushroomIcon },
-    { id: 11, category: 'distribusi', label: 'Pengemasan', desc: 'Kemasan plastik food-grade dengan tracking lot.', tone: 'from-emerald-300 to-teal-700', Icon: TruckIcon },
-    { id: 12, category: 'distribusi', label: 'Distribusi Harian', desc: 'Kirim ke pasar, retail, & customer hari yang sama.', tone: 'from-teal-400 to-emerald-700', Icon: TruckIcon },
+    { id: 1, category: 'lab', label: 'Isolasi Bibit F0', desc: 'Pengambilan miselium murni dari jamur indukan di clean room.', tone: 'from-emerald-400 to-teal-600', Icon: VialIcon, src: '/images/gallery/lab/01-isolasi-bibit-f0.jpg' },
+    { id: 2, category: 'lab', label: 'Inokulasi PDA', desc: 'Bibit dipindah ke media PDA untuk multiplikasi awal.', tone: 'from-teal-400 to-emerald-700', Icon: VialIcon, src: '/images/gallery/lab/02-inokulasi-pda.jpg' },
+    { id: 3, category: 'produksi', label: 'Pencampuran Media', desc: 'Serbuk gergaji + dedak + kapur diaduk merata.', tone: 'from-amber-300 to-emerald-600', Icon: MixerIcon, src: '/images/gallery/produksi/03-pencampuran-media.jpg' },
+    { id: 4, category: 'produksi', label: 'Sterilisasi Steam', desc: 'Drum steam 8 jam untuk membunuh kontaminan.', tone: 'from-slate-400 to-emerald-700', Icon: SteamIcon, src: '/images/gallery/produksi/04-sterilisasi-steam.jpg' },
+    { id: 5, category: 'produksi', label: 'Inokulasi Baglog', desc: 'Bibit ditanam di baglog yang sudah dingin.', tone: 'from-emerald-300 to-emerald-700', Icon: BaglogIcon, src: '/images/gallery/produksi/05-inokulasi-baglog.jpg' },
+    { id: 6, category: 'produksi', label: 'Inkubasi 30 Hari', desc: 'Miselium tumbuh menutupi seluruh media.', tone: 'from-lime-400 to-emerald-600', Icon: BaglogIcon, src: '/images/gallery/produksi/06-inkubasi.jpg' },
+    { id: 7, category: 'kumbung', label: 'Kumbung A1', desc: 'Suhu & kelembaban dipantau real-time.', tone: 'from-emerald-500 to-teal-700', Icon: GreenhouseIcon, src: '/images/gallery/kumbung/07-kumbung-a1.jpg' },
+    { id: 8, category: 'kumbung', label: 'Monitoring Sensor', desc: 'IoT sensor + dashboard digital tiap kumbung.', tone: 'from-teal-500 to-emerald-800', Icon: GreenhouseIcon, src: '/images/gallery/kumbung/08-monitoring-sensor.jpg' },
+    { id: 9, category: 'panen', label: 'Panen Pagi', desc: 'Jamur segar dipetik setiap pagi sebelum kemasan.', tone: 'from-emerald-400 to-emerald-700', Icon: BasketIcon, src: '/images/gallery/panen/09-panen-pagi.jpg' },
+    { id: 10, category: 'panen', label: 'Sortir & Grading', desc: 'Klasifikasi jamur berdasarkan ukuran & kualitas.', tone: 'from-lime-300 to-emerald-600', Icon: MushroomIcon, src: '/images/gallery/panen/10-sortir-grading.jpg' },
+    { id: 11, category: 'distribusi', label: 'Pengemasan', desc: 'Kemasan plastik food-grade dengan tracking lot.', tone: 'from-emerald-300 to-teal-700', Icon: TruckIcon, src: '/images/gallery/distribusi/11-pengemasan.jpg' },
+    { id: 12, category: 'distribusi', label: 'Distribusi Harian', desc: 'Kirim ke pasar, retail, & customer hari yang sama.', tone: 'from-teal-400 to-emerald-700', Icon: TruckIcon, src: '/images/gallery/distribusi/12-distribusi.jpg' },
 ];
+
+// GalleryImage: render <img> dengan onError fallback ke icon 3D kalau file gak ada.
+function GalleryImage({ item, className = '' }) {
+    const [errored, setErrored] = useState(false);
+    const Icon = item.Icon;
+
+    if (!item.src || errored) {
+        return (
+            <div className={`absolute inset-0 flex items-center justify-center p-8 ${className}`}>
+                <div className="w-3/4 h-3/4">
+                    <Icon className="w-full h-full drop-shadow-2xl" />
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src={item.src}
+            alt={item.label}
+            onError={() => setErrored(true)}
+            className={`absolute inset-0 w-full h-full object-cover ${className}`}
+        />
+    );
+}
 
 export default function InteractiveGallery({ items = DEFAULT_ITEMS }) {
     const [activeFilter, setActiveFilter] = useState('all');
@@ -113,20 +139,7 @@ export default function InteractiveGallery({ items = DEFAULT_ITEMS }) {
                                     backgroundSize: '24px 24px',
                                 }}
                             />
-                            {/* Image placeholder area — kalau ada src foto, render di sini */}
-                            {item.src ? (
-                                <img
-                                    src={item.src}
-                                    alt={item.label}
-                                    className="absolute inset-0 w-full h-full object-cover"
-                                />
-                            ) : (
-                                <div className="absolute inset-0 flex items-center justify-center p-8">
-                                    <div className="w-3/4 h-3/4 group-hover:scale-110 transition-transform duration-500">
-                                        <Icon className="w-full h-full drop-shadow-2xl" />
-                                    </div>
-                                </div>
-                            )}
+                            <GalleryImage item={item} className="group-hover:scale-105 transition-transform duration-500" />
                             {/* Gradient overlay for label */}
                             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                             {/* Label */}
@@ -216,15 +229,7 @@ export default function InteractiveGallery({ items = DEFAULT_ITEMS }) {
                                     backgroundSize: '40px 40px',
                                 }}
                             />
-                            {active.src ? (
-                                <img src={active.src} alt={active.label} className="absolute inset-0 w-full h-full object-cover" />
-                            ) : (
-                                <div className="absolute inset-0 flex items-center justify-center p-12">
-                                    <div className="w-1/2 max-w-xs">
-                                        <active.Icon className="w-full h-full drop-shadow-2xl" />
-                                    </div>
-                                </div>
-                            )}
+                            <GalleryImage item={active} />
                         </div>
                         <div className="p-6 md:p-8">
                             <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest">
