@@ -10,9 +10,9 @@ class MutasiBankBniSeeder extends Seeder
 {
     /**
      * Mutasi BNI Giro 2047423575 / DEFILA SOLUSI BERSAMA INDONESIA PT
-     * Periode 07-Apr-2026 s/d 07-May-2026
-     * Beginning Ledger Balance: 5.275.796.068, Ending Balance: 1.220.164.040
-     * Total Debit: 4.277.179.926 (29 trx), Total Credit: 221.547.898 (6 trx)
+     * Periode 07-Apr-2026 s/d 07-May-2026 (incl. transaksi 07/05/2026)
+     * Beginning Ledger Balance: 5.275.796.068, Ending Balance: 1.174.020.840
+     * Total Debit: 4.410.588.926 (37 trx), Total Credit: 308.813.698 (8 trx)
      */
     public function run(): void
     {
@@ -63,6 +63,18 @@ class MutasiBankBniSeeder extends Seeder
             ['2026-05-06', '18:50:23', '968288', 'TRF/PAY/TOP-UP ECHANNEL ke 7330096751 - Jamur', 15000000, 'D', 1227041540, 'Pemb Bahan Baku', null],
             ['2026-05-06', '00:00:00', '968288', 'BY TRX BIFAST', 2500, 'D', 1227039040, 'Biaya Bank', null],
             ['2026-05-06', '18:50:24', '968388', 'TRANSFER KE 2013836446 M IKHWAN SUFI - Jamur TRF', 6875000, 'D', 1220164040, 'Pengembalian', 'M Ikhwan Sufi'],
+
+            // 07/05/2026
+            ['2026-05-07', '08:52:18', '981204', 'TRANSFER DARI Ibu IMAS HERLINA - jmr', 37500000, 'C', 1257664040, 'Penjualan Jamur', 'Imas Herlina'],
+            ['2026-05-07', '10:27:26', '955988', 'TRF/PAY/TOP-UP ECHANNEL ke 1291595583 - Pemb bahan baku', 35500000, 'D', 1222164040, 'Pemb Bahan Baku', null],
+            ['2026-05-07', '00:00:00', '955988', 'BY TRX BIFAST', 2500, 'D', 1222161540, 'Biaya Bank', null],
+            ['2026-05-07', '11:55:55', '966563', 'TRF/PAY/TOP-UP ECHANNEL ke 1291595583 - Pembangunan Kumbung', 50000000, 'D', 1172161540, 'Pemb Kumbung', null],
+            ['2026-05-07', '00:00:00', '966563', 'BY TRX BIFAST', 2500, 'D', 1172159040, 'Biaya Bank', null],
+            ['2026-05-07', '12:10:48', '961292', 'TRF/PAY/TOP-UP ECHANNEL DARI IMAS HERLINA - jmr df', 49765800, 'C', 1221924840, 'Penjualan Jamur', 'Imas Herlina'],
+            ['2026-05-07', '12:22:39', '933397', 'TRF/PAY/TOP-UP ECHANNEL ke 7330096751', 41575000, 'D', 1180349840, 'Pemb Bahan Baku', null],
+            ['2026-05-07', '00:00:00', '933397', 'BY TRX BIFAST', 2500, 'D', 1180347340, 'Biaya Bank', null],
+            ['2026-05-07', '12:34:07', '905483', 'TRF/PAY/TOP-UP ECHANNEL ke 708863030300 - Jamur', 6324000, 'D', 1174023340, 'Pemb Bahan Baku', null],
+            ['2026-05-07', '00:00:00', '905483', 'BY TRX BIFAST', 2500, 'D', 1174020840, 'Biaya Bank', null],
         ];
 
         $inserted = 0;
