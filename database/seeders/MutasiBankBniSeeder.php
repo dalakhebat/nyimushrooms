@@ -3,15 +3,16 @@
 namespace Database\Seeders;
 
 use App\Models\MutasiBank;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class MutasiBankBniSeeder extends Seeder
 {
     /**
      * Mutasi BNI Giro 2047423575 / DEFILA SOLUSI BERSAMA INDONESIA PT
-     * Periode 05-Apr-2026 s/d 05-May-2026
-     * Beginning Balance: 5.275.796.068, Ending Balance: 1.218.471.540
-     * Total Debit: 4.203.847.426, Total Credit: 146.522.898
+     * Periode 07-Apr-2026 s/d 07-May-2026
+     * Beginning Ledger Balance: 5.275.796.068, Ending Balance: 1.220.164.040
+     * Total Debit: 4.277.179.926 (29 trx), Total Credit: 221.547.898 (6 trx)
      */
     public function run(): void
     {
@@ -50,30 +51,58 @@ class MutasiBankBniSeeder extends Seeder
             ['2026-05-05', '00:00:00', '944690', 'BY TRX BIFAST', 2500, 'D', 1273474040, 'Biaya Bank', null],
             ['2026-05-05', '07:33:03', '946964', 'TRF/PAY/TOP-UP ECHANNEL ke 1290745345 - Pemb bahan baku', 55000000, 'D', 1218474040, 'Pemb Bahan Baku', null],
             ['2026-05-05', '00:00:00', '946964', 'BY TRX BIFAST', 2500, 'D', 1218471540, 'Biaya Bank', null],
+
+            // 06/05/2026
+            ['2026-05-06', '09:10:21', '982125', 'TRANSFER DARI 2051657676 Ibu IMAS HERLINA - jmr', 53150000, 'C', 1271621540, 'Penjualan Jamur', 'Imas Herlina'],
+            ['2026-05-06', '16:34:54', '993000', 'TRF/PAY/TOP-UP ECHANNEL ke 1291595583 - Pemb bahan baku', 33250000, 'D', 1238371540, 'Pemb Bahan Baku', null],
+            ['2026-05-06', '00:00:00', '993000', 'BY TRX BIFAST', 2500, 'D', 1238369040, 'Biaya Bank', null],
+            ['2026-05-06', '16:34:57', '941093', 'TRF/PAY/TOP-UP ECHANNEL ke 1290745345 - Pemb bahan baku', 18200000, 'D', 1220169040, 'Pemb Bahan Baku', null],
+            ['2026-05-06', '00:00:00', '941093', 'BY TRX BIFAST', 2500, 'D', 1220166540, 'Biaya Bank', null],
+            ['2026-05-06', '16:57:01', '970896', 'TRF/PAY/TOP-UP ECHANNEL DARI 1291595583 IWAN SETIAWAN - Pro,JK,tpg', 15000000, 'C', 1235166540, 'Penjualan Jamur', 'Iwan Setiawan'],
+            ['2026-05-06', '16:58:42', '937120', 'TRF/PAY/TOP-UP ECHANNEL DARI 1291595583 IWAN SETIAWAN - Pro,jk', 6875000, 'C', 1242041540, 'Penjualan Jamur', 'Iwan Setiawan'],
+            ['2026-05-06', '18:50:23', '968288', 'TRF/PAY/TOP-UP ECHANNEL ke 7330096751 - Jamur', 15000000, 'D', 1227041540, 'Pemb Bahan Baku', null],
+            ['2026-05-06', '00:00:00', '968288', 'BY TRX BIFAST', 2500, 'D', 1227039040, 'Biaya Bank', null],
+            ['2026-05-06', '18:50:24', '968388', 'TRANSFER KE 2013836446 M IKHWAN SUFI - Jamur TRF', 6875000, 'D', 1220164040, 'Pengembalian', 'M Ikhwan Sufi'],
         ];
+
+        $inserted = 0;
+        $updated = 0;
 
         foreach ($rows as $row) {
             [$tanggal, $jam, $journalNo, $deskripsi, $nominal, $tipe, $saldo, $kategori, $counterparty] = $row;
 
-            MutasiBank::updateOrCreate(
-                [
-                    'rekening' => $rekening,
-                    'tanggal' => $tanggal,
-                    'journal_no' => $journalNo,
-                    'nominal' => $nominal,
-                    'tipe' => $tipe,
-                ],
-                [
-                    'bank' => 'BNI',
-                    'jam' => $jam,
-                    'deskripsi' => $deskripsi,
-                    'saldo' => $saldo,
-                    'kategori' => $kategori,
-                    'counterparty' => $counterparty,
-                ]
-            );
+            // Normalisasi tanggal — DB SQLite kadang nyimpen "Y-m-d H:i:s",
+            // pakai whereDate biar match terlepas dari format string.
+            $existing = MutasiBank::where('rekening', $rekening)
+                ->whereDate('tanggal', $tanggal)
+                ->where('journal_no', $journalNo)
+                ->where('tipe', $tipe)
+                ->whereRaw('CAST(nominal AS INTEGER) = ?', [(int) $nominal])
+                ->first();
+
+            $payload = [
+                'rekening' => $rekening,
+                'bank' => 'BNI',
+                'tanggal' => Carbon::parse($tanggal)->toDateString(),
+                'jam' => $jam,
+                'journal_no' => $journalNo,
+                'deskripsi' => $deskripsi,
+                'nominal' => $nominal,
+                'tipe' => $tipe,
+                'saldo' => $saldo,
+                'kategori' => $kategori,
+                'counterparty' => $counterparty,
+            ];
+
+            if ($existing) {
+                $existing->update($payload);
+                $updated++;
+            } else {
+                MutasiBank::create($payload);
+                $inserted++;
+            }
         }
 
-        $this->command->info('Mutasi BNI Giro Defila ' . count($rows) . ' rows imported.');
+        $this->command->info("Mutasi BNI Giro Defila — {$inserted} baru, {$updated} updated (total " . count($rows) . " rows).");
     }
 }

@@ -52,7 +52,8 @@
       "Bash(tar -tzf \"/c/Users/BKPM/Downloads/defila-deploy-2026-05-07.tar.gz\")",
       "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-07-v2.tar.gz app/Http/Controllers/PublicPengajuanController.php resources/js/Pages/Public/Pengajuan/Form.jsx resources/js/Pages/Public/Pengajuan/Sukses.jsx resources/js/Pages/Public/Pengajuan/Lacak.jsx public/build)",
       "Bash(tar -czf /c/Users/BKPM/Downloads/defila-disable-register.tar.gz routes/auth.php)",
-      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-download-pdf.tar.gz app/Http/Controllers/PengajuanPengeluaranController.php app/Http/Controllers/PublicPengajuanController.php routes/auth.php resources/js/Pages/Pengajuan/Show.jsx resources/js/Pages/Pengajuan/Index.jsx resources/js/Pages/Public/Pengajuan/Sukses.jsx resources/js/Pages/Public/Pengajuan/Lacak.jsx public/build)"
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-download-pdf.tar.gz app/Http/Controllers/PengajuanPengeluaranController.php app/Http/Controllers/PublicPengajuanController.php routes/auth.php resources/js/Pages/Pengajuan/Show.jsx resources/js/Pages/Pengajuan/Index.jsx resources/js/Pages/Public/Pengajuan/Sukses.jsx resources/js/Pages/Public/Pengajuan/Lacak.jsx public/build)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-mutasi-bni-may07.tar.gz database/seeders/MutasiBankBniSeeder.php)"
     ]
   }
 }
