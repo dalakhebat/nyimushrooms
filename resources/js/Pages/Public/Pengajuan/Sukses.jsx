@@ -1,8 +1,30 @@
+import { useEffect } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import MIcon from '@/Components/MIcon';
 
 export default function PublicPengajuanSukses({ pengajuan }) {
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem('defila_pengajuan_history');
+            const list = raw ? JSON.parse(raw) : [];
+            const idx = list.findIndex((x) => x.nomor === pengajuan.nomor);
+            const entry = {
+                nomor: pengajuan.nomor,
+                pemohon_nama: pengajuan.pemohon_nama || pengajuan.pemohon?.name,
+                tanggal_pengajuan: pengajuan.tanggal_pengajuan,
+                kategori: pengajuan.kategori,
+                jumlah: pengajuan.jumlah,
+                tujuan_penerima: pengajuan.tujuan_penerima,
+                status: pengajuan.status,
+                created_at: pengajuan.created_at,
+            };
+            if (idx >= 0) list[idx] = { ...list[idx], ...entry };
+            else list.unshift(entry);
+            localStorage.setItem('defila_pengajuan_history', JSON.stringify(list.slice(0, 50)));
+        } catch (_) {}
+    }, [pengajuan]);
+
     const formatRupiah = (v) =>
         new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v);
 

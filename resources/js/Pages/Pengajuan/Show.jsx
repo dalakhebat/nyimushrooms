@@ -162,10 +162,14 @@ export default function PengajuanShow({ pengajuan, authority }) {
                             <div>
                                 <p className="text-xs text-on-tertiary-container uppercase mb-2">Mengetahui</p>
                                 <div className="bg-white border rounded-lg p-2 h-32 flex items-center justify-center">
-                                    {authority?.mengetahui?.ttd_url ? (
-                                        <img src={authority.mengetahui.ttd_url} alt={`TTD ${authority.mengetahui.nama}`} className="max-h-full max-w-full" />
+                                    {pengajuan.status === 'disetujui' || pengajuan.status === 'cair' ? (
+                                        authority?.mengetahui?.ttd_url ? (
+                                            <img src={authority.mengetahui.ttd_url} alt={`TTD ${authority.mengetahui.nama}`} className="max-h-full max-w-full" />
+                                        ) : (
+                                            <span className="text-xs text-on-tertiary-container italic">TTD tersimpan</span>
+                                        )
                                     ) : (
-                                        <span className="text-xs text-on-tertiary-container italic">TTD tersimpan</span>
+                                        <span className="text-xs text-on-tertiary-container">Belum disetujui</span>
                                     )}
                                 </div>
                                 <p className="text-xs text-center mt-2 font-medium">{authority?.mengetahui?.nama || 'Edy Junaedi'}</p>

@@ -49,6 +49,7 @@ Route::post('/absensi-publik', [QrAbsensiController::class, 'processScanPublic']
 Route::get('/ajukan', [PublicPengajuanController::class, 'showForm'])->name('public.pengajuan.form');
 Route::post('/ajukan', [PublicPengajuanController::class, 'submit'])->name('public.pengajuan.submit');
 Route::get('/ajukan/{nomor}/sukses', [PublicPengajuanController::class, 'sukses'])->name('public.pengajuan.sukses');
+Route::get('/ajukan/{nomor}/lacak', [PublicPengajuanController::class, 'lacak'])->name('public.pengajuan.lacak');
 Route::get('/ajukan/{nomor}/pdf', [PublicPengajuanController::class, 'pdf'])->name('public.pengajuan.pdf');
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');

@@ -76,18 +76,36 @@ class PublicPengajuanController extends Controller
             ->where('nomor', $nomor)
             ->firstOrFail();
 
+        $sudahDisetujui = in_array($pengajuan->status, ['disetujui', 'cair'], true);
+
         $pdf = Pdf::loadView('pdf.pengajuan-pengeluaran', [
             'pengajuan' => $pengajuan,
             'namaMengetahui' => config('defila.mengetahui.nama'),
             'jabatanMengetahui' => config('defila.mengetahui.jabatan'),
-            'ttdMengetahui' => $this->signatureBase64(config('defila.mengetahui.ttd_path')),
+            'ttdMengetahui' => $sudahDisetujui ? $this->signatureBase64(config('defila.mengetahui.ttd_path')) : null,
             'namaDisetujui' => config('defila.disetujui.nama'),
             'jabatanDisetujui' => config('defila.disetujui.jabatan'),
-            'ttdDisetujui' => $this->signatureBase64(config('defila.disetujui.ttd_path')),
+            'ttdDisetujui' => $sudahDisetujui ? $this->signatureBase64(config('defila.disetujui.ttd_path')) : null,
             'cetakPada' => Carbon::now()->locale('id')->isoFormat('D MMM Y HH:mm'),
         ])->setPaper('a4', 'portrait');
 
         return $pdf->stream("Pengajuan-{$pengajuan->nomor}.pdf");
+    }
+
+    public function lacak(string $nomor)
+    {
+        $pengajuan = PengajuanPengeluaran::with(['pemohon', 'approver'])
+            ->where('nomor', $nomor)
+            ->first();
+
+        if (!$pengajuan) {
+            return redirect()->route('public.pengajuan.form')
+                ->with('error', "Nomor pengajuan {$nomor} tidak ditemukan.");
+        }
+
+        return Inertia::render('Public/Pengajuan/Lacak', [
+            'pengajuan' => $pengajuan,
+        ]);
     }
 
     private function signatureBase64(?string $relativePath): ?string
