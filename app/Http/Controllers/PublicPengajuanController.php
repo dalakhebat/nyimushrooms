@@ -21,8 +21,15 @@ class PublicPengajuanController extends Controller
 
     public function showForm()
     {
+        $pengajuans = PengajuanPengeluaran::with('pemohon')
+            ->orderBy('tanggal_pengajuan', 'desc')
+            ->orderBy('id', 'desc')
+            ->limit(100)
+            ->get(['id', 'nomor', 'tanggal_pengajuan', 'pemohon_id', 'pemohon_nama', 'kategori', 'jumlah', 'tujuan_penerima', 'status', 'created_at']);
+
         return Inertia::render('Public/Pengajuan/Form', [
             'kategoris' => $this->kategoris,
+            'pengajuans' => $pengajuans,
         ]);
     }
 

@@ -18,37 +18,23 @@ const STATUS_BADGES = {
     ditolak: { label: 'Ditolak', className: 'bg-red-100 text-red-700' },
 };
 
-export default function PublicPengajuanForm({ kategoris, flash }) {
+export default function PublicPengajuanForm({ kategoris, pengajuans = [], flash }) {
     const [mode, setMode] = useState('buat');
     const [step, setStep] = useState(1);
-    const [lacakNomor, setLacakNomor] = useState('');
-    const [history, setHistory] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState('semua');
 
-    useEffect(() => {
-        try {
-            const raw = localStorage.getItem('defila_pengajuan_history');
-            setHistory(raw ? JSON.parse(raw) : []);
-        } catch (_) {
-            setHistory([]);
+    const filteredPengajuans = pengajuans.filter((p) => {
+        if (statusFilter !== 'semua' && p.status !== statusFilter) return false;
+        if (searchQuery.trim()) {
+            const q = searchQuery.trim().toLowerCase();
+            const nama = (p.pemohon_nama || p.pemohon?.name || '').toLowerCase();
+            const nomor = (p.nomor || '').toLowerCase();
+            const tujuan = (p.tujuan_penerima || '').toLowerCase();
+            return nama.includes(q) || nomor.includes(q) || tujuan.includes(q);
         }
-    }, []);
-
-    const handleLacak = (e) => {
-        e?.preventDefault();
-        const nomor = lacakNomor.trim().toUpperCase();
-        if (!nomor) {
-            alert('Mohon isi nomor pengajuan');
-            return;
-        }
-        router.visit(`/ajukan/${nomor}/lacak`);
-    };
-
-    const hapusHistori = (nomor) => {
-        if (!confirm(`Hapus ${nomor} dari riwayat perangkat ini? (data di server tidak terhapus)`)) return;
-        const next = history.filter((x) => x.nomor !== nomor);
-        localStorage.setItem('defila_pengajuan_history', JSON.stringify(next));
-        setHistory(next);
-    };
+        return true;
+    });
 
     const formatRupiahShort = (v) =>
         new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v || 0);
@@ -159,8 +145,8 @@ export default function PublicPengajuanForm({ kategoris, flash }) {
                 >
                     <MIcon name="search" className="text-base" />
                     Lacak Pengajuan
-                    {history.length > 0 && (
-                        <span className="ml-1 px-2 py-0.5 text-[10px] bg-primary text-white rounded-full">{history.length}</span>
+                    {pengajuans.length > 0 && (
+                        <span className="ml-1 px-2 py-0.5 text-[10px] bg-primary text-white rounded-full">{pengajuans.length}</span>
                     )}
                 </button>
             </div>
@@ -173,50 +159,56 @@ export default function PublicPengajuanForm({ kategoris, flash }) {
             )}
 
             {mode === 'lacak' && (
-                <div className="p-6 space-y-6">
-                    {/* Search by nomor */}
-                    <form onSubmit={handleLacak} className="space-y-3">
-                        <label className="block text-sm font-bold text-on-surface">
-                            Masukkan Nomor Pengajuan
-                        </label>
-                        <div className="flex gap-2">
-                            <input
-                                type="text"
-                                value={lacakNomor}
-                                onChange={(e) => setLacakNomor(e.target.value)}
-                                placeholder="Contoh: PENG-2026-0010"
-                                className="flex-1 px-4 py-3 border-2 border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary text-base font-mono uppercase"
-                            />
+                <div className="p-6 space-y-4">
+                    {/* Search bar */}
+                    <div className="relative">
+                        <MIcon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-base text-on-tertiary-container" />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Cari nama pemohon, nomor, atau tujuan..."
+                            className="w-full pl-10 pr-4 py-3 border-2 border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                        />
+                    </div>
+
+                    {/* Status filter chips */}
+                    <div className="flex gap-2 overflow-x-auto pb-1">
+                        {[
+                            { val: 'semua', label: 'Semua', count: pengajuans.length },
+                            { val: 'diajukan', label: 'Diajukan', count: pengajuans.filter(p => p.status === 'diajukan').length },
+                            { val: 'disetujui', label: 'Disetujui', count: pengajuans.filter(p => p.status === 'disetujui').length },
+                            { val: 'cair', label: 'Cair', count: pengajuans.filter(p => p.status === 'cair').length },
+                            { val: 'ditolak', label: 'Ditolak', count: pengajuans.filter(p => p.status === 'ditolak').length },
+                        ].map((f) => (
                             <button
-                                type="submit"
-                                className="px-5 py-3 bg-primary text-white rounded-xl text-sm font-bold hover:opacity-90 inline-flex items-center"
+                                key={f.val}
+                                type="button"
+                                onClick={() => setStatusFilter(f.val)}
+                                className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap inline-flex items-center gap-1 transition-all ${
+                                    statusFilter === f.val
+                                        ? 'bg-primary text-white'
+                                        : 'bg-surface-container-low text-on-surface hover:bg-gray-200'
+                                }`}
                             >
-                                <MIcon name="search" className="text-base mr-1" />
-                                Lacak
+                                {f.label}
+                                <span className={`px-1.5 py-0 rounded-full text-[10px] ${
+                                    statusFilter === f.val ? 'bg-white/30' : 'bg-white/80 text-on-tertiary-container'
+                                }`}>{f.count}</span>
                             </button>
-                        </div>
-                        <p className="text-xs text-on-tertiary-container">
-                            Nomor pengajuan kamu dapat di halaman sukses setelah submit form.
-                        </p>
-                    </form>
+                        ))}
+                    </div>
 
-                    {/* Riwayat dari device ini */}
-                    <div>
-                        <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-sm font-bold text-on-surface">
-                                Riwayat dari Perangkat Ini
-                            </h3>
-                            {history.length > 0 && (
-                                <span className="text-xs text-on-tertiary-container">{history.length} pengajuan</span>
-                            )}
-                        </div>
-
-                        {history.length === 0 ? (
-                            <div className="bg-surface-container-low border border-dashed border-outline-variant/40 rounded-xl p-6 text-center">
-                                <MIcon name="inbox" className="text-4xl text-on-tertiary-container" />
-                                <p className="text-sm text-on-tertiary-container mt-2">
-                                    Belum ada pengajuan yang dibuat dari perangkat ini.
-                                </p>
+                    {/* List */}
+                    {filteredPengajuans.length === 0 ? (
+                        <div className="bg-surface-container-low border border-dashed border-outline-variant/40 rounded-xl p-8 text-center">
+                            <MIcon name="inbox" className="text-4xl text-on-tertiary-container" />
+                            <p className="text-sm text-on-tertiary-container mt-2">
+                                {pengajuans.length === 0
+                                    ? 'Belum ada pengajuan yang masuk sistem.'
+                                    : 'Tidak ada pengajuan yang cocok dengan filter ini.'}
+                            </p>
+                            {pengajuans.length === 0 && (
                                 <button
                                     type="button"
                                     onClick={() => setMode('buat')}
@@ -225,70 +217,46 @@ export default function PublicPengajuanForm({ kategoris, flash }) {
                                     <MIcon name="add" className="text-base mr-1" />
                                     Buat Pengajuan Pertama
                                 </button>
-                            </div>
-                        ) : (
-                            <div className="space-y-2">
-                                {history.map((h) => {
-                                    const badge = STATUS_BADGES[h.status] || STATUS_BADGES.diajukan;
-                                    return (
-                                        <div
-                                            key={h.nomor}
-                                            className="bg-white border border-outline-variant/20 rounded-xl p-4 hover:border-primary/40 hover:shadow-sm transition-all"
-                                        >
-                                            <div className="flex items-start justify-between gap-3 mb-2">
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-sm font-mono font-bold text-secondary">{h.nomor}</p>
-                                                    <p className="text-xs text-on-tertiary-container mt-0.5">
-                                                        {h.pemohon_nama} · {formatDateShort(h.tanggal_pengajuan)}
-                                                    </p>
-                                                </div>
-                                                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full whitespace-nowrap ${badge.className}`}>
-                                                    {badge.label}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center justify-between gap-2 mb-3">
-                                                <p className="text-xs text-on-surface truncate">
-                                                    <span className="text-on-tertiary-container">Untuk:</span> {h.tujuan_penerima}
-                                                </p>
-                                                <p className="text-sm font-bold text-primary whitespace-nowrap">
-                                                    {formatRupiahShort(h.jumlah)}
+                            )}
+                        </div>
+                    ) : (
+                        <div className="space-y-2">
+                            {filteredPengajuans.map((p) => {
+                                const badge = STATUS_BADGES[p.status] || STATUS_BADGES.diajukan;
+                                return (
+                                    <button
+                                        key={p.nomor}
+                                        type="button"
+                                        onClick={() => router.visit(`/ajukan/${p.nomor}/lacak`)}
+                                        className="w-full text-left bg-white border border-outline-variant/20 rounded-xl p-4 hover:border-primary/40 hover:shadow-sm transition-all"
+                                    >
+                                        <div className="flex items-start justify-between gap-3 mb-2">
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-mono font-bold text-secondary">{p.nomor}</p>
+                                                <p className="text-xs text-on-tertiary-container mt-0.5">
+                                                    {p.pemohon_nama || p.pemohon?.name} · {formatDateShort(p.tanggal_pengajuan)}
                                                 </p>
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => router.visit(`/ajukan/${h.nomor}/lacak`)}
-                                                    className="flex-1 px-3 py-2 bg-primary text-white rounded-lg text-xs font-medium hover:opacity-90 inline-flex items-center justify-center"
-                                                >
-                                                    <MIcon name="visibility" className="text-sm mr-1" />
-                                                    Lihat Status
-                                                </button>
-                                                <a
-                                                    href={`/ajukan/${h.nomor}/pdf`}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className="px-3 py-2 bg-secondary text-white rounded-lg text-xs font-medium hover:opacity-90 inline-flex items-center justify-center"
-                                                >
-                                                    <MIcon name="print" className="text-sm" />
-                                                </a>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => hapusHistori(h.nomor)}
-                                                    className="px-3 py-2 bg-surface-container-low text-on-tertiary-container rounded-lg text-xs hover:bg-red-50 hover:text-red-600 inline-flex items-center justify-center"
-                                                    title="Hapus dari riwayat perangkat ini"
-                                                >
-                                                    <MIcon name="delete" className="text-sm" />
-                                                </button>
-                                            </div>
+                                            <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full whitespace-nowrap ${badge.className}`}>
+                                                {badge.label}
+                                            </span>
                                         </div>
-                                    );
-                                })}
-                                <p className="text-[11px] text-on-tertiary-container text-center mt-3">
-                                    Riwayat hanya tersimpan di perangkat ini. Buka di HP/laptop lain ⇒ riwayat berbeda.
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                                        <div className="flex items-center justify-between gap-2">
+                                            <p className="text-xs text-on-surface truncate flex-1">
+                                                <span className="text-on-tertiary-container">Untuk:</span> {p.tujuan_penerima}
+                                            </p>
+                                            <p className="text-sm font-bold text-primary whitespace-nowrap">
+                                                {formatRupiahShort(p.jumlah)}
+                                            </p>
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                            <p className="text-[11px] text-on-tertiary-container text-center mt-3">
+                                Menampilkan 100 pengajuan terbaru. Pakai search di atas untuk cari yang lebih lama.
+                            </p>
+                        </div>
+                    )}
                 </div>
             )}
 
