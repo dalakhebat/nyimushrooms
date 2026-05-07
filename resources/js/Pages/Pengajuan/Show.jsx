@@ -73,12 +73,10 @@ export default function PengajuanShow({ pengajuan, authority }) {
                 </Link>
                 <a
                     href={`/pengajuan/${pengajuan.id}/pdf`}
-                    target="_blank"
-                    rel="noreferrer"
                     className="inline-flex items-center px-4 py-2 bg-secondary text-white rounded-xl text-sm font-medium hover:opacity-90"
                 >
-                    <MIcon name="print" className="text-base mr-1" />
-                    Cetak PDF
+                    <MIcon name="download" className="text-base mr-1" />
+                    Download PDF
                 </a>
             </div>
 

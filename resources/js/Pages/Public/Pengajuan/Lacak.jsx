@@ -154,11 +154,9 @@ export default function PublicPengajuanLacak({ pengajuan }) {
                 <div className="space-y-3">
                     <a
                         href={`/ajukan/${pengajuan.nomor}/pdf`}
-                        target="_blank"
-                        rel="noreferrer"
                         className="w-full inline-flex items-center justify-center px-6 py-4 bg-primary text-white rounded-xl text-base font-bold hover:opacity-90 shadow-md"
                     >
-                        <MIcon name="print" className="text-xl mr-2" />
+                        <MIcon name="download" className="text-xl mr-2" />
                         Download PDF Pengajuan
                     </a>
 

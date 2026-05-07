@@ -35,7 +35,24 @@
       "Bash(dir public\\\\favicon.ico /T:W)",
       "Bash(taskkill //F //FI \"WINDOWTITLE eq npm*\")",
       "Bash(taskkill //F //FI \"IMAGENAME eq php.exe\")",
-      "Bash(taskkill //F //IM node.exe)"
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(rm -f /c/Users/BKPM/Downloads/defila-deploy-2026-05-05.zip)",
+      "Read(//c/Users/BKPM/Downloads/**)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-05.tar.gz public/build public/favicon.svg resources/views/app.blade.php resources/views/pdf/pengajuan-pengeluaran.blade.php app/Http/Controllers/PengajuanPengeluaranController.php app/Http/Controllers/PublicPengajuanController.php app/Models/PengajuanPengeluaran.php database/migrations/2026_05_04_120000_create_pengajuan_pengeluarans_table.php database/migrations/2026_05_04_140000_add_pemohon_nama_to_pengajuan_pengeluarans.php routes/web.php resources/js/Components/SafeChartContainer.jsx resources/js/Components/SignaturePad.jsx resources/js/Components/ApplicationLogo.jsx resources/js/Layouts/PublicLayout.jsx resources/js/Layouts/AdminLayout.jsx resources/js/Pages/DashboardEksekutif.jsx resources/js/Pages/Welcome.jsx resources/js/Pages/Pengajuan resources/js/Pages/Public)",
+      "Bash(tar -tzf /c/Users/BKPM/Downloads/defila-deploy-2026-05-05.tar.gz)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-05-v2.tar.gz public/build resources/views/app.blade.php routes/web.php)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-05-v3.tar.gz public/build)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-05-v4.tar.gz public/build public/images resources/views/pdf/pengajuan-pengeluaran.blade.php app/Http/Controllers/PengajuanPengeluaranController.php app/Http/Controllers/PublicPengajuanController.php config/defila.php)",
+      "Bash(cp \"/c/Users/BKPM/Pictures/Screenshots/Screenshot 2026-02-18 162250.png\" /c/Users/BKPM/nyimushroom/public/images/signatures/retno.png)",
+      "Bash(cp \"/c/Users/BKPM/Pictures/Screenshots/Screenshot 2026-05-05 144601.png\" /c/Users/BKPM/nyimushroom/public/images/signatures/edy.png)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-05-v5.tar.gz public/build app/Http/Controllers/DashboardEksekutifController.php app/Models/MutasiBank.php database/migrations/2026_05_05_160000_create_mutasi_banks_table.php database/seeders/MutasiBankBniSeeder.php)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-05-v6.tar.gz public/build config/defila.php)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-05-v7.tar.gz public/build config/defila.php app/Http/Controllers/DashboardEksekutifController.php)",
+      "Bash(ssh *)",
+      "Bash(tar -tzf \"/c/Users/BKPM/Downloads/defila-deploy-2026-05-07.tar.gz\")",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-deploy-2026-05-07-v2.tar.gz app/Http/Controllers/PublicPengajuanController.php resources/js/Pages/Public/Pengajuan/Form.jsx resources/js/Pages/Public/Pengajuan/Sukses.jsx resources/js/Pages/Public/Pengajuan/Lacak.jsx public/build)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-disable-register.tar.gz routes/auth.php)",
+      "Bash(tar -czf /c/Users/BKPM/Downloads/defila-download-pdf.tar.gz app/Http/Controllers/PengajuanPengeluaranController.php app/Http/Controllers/PublicPengajuanController.php routes/auth.php resources/js/Pages/Pengajuan/Show.jsx resources/js/Pages/Pengajuan/Index.jsx resources/js/Pages/Public/Pengajuan/Sukses.jsx resources/js/Pages/Public/Pengajuan/Lacak.jsx public/build)"
     ]
   }
 }

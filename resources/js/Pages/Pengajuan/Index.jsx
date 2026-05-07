@@ -183,12 +183,10 @@ export default function PengajuanIndex({ pengajuans, summary, kategoris, filters
                                                     </Link>
                                                     <a
                                                         href={`/pengajuan/${p.id}/pdf`}
-                                                        target="_blank"
-                                                        rel="noreferrer"
                                                         className="text-blue-600 hover:text-blue-700"
-                                                        title="Cetak PDF"
+                                                        title="Download PDF"
                                                     >
-                                                        <MIcon name="print" className="text-base" />
+                                                        <MIcon name="download" className="text-base" />
                                                     </a>
                                                     {p.status !== 'cair' && (
                                                         <button

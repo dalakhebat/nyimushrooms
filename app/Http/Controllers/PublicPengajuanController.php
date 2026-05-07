@@ -96,7 +96,7 @@ class PublicPengajuanController extends Controller
             'cetakPada' => Carbon::now()->locale('id')->isoFormat('D MMM Y HH:mm'),
         ])->setPaper('a4', 'portrait');
 
-        return $pdf->stream("Pengajuan-{$pengajuan->nomor}.pdf");
+        return $pdf->download("Pengajuan-{$pengajuan->nomor}.pdf");
     }
 
     public function lacak(string $nomor)

@@ -211,7 +211,7 @@ class PengajuanPengeluaranController extends Controller
         ])->setPaper('a4', 'portrait');
 
         $filename = "Pengajuan-{$pengajuan->nomor}.pdf";
-        return $pdf->stream($filename);
+        return $pdf->download($filename);
     }
 
     private function signatureBase64(?string $relativePath): ?string
